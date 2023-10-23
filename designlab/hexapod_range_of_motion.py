@@ -17,6 +17,8 @@ class HexapodRangeOfMotion:
     
     def render(self,ax):
 
+        print("HexapodLegRangeCalculator.render : 脚の可動範囲を描画します")
+
         self.render_upper_leg_range(ax,'black',0.3)
 
         self.render_lower_leg_range(ax,'black',1)

@@ -35,6 +35,8 @@ class HexapodLegRenderer:
         イベントを設定する,初期化処理.2度目以降の呼び出しは無視される\n
         '''
 
+        print("HexapodLegRenderer.set_event : イベントを設定します")
+
         # すでに初期化済みの場合は何もしない
         if self._alreadly_init:
             print("HexapodLegRenderer.set_event() : すでに初期化済みです")
@@ -236,5 +238,15 @@ class HexapodLegRenderer:
         plt.draw()
         return
     
+    def set_circle(self, vaild):
+        #type : (bool) -> None
+        
+        if vaild:
+            self._femur_circle.set_visible(True)
+            self._tibia_circle.set_visible(True)
+        else:
+            self._femur_circle.set_visible(False)
+            self._tibia_circle.set_visible(False)
+
 if __name__ == "__main__":
     print("hexapod_leg_renderer.py" + "\nここで実行しても何も起こりません。")

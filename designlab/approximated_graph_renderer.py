@@ -15,6 +15,7 @@ class ApproximatedGraphRenderer:
     _GRAPH_STEP = 0.01
 
     _draw_additional_line = True    #補助線を描画するかどうか 
+    _draw_fill = True               #fillするかどうか
     _color = 'green'
     _alpha = 1.0
 
@@ -69,7 +70,7 @@ class ApproximatedGraphRenderer:
 
         z = np.arange(self._Z_MIN,self._Z_MAX,self._GRAPH_STEP)     # GRAPH_STEP刻みでZ_MINからZ_MAXまでの配列zを作成
 
-        approximated_x_min = np.full_like(z,self._MIN_LEG_RADIUS)   # xと同じ要素数で値がすべてMIN_LEG_RADIUSの配列zを作成
+        approximated_x_min = np.full_like(z,calc.get_approximate_min_leg_raudus())   # xと同じ要素数で値がすべてMIN_LEG_RADIUSの配列zを作成
 
         approximated_x_max = []
         for i in range(len(z)):
@@ -81,14 +82,18 @@ class ApproximatedGraphRenderer:
             self._ax.plot(approximated_x_max, z, color=self._color,alpha=0.1)
 
         # xとzで囲まれた範囲をfillする
-        self._ax.fill_betweenx(
-            z,
-            approximated_x_min,
-            approximated_x_max,
-            where=approximated_x_max>=approximated_x_min,
-            color=self._color,
-            alpha=self._alpha
-        )  
+        if self._draw_fill:
+            self._ax.fill_betweenx(
+                z,
+                approximated_x_min,
+                approximated_x_max,
+                where=approximated_x_max>=approximated_x_min,
+                color=self._color,
+                alpha=self._alpha
+            )  
+        else:
+            self._ax.plot(approximated_x_min, z, color=self._color,alpha=self._alpha)
+            self._ax.plot(approximated_x_max, z, color=self._color,alpha=self._alpha)
 
     def set_draw_additional_line(self,draw_additional_line):
         # type: (bool) -> None
@@ -102,6 +107,18 @@ class ApproximatedGraphRenderer:
         '''
         self._draw_additional_line = draw_additional_line
     
+    def set_draw_fill(self,draw_fill):
+        # type: (bool) -> None
+        '''
+        fillするかどうかを設定する
+
+        Parameters
+        ----------
+        draw_fill : bool
+            fillするかどうか
+        '''
+        self._draw_fill = draw_fill
+
     def set_color(self,color):
         # type: (str) -> None
         '''

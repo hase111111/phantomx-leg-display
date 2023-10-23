@@ -40,15 +40,17 @@ if __name__ == "__main__":
 
     # 脚が出せる力のグラフを描画
     hexapod_leg_power = dl.HexapodLegPower()
-    #hexapod_leg_power.render(fig, ax,X_MIN,X_MAX,Z_MIN,Z_MAX)
+    hexapod_leg_power.render(fig, ax,X_MIN,X_MAX,Z_MIN,Z_MAX)
 
     # 脚の可動範囲の近似値を描画
     app_graph = dl.ApproximatedGraphRenderer()
+    app_graph.set_draw_fill(False)
     app_graph.render(ax,Z_MIN,Z_MAX)
 
     # 脚を描画
     leg_renderer = dl.HexapodLegRenderer()
     leg_renderer.set_event(fig, ax, ax_table)
+    leg_renderer.set_circle(False)
 
     # マウスがグラフのどこをポイントしているかを示す線を描画する
     mouse_grid_renderer = dl.MouseGridRenderer()
@@ -56,7 +58,7 @@ if __name__ == "__main__":
 
     # 脚の可動範囲を描画する
     hexapod_range_of_motion = dl.HexapodRangeOfMotion()
-    hexapod_range_of_motion.render(ax)
+    hexapod_range_of_motion.render_lower_leg_range(ax,'black',1)
 
     ax.set_xlim(X_MIN, X_MAX)   # x 軸の範囲を設定
     ax.set_ylim(Z_MIN, Z_MAX)   # z 軸の範囲を設定

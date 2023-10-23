@@ -17,6 +17,7 @@ class HexapodLegRangeCalculator:
     THETA3_MAX = math.radians(25.5)   # [rad]
 
     __PRINT_FLAG = False
+    _MIN_RADIUS = 120.0     # [mm]
 
     _approximate_max_leg_raudus = []    #近似された脚の可動範囲の最大半径のリスト，z軸の座標軸の取り方が逆なので，zを反転させる
 
@@ -34,6 +35,9 @@ class HexapodLegRangeCalculator:
 
         return    
     
+    def get_approximate_min_leg_raudus(self):
+        return self._MIN_RADIUS
+        
     def get_approximate_max_leg_raudus(self, z):
         # type: (float) -> float
         '''
@@ -52,10 +56,15 @@ class HexapodLegRangeCalculator:
 
         # zが範囲外の場合は0を返す
         if  -z < 0 or len(self._approximate_max_leg_raudus) < -z:
-            return 0.0
+            return self._MIN_RADIUS
 
         # Z軸の座標軸の取り方が逆なので、zを反転させる
-        return self._approximate_max_leg_raudus[(int)(-z)]
+        r = self._approximate_max_leg_raudus[(int)(-z)]
+
+        if(self._MIN_RADIUS < r):
+            return r
+        else:
+            return self._MIN_RADIUS
     
     def get_leg_position_xz(self, theta2, theta3):
         # type: (float, float) -> tuple[bool, float, float]
