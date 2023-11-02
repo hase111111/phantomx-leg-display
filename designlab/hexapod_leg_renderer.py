@@ -20,6 +20,8 @@ class HexapodLegRenderer:
     _femur_wedge = None        # 脚の角度を表示するための扇形
     _tibia_wedge = None        # 脚の角度を表示するための扇形
 
+    _fig = None
+
     # [ [coxa x , femur x , tibia x, leg x], [coxa z , femur z , tibia z, leg z] ]の順に格納
     _joint_pos = [[0,0,0,0],[0,0,0,0]]         # 脚の関節の位置
     _joint_pos_click = [[0,0,0,0],[0,0,0,0]]   # クリックされたときに表示するグラフ用
@@ -47,6 +49,8 @@ class HexapodLegRenderer:
             print("HexapodLegRenderer.set_event() : figまたはaxがNoneです")
             return
 
+        self._fig = fig
+        
         # 脚の付け根の円を登録
         self._femur_circle = plt.Circle([0,0],color='black',fill=False)
         self._tibia_circle = plt.Circle([0,0],color='black',fill=False)
@@ -231,6 +235,7 @@ class HexapodLegRenderer:
 
         # 左クリックされた場合は表示を更新
         elif event.button == left_click_index:
+            self._fig.savefig("result/img.png",transparent=True)
             self._leg_graph_click.set_visible(True)
             self._joint_pos_click = self._joint_pos
             self._leg_graph_click.set_data(self._joint_pos_click)
@@ -247,6 +252,16 @@ class HexapodLegRenderer:
         else:
             self._femur_circle.set_visible(False)
             self._tibia_circle.set_visible(False)
+
+    def set_wedge(self, vaild):
+        #type : (bool) -> None
+        
+        if vaild:
+            self._femur_wedge.set_visible(True)
+            self._tibia_wedge.set_visible(True)
+        else:
+            self._femur_wedge.set_visible(False)
+            self._tibia_wedge.set_visible(False)
 
 if __name__ == "__main__":
     print("hexapod_leg_renderer.py" + "\nここで実行しても何も起こりません。")

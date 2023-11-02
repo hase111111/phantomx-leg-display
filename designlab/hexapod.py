@@ -35,6 +35,20 @@ class HexapodLegRangeCalculator:
 
         return    
     
+    def set_approximate_min_leg_raudus(self, r):
+        # type: (float) -> None
+        '''
+        脚の最小半径を設定する
+
+        Parameters
+        ----------
+        r : float
+            脚の最小半径 [mm]
+        '''
+
+        self._MIN_RADIUS = r
+        return
+
     def get_approximate_min_leg_raudus(self):
         return self._MIN_RADIUS
         

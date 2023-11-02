@@ -11,7 +11,6 @@ class ApproximatedGraphRenderer:
     _ax = None
     _Z_MIN = 0
     _Z_MAX = 0
-    _MIN_LEG_RADIUS = 130
     _GRAPH_STEP = 0.01
 
     _draw_additional_line = True    #補助線を描画するかどうか 
@@ -19,11 +18,13 @@ class ApproximatedGraphRenderer:
     _color = 'green'
     _alpha = 1.0
 
+    _calc = None
+
     def __init__(self):
         '''
         コンストラクタ pythonでは__init__がコンストラクタになる
         '''
-
+        self._calc = HexapodLegRangeCalculator()  # 計算機のインスタンスを作成
 
     def render(self,ax,z_min,z_max):
         # type: (plt.axis,float,float) -> None
@@ -49,7 +50,6 @@ class ApproximatedGraphRenderer:
         print("ApproximatedGraphRenderer.render() : " + 
               "z_min = " + str(self._Z_MIN) + ", " + 
               "z_max = " + str(self._Z_MAX) + ", " +
-              "MIN_LEG_RADIUS = " + str(self._MIN_LEG_RADIUS) +  ", " +
               "draw_additional_line = " + str(self._draw_additional_line) +  ", " +
               "color = " + self._color +  ", " +
               "alpha = " + str(self._alpha)
@@ -66,15 +66,13 @@ class ApproximatedGraphRenderer:
             return
         
         # 近似された(Approximated)脚可動範囲の計算を行う
-        calc = HexapodLegRangeCalculator()  # 計算機のインスタンスを作成
-
         z = np.arange(self._Z_MIN,self._Z_MAX,self._GRAPH_STEP)     # GRAPH_STEP刻みでZ_MINからZ_MAXまでの配列zを作成
 
-        approximated_x_min = np.full_like(z,calc.get_approximate_min_leg_raudus())   # xと同じ要素数で値がすべてMIN_LEG_RADIUSの配列zを作成
+        approximated_x_min = np.full_like(z,self._calc.get_approximate_min_leg_raudus())   # xと同じ要素数で値がすべてMIN_LEG_RADIUSの配列zを作成
 
         approximated_x_max = []
         for i in range(len(z)):
-            approximated_x_max.append(calc.get_approximate_max_leg_raudus(z[i]))
+            approximated_x_max.append(self._calc.get_approximate_max_leg_raudus(z[i]))
 
         if self._draw_additional_line:
             # 補助線を描画する
@@ -142,6 +140,18 @@ class ApproximatedGraphRenderer:
             透明度
         '''
         self._alpha = alpha
+
+    def set_min_leg_radius(self,min_leg_radius):
+        # type: (float) -> None
+        '''
+        脚の最小半径を設定する
+
+        Parameters
+        ----------
+        min_leg_radius : float
+            脚の最小半径
+        '''
+        self._calc.set_approximate_min_leg_raudus(min_leg_radius)
 
 if __name__ == "__main__":
     

@@ -190,6 +190,8 @@ class HexapodLegPower:
 
         Returns
         -------
+
+        
         jacobian : np.matrix
             2*2のヤコビ行列
         '''
