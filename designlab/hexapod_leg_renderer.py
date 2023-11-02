@@ -29,6 +29,8 @@ class HexapodLegRenderer:
     _alreadly_init = False     # 初期化フラグ
     _reverse = False           # 反転フラグ
 
+    _fig_name = "result/img.png"
+
     def __init__(self):
         return    
     
@@ -235,7 +237,7 @@ class HexapodLegRenderer:
 
         # 左クリックされた場合は表示を更新
         elif event.button == left_click_index:
-            self._fig.savefig("result/img.png",transparent=True)
+            self._fig.savefig(self._fig_name,transparent=True)
             self._leg_graph_click.set_visible(True)
             self._joint_pos_click = self._joint_pos
             self._leg_graph_click.set_data(self._joint_pos_click)
@@ -262,6 +264,10 @@ class HexapodLegRenderer:
         else:
             self._femur_wedge.set_visible(False)
             self._tibia_wedge.set_visible(False)
+
+    def set_img_file_name(self, file_name):
+        #type : (str) -> None
+        self._fig_name = file_name
 
 if __name__ == "__main__":
     print("hexapod_leg_renderer.py" + "\nここで実行しても何も起こりません。")

@@ -25,11 +25,6 @@ X_MAX = 300.0
 Z_MIN = -200.0
 Z_MAX = 200.0
 
-GRAPH_STEP = 0.01
-
-MIN_LEG_RADIUS = 120
-
-
 
 if __name__ == "__main__":
 
@@ -41,21 +36,28 @@ if __name__ == "__main__":
 
     # 脚が出せる力のグラフを描画
     hexapod_leg_power = dl.HexapodLegPower()
-    #hexapod_leg_power.render(fig, ax,X_MIN,X_MAX,Z_MIN,Z_MAX)
+    hexapod_leg_power.set_step(2.0) 
+    hexapod_leg_power.render(fig, ax,X_MIN,X_MAX,Z_MIN,Z_MAX)
 
     # 脚の可動範囲の近似値を描画
     app_graph = dl.ApproximatedGraphRenderer()
-    app_graph.set_draw_fill(False)
+    app_graph.set_draw_additional_line(True)
+    app_graph.set_draw_fill(True)
+    app_graph.set_alpha(0.5)
+    app_graph.set_color('green')
+    app_graph.set_min_leg_radius(120)
     app_graph.render(ax,Z_MIN,Z_MAX)
 
     # 脚を描画
     leg_renderer = dl.HexapodLegRenderer()
     leg_renderer.set_event(fig, ax, ax_table)
-    leg_renderer.set_circle(False)
+    leg_renderer.set_circle(True)
+    leg_renderer.set_wedge(True)
+    leg_renderer.set_img_file_name("result/img_main.png")   # 左クリックで保存するファイル名を指定
 
     # マウスがグラフのどこをポイントしているかを示す線を描画する
     mouse_grid_renderer = dl.MouseGridRenderer()
-    #mouse_grid_renderer.set_event(fig, ax)
+    mouse_grid_renderer.set_event(fig, ax)
 
     # 脚の可動範囲を描画する
     hexapod_range_of_motion = dl.HexapodRangeOfMotion()
