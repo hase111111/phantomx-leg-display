@@ -8,8 +8,10 @@
 
 # pythonのバージョンは3.6.9，Window10で開発を行っていますが，WSL2をいれて，Ubuntu18.04の仮想環境を作って，そこで開発を行っています．
 # 依存しているライブラリは，matplotlib，numpy，tdqmです．
-# 実行できない場合は，これらのライブラリをインストールしてください．インストール方法は「python ライブラリ名 install方法」でググってください．
+# 実行できない場合は，これらのライブラリをインストールしてください．インストール方法は「python (ライブラリ名) install方法」でググってください．
 # （おそらく terminalで $ pip3 install matplotlib numpy tdqm と打てばインストールできるかと思いますが）
+# ModuleNotFoundError: No module named 'tkinter' とエラーが出た場合は，tkinterをインストールしてください．
+# ( このコマンドで可能です $ sudo apt-get install python3-tk )
 
 # モジュールのインポート
 import matplotlib as mpl
@@ -37,7 +39,7 @@ if __name__ == "__main__":
     # 脚が出せる力のグラフを描画
     hexapod_leg_power = dl.HexapodLegPower()
     hexapod_leg_power.set_step(2.0) 
-    hexapod_leg_power.render(fig, ax,X_MIN,X_MAX,Z_MIN,Z_MAX)
+    #hexapod_leg_power.render(fig, ax,X_MIN,X_MAX,Z_MIN,Z_MAX)
 
     # 脚の可動範囲の近似値を描画
     app_graph = dl.ApproximatedGraphRenderer()
