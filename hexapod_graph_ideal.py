@@ -36,9 +36,9 @@ if __name__ == "__main__":
     # 脚の可動範囲の近似値を描画
     app_graph = dl.ApproximatedGraphRenderer()
     app_graph.set_min_leg_radius(140)
-    app_graph.set_draw_fill(False)
-    #app_graph.set_alpha(0.5)
-    app_graph.render(ax,-170.5, 0.1)
+    app_graph.set_draw_fill(True)
+    app_graph.set_alpha(0.5)
+    app_graph.render(ax,-174, 0.1)
 
     # 脚を描画
     leg_renderer = dl.HexapodLegRenderer()

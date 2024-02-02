@@ -21,7 +21,7 @@ if __name__ == "__main__":
     ax_table = fig.add_subplot(3,3,2)
     ax = fig.add_subplot(1,1,1)
 
-    ax.plot([X_MIN,X_MAX],[-25,-25], color = "red",linestyle = "dotted")               # グラフを描画する
+    ax.plot([X_MIN,X_MAX],[-20,-20], color = "red",linestyle = "dotted")               # グラフを描画する
     #ax.plot([X_MIN,X_MAX],[-50,-50], color = "orange",linestyle = "dotted")               # グラフを
 
     # 0,0を通る線を描画する
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     # 脚の可動範囲の近似値を描画
     app_graph = dl.ApproximatedGraphRenderer()
     app_graph.set_min_leg_radius(130)
-    #app_graph.set_draw_fill(False)
+    # app_graph.set_draw_fill(False)
     app_graph.set_alpha(0.5)
     app_graph.render(ax,-180, 0.1)
 
