@@ -160,3 +160,6 @@ cython_debug/
 #.idea/
 
 .vscode/
+
+# resultフォルダを無視
+result/
