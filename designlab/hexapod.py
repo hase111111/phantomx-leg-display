@@ -334,7 +334,7 @@ class HexapodLegRangeCalculator:
                     continue
                 q2 = math.acos(q2_theta)
 
-                r_margin = 0.0
+                r_margin = 1.0
                 self._approximate_max_leg_raudus[z] = (float)(x) - r_margin
 
         return

@@ -6,6 +6,7 @@ mpl.use('tkagg')
 import matplotlib.pyplot as plt
 import numpy as np
 import designlab as dl
+import pandas as pd
 
 
 # 定数を定義
@@ -22,11 +23,6 @@ if __name__ == "__main__":
     ax = fig.add_subplot(1,1,1)
 
     ax.plot([X_MIN,X_MAX],[-20,-20], color = "red",linestyle = "dotted")               # グラフを描画する
-    #ax.plot([X_MIN,X_MAX],[-30,-30], color = "orange",linestyle = "dotted")               # グラフを
-
-    # 0,0を通る線を描画する
-    #ax.plot([0,0],[Z_MIN,Z_MAX], color = "black", lw = 0.5)       # グラフを描画する    
-    #ax.plot([X_MIN,X_MAX],[0,0], color = "black", lw = 0.5)       # グラフを描画する
 
     # 以下グラフの作成，描画
 
@@ -51,15 +47,19 @@ if __name__ == "__main__":
     hexapod_range_of_motion = dl.HexapodRangeOfMotion()
     hexapod_range_of_motion.render_lower_leg_range(ax,'black',1)
 
+    for i in range(6):
+        # CSVファイルのパス
+        csv_file = 'leg/all_simulation_leg' + str(i + 1) + '.csv'
 
+        # CSVファイルを読み込む
+        data = pd.read_csv(csv_file, names=['x', 'z', 'string'])
+        ax.scatter(data['x'], data['z'], marker = 'o', color = 'orange', s = 10)
 
     ax.set_xlim(X_MIN, X_MAX)   # x 軸の範囲を設定
     ax.set_ylim(Z_MIN, Z_MAX)   # z 軸の範囲を設定
 
     ax.set_xlabel('x [mm]')        # x軸のラベルを設定
     ax.set_ylabel('z [mm]')        # y軸のラベルを設定
-    #ax.set_xlim(50, 200)   # x 軸の範囲を設定
-    #ax.set_ylim(-100, 50)   # z 軸の範囲を設定
 
     ax.set_aspect('equal')  # x,y軸のスケールを揃える
 
