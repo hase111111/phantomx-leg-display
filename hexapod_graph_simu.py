@@ -47,13 +47,23 @@ if __name__ == "__main__":
     hexapod_range_of_motion = dl.HexapodRangeOfMotion()
     hexapod_range_of_motion.render_lower_leg_range(ax,'black',1)
 
-    for i in range(6):
-        # CSVファイルのパス
-        csv_file = 'leg/all_simulation_leg' + str(i + 1) + '.csv'
 
-        # CSVファイルを読み込む
-        data = pd.read_csv(csv_file, names=['x', 'z', 'string'])
-        ax.scatter(data['x'], data['z'], marker = 'o', color = 'orange', s = 10)
+    # CSVファイルのパス
+    csv_file = 'leg/all_simulation_all_leg' + '.csv'
+
+    # CSVファイルを読み込む (x, y, lift, string , error, index)
+    data = pd.read_csv(csv_file)
+
+    normal_data = data[data['error'] == True]
+    normal_lift_data = normal_data[normal_data['relay'] == True]
+    normal_ground_data = normal_data[normal_data['relay'] == False]
+    error_data = data[data['error'] == False]
+
+    # グラフを描画する，1列目と，2列目をx, yに指定
+    ax.scatter(normal_ground_data['x'], normal_ground_data['z'], marker = 'x', color = 'orange', s = 2)
+    ax.scatter(normal_lift_data['x'], normal_lift_data['z'], marker = 'o', color = 'blue', s = 2)
+    ax.scatter(error_data['x'], error_data['z'], marker = 'x', color = 'black', s = 2)
+
 
     ax.set_xlim(X_MIN, X_MAX)   # x 軸の範囲を設定
     ax.set_ylim(Z_MIN, Z_MAX)   # z 軸の範囲を設定
