@@ -36,15 +36,15 @@ if __name__ == "__main__":
     app_graph2.set_min_leg_radius(140)
     app_graph2.set_draw_fill(False)
     app_graph2.set_alpha(0.5)
-    app_graph2.set_color('lime')
+    # app_graph2.set_color('lime')
     app_graph2.render(ax,-175, 0.1)  # R = 140
 
-    app_graph = dl.ApproximatedGraphRenderer()
-    app_graph.set_min_leg_radius(130)
-    app_graph.set_draw_fill(False)
-    app_graph.set_alpha(0.5)
-    app_graph.render(ax,-180, 0.1)  # R = 130
-    #app_graph.render(ax,-183.1, 0.1)  # R = 120
+    # app_graph = dl.ApproximatedGraphRenderer()
+    # app_graph.set_min_leg_radius(130)
+    # app_graph.set_draw_fill(False)
+    # app_graph.set_alpha(0.5)
+    # app_graph.render(ax,-180, 0.1)  # R = 130
+    # app_graph.render(ax,-183.1, 0.1)  # R = 120
 
     # 脚を描画
     # leg_renderer = dl.HexapodLegRenderer()
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     ax.scatter(normal_ground_data['x'], normal_ground_data['z'], marker = 'o', color = 'blue', s = 10, zorder=2)
     ax.scatter(normal_lift_data['x'], normal_lift_data['z'], marker = ',', color = 'magenta', s = 10, zorder=2)
 
-    ax.scatter(error_ground_data['x'], error_ground_data['z'], marker = 'x', color = 'cyan', s = 10, zorder=2)
+    # ax.scatter(error_ground_data['x'], error_ground_data['z'], marker = 'x', color = 'cyan', s = 10, zorder=2)
 
 
     ax.set_xlim(X_MIN, X_MAX)   # x 軸の範囲を設定
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     ax.set_ylim(-200, 5)   # z 軸の範囲を設定
 
     # 出力する
-    plt.savefig('result/' + csv_file_name + '.png',dpi = 1000)  # 画像を保存する
+    plt.savefig('result/' + csv_file_name + '.png',dpi = 100)  # 画像を保存する
 
     plt.show()  # 表示する
 
