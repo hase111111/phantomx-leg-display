@@ -75,11 +75,10 @@ if __name__ == "__main__":
     error_ground_data = error_data[error_data['relay'] == False]
 
     # グラフを描画する，1列目と，2列目をx, yに指定
-    ax.scatter(normal_ground_data['x'], normal_ground_data['z'], marker = 'o', color = 'blue', s = 10, zorder=2)
-    ax.scatter(normal_lift_data['x'], normal_lift_data['z'], marker = ',', color = 'magenta', s = 10, zorder=2)
+    #ax.scatter(normal_ground_data['x'], normal_ground_data['z'], marker = 'o', color = 'blue', s = 10, zorder=2)
+    #ax.scatter(normal_lift_data['x'], normal_lift_data['z'], marker = ',', color = 'magenta', s = 10, zorder=2)
 
     # ax.scatter(error_ground_data['x'], error_ground_data['z'], marker = 'x', color = 'cyan', s = 10, zorder=2)
-
 
     ax.set_xlim(X_MIN, X_MAX)   # x 軸の範囲を設定
     ax.set_ylim(Z_MIN, Z_MAX)   # z 軸の範囲を設定
@@ -91,8 +90,8 @@ if __name__ == "__main__":
 
     ax_table.set_visible(False) # 表示しない
     
-    ax.set_xlim(50, 250)   # x 軸の範囲を設定
-    ax.set_ylim(-200, 5)   # z 軸の範囲を設定
+    # ax.set_xlim(50, 250)   # x 軸の範囲を設定
+    # ax.set_ylim(-200, 1)   # z 軸の範囲を設定
 
     # 出力する
     plt.savefig('result/' + csv_file_name + '.png',dpi = 100)  # 画像を保存する
