@@ -29,8 +29,8 @@ class ApproximatedGraphRenderer:
     def render(self,ax,z_min,z_max):
         # type: (plt.axis,float,float) -> None
         '''        
-        近似された(Approximated)脚可動範囲の表示を行う\n
-        set_???関数はこの関数の前に呼び出す必要がある
+        近似された(Approximated)脚可動範囲の表示を行う．
+        セット関数はこの関数の前に呼び出す必要がある
 
         Parameters
         ----------
@@ -46,7 +46,7 @@ class ApproximatedGraphRenderer:
         self._Z_MIN = z_min
         self._Z_MAX = z_max
 
-        print("ApproximatedGraphRenderer.render() : 近似された脚可動範囲を表示します")
+        print("ApproximatedGraphRenderer.render() : Shows approximate leg range of motion")
         print("ApproximatedGraphRenderer.render() : " + 
               "z_min = " + str(self._Z_MIN) + ", " + 
               "z_max = " + str(self._Z_MAX) + ", " +

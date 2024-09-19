@@ -16,21 +16,15 @@ class HexapodLegRangeCalculator:
     THETA3_MIN = math.radians(-145.0) # [rad]
     THETA3_MAX = math.radians(25.5)   # [rad]
 
-    __PRINT_FLAG = False
+    _PRINT_FLAG = False
     _MIN_RADIUS = 120.0     # [mm]
 
     _approximate_max_leg_raudus = []    #近似された脚の可動範囲の最大半径のリスト，z軸の座標軸の取り方が逆なので，zを反転させる
 
     def __init__(self):
-        '''
-        コンストラクタ pythonでは__init__がコンストラクタになる\n
-        また，こうして'で囲まれたコメントはdocstringと呼ばれ,help()で表示される\n
-        カーソルで関数にあわせると表示される
-        '''
+        self._init_approximate_max_leg_raudus()    # 脚の最大半径を計算する
 
-        self.__init_approximate_max_leg_raudus()    # 脚の最大半径を計算する
-
-        if self.__PRINT_FLAG:
+        if self._PRINT_FLAG:
             print(self._approximate_max_leg_raudus)
 
         return    
@@ -191,7 +185,7 @@ class HexapodLegRangeCalculator:
         if reverse_flag:
             q2 = -q2
         angle.append(q1 + q2)
-        angle[1] = self.__clamp_angle(angle[1]) # -180度~180度に収める
+        angle[1] = self._clamp_angle(angle[1]) # -180度~180度に収める
         joint_pos[0].append((self.FEMUR_LENGTH * math.cos(angle[1])) + joint_pos[0][1])
         joint_pos[1].append((self.FEMUR_LENGTH * math.sin(angle[1])) + joint_pos[1][1])
 
@@ -201,7 +195,7 @@ class HexapodLegRangeCalculator:
         angle.append(
             math.atan2( (joint_pos[1][3] - joint_pos[1][2]), (joint_pos[0][3] - joint_pos[0][2]) ) - angle[1]
         )
-        angle[2] = self.__clamp_angle(angle[2]) # -180度~180度に収める
+        angle[2] = self._clamp_angle(angle[2]) # -180度~180度に収める
         return True,joint_pos,angle
     
     def calc_inverse_kinematics_xz_arduino(self, x, z):
@@ -294,12 +288,9 @@ class HexapodLegRangeCalculator:
             return False
         return True
     
-    def __init_approximate_max_leg_raudus(self):
+    def _init_approximate_max_leg_raudus(self):
         '''
         脚の最大半径を計算する privateメソッド
-        先行研究のプログラムの移植(2019の波東さんのプログラム)
-        内部で動く処理の話だが,z軸をさかさまにしているので注意
-        先行研究ではx(54 ~ 246),z(0 ~ 200)の範囲で計算している,メモ
         '''
 
         z_min = 0
@@ -329,7 +320,7 @@ class HexapodLegRangeCalculator:
                 q2_theta = q2_upper / q2_lower
 
                 if (q2_theta < -1.0) or (q2_theta > 1.0):
-                    if self.__PRINT_FLAG:
+                    if self._PRINT_FLAG:
                         print("[error] : q2_theta:" + str(q2_theta) + " x:" + str(x) + " z:" + str(z))
                     continue
                 q2 = math.acos(q2_theta)
@@ -339,7 +330,7 @@ class HexapodLegRangeCalculator:
 
         return
 
-    def __clamp_angle(self, angle):
+    def _clamp_angle(self, angle):
         # type: (float) -> float
         '''
         角度を-180 ~ 180の範囲にする
