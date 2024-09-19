@@ -1,20 +1,20 @@
+
 #-*- coding: utf-8 -*-
 
 # モジュールのインポート
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
+from hexapod_leg_range_calculator import HexapodLegRangeCalculator
 
 class ApproximatedGraphRenderer:
-
     _ax = None
     _Z_MIN = 0
     _Z_MAX = 0
     _GRAPH_STEP = 0.01
 
-    _draw_additional_line = True    #補助線を描画するかどうか 
-    _draw_fill = True               #fillするかどうか
+    _draw_additional_line = True    # 補助線を描画するかどうか 
+    _draw_fill = True               # fillするかどうか
     _color = 'green'
     _alpha = 1.0
 
@@ -154,8 +154,7 @@ class ApproximatedGraphRenderer:
         self._calc.set_approximate_min_leg_raudus(min_leg_radius)
 
 if __name__ == "__main__":
-    
-    print("近似された脚可動範囲の表示を行う")
+    # 近似された脚可動範囲の表示を行う
 
     # 以下グラフの作成，描画
     fig,ax = plt.subplots()
