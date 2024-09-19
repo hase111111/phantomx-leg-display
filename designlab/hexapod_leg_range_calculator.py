@@ -1,3 +1,4 @@
+
 #-*- coding: utf-8 -*-
 
 import math
@@ -343,3 +344,4 @@ class HexapodLegRangeCalculator:
 
 if __name__ == "__main__":
     print("hexapod.py" + "\nここで実行しても作業は行われません")
+    

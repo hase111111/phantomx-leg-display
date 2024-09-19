@@ -1,3 +1,4 @@
+
 #-*- coding: utf-8 -*-
 
 # モジュールのインポート
@@ -8,7 +9,7 @@ import numpy as np
 import math
 import tqdm
 
-from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
+from hexapod_leg_range_calculator import HexapodLegRangeCalculator
 
 class HexapodLegPower:
 
@@ -75,7 +76,7 @@ class HexapodLegPower:
             for j in tqdm.tqdm(range(len(z_range)), leave=False):
 
                 # j→i (z→x) の順で配列を参照することに注意
-                power_array[j][i] = self.__get_max_power(x_range[i], z_range[j],0,1)
+                power_array[j][i] = self._get_max_power(x_range[i], z_range[j],0,1)
 
         # power_arrayを等高線で描画する
         cmap = copy.copy(mpl.cm.get_cmap("jet"))
@@ -110,7 +111,7 @@ class HexapodLegPower:
 
         return
     
-    def __get_max_power(self, x, z, power_x, power_z):
+    def _get_max_power(self, x, z, power_x, power_z):
         # type: (float, float, float, float) -> float
         '''
         x,zの座標における脚の力の最大値を返す
@@ -151,7 +152,7 @@ class HexapodLegPower:
         for p in power_list:
 
             # ヤコビ行列を作成
-            jacobian = self.__make_jacobian(angle[1], angle[2])
+            jacobian = self._make_jacobian(angle[1], angle[2])
 
             # 力のベクトルを作成 [F_x, F_z]^T
             power = np.matrix(
@@ -176,7 +177,7 @@ class HexapodLegPower:
 
         return (float)(ans)
 
-    def __make_jacobian(self, theta2, theta3):
+    def _make_jacobian(self, theta2, theta3):
         # type: (float, float) -> np.matrix
         '''
         ヤコビ行列を計算する
@@ -213,3 +214,21 @@ class HexapodLegPower:
         )
 
         return jacobian
+
+if __name__ == "__main__":
+    # 力の分布を描画する
+    fig = plt.figure()
+    ax = fig.add_subplot(1,1,1)
+
+    hexapod_leg_power = HexapodLegPower()
+    hexapod_leg_power.set_step(2.0)
+    hexapod_leg_power.render(fig, ax, -100, 300, -200, 200)
+
+    ax.set_xlim(-100, 300)
+    ax.set_ylim(-200, 200)
+
+    ax.set_xlabel('x [mm]')
+    ax.set_ylabel('z [mm]')
+    ax.set_aspect('equal')
+
+    plt.show()
