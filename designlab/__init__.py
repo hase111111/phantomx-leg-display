@@ -2,7 +2,7 @@
 
 # 自作のパッケージの設定ファイル
 
-from .hexapod import HexapodLegRangeCalculator
+from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 from .hexapod_leg_renderer import HexapodLegRenderer
 from .approximated_graph_renderer import ApproximatedGraphRenderer
 from .mouse_grid_renderer import MouseGridRenderer

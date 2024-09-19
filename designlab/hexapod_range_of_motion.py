@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .hexapod import HexapodLegRangeCalculator
+from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 
 class HexapodRangeOfMotion:
 

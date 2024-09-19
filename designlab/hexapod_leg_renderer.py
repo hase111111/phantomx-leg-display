@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 
-from .hexapod import HexapodLegRangeCalculator
+from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 import matplotlib.pyplot as plt
 import matplotlib.patches as patch
 import math

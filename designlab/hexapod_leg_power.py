@@ -8,7 +8,7 @@ import numpy as np
 import math
 import tqdm
 
-from .hexapod import HexapodLegRangeCalculator
+from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 
 class HexapodLegPower:
 
