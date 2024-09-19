@@ -1,3 +1,4 @@
+
 #-*- coding: utf-8 -*-
 
 import matplotlib.pyplot as plt
@@ -54,13 +55,13 @@ class MouseGridRenderer:
         self._x_axis.set_color(self._color)
 
         # マウスが動いたときに呼び出す関数を設定
-        fig.canvas.mpl_connect('motion_notify_event', self.__on_move)  
+        fig.canvas.mpl_connect('motion_notify_event', self._on_move)  
 
         self._alreadly_init = True
 
         return
 
-    def __on_move(self,event):
+    def _on_move(self,event):
         
         # マウスポイント地点を取得
         x = event.xdata

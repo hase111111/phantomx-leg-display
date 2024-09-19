@@ -1,3 +1,4 @@
+
 #-*- coding: utf-8 -*-
 
 import matplotlib.pyplot as plt
@@ -33,7 +34,7 @@ class HexapodRangeOfMotion:
         if self._ax == None:
             self._ax = ax
 
-        self.__make_leg_range(
+        self._make_leg_range(
             HexapodLegRangeCalculator.THETA2_MIN,
             HexapodLegRangeCalculator.THETA2_MAX,
             0,
@@ -52,7 +53,7 @@ class HexapodRangeOfMotion:
         if self._ax == None:
             self._ax = ax
 
-        self.__make_leg_range(
+        self._make_leg_range(
             HexapodLegRangeCalculator.THETA2_MIN,
             HexapodLegRangeCalculator.THETA2_MAX,
             HexapodLegRangeCalculator.THETA3_MIN,
@@ -63,7 +64,7 @@ class HexapodRangeOfMotion:
 
         return  
     
-    def __make_leg_range(self,theta2_min,theta2_max,theta3_min,theta3_max,color_value,alpha_vaule):
+    def _make_leg_range(self,theta2_min,theta2_max,theta3_min,theta3_max,color_value,alpha_vaule):
         # type: (float,float,float,float,str,float) -> None
         '''
         脚の可動範囲を描画する\n
@@ -96,18 +97,18 @@ class HexapodRangeOfMotion:
         tibia_range = np.arange(theta3_min, theta3_max, self._STEP)
 
         # femur joint (min ~ max) , tibia joint (min)
-        self.__make_leg_line(femur_range,[theta3_min],color_value,alpha_vaule)
+        self._make_leg_line(femur_range,[theta3_min],color_value,alpha_vaule)
 
         # femur joint (min ~ max) , tibia joint (max)
-        self.__make_leg_line(femur_range,[theta3_max],color_value,alpha_vaule)
+        self._make_leg_line(femur_range,[theta3_max],color_value,alpha_vaule)
 
         # femur joint (min) , tibia joint (min ~ max)
-        self.__make_leg_line([theta2_min],tibia_range,color_value,alpha_vaule)
+        self._make_leg_line([theta2_min],tibia_range,color_value,alpha_vaule)
 
         # femur joint (max) , tibia joint (min ~ max)
-        self.__make_leg_line([theta2_max],tibia_range,color_value,alpha_vaule)
+        self._make_leg_line([theta2_max],tibia_range,color_value,alpha_vaule)
 
-    def __make_leg_line(self,theta2,theta3,color_value,alpha_vaule):
+    def _make_leg_line(self,theta2,theta3,color_value,alpha_vaule):
         # type: (list[float],list[float],str,float) -> None
         '''
         間接を回しながら，脚先の座標をプロットしていく

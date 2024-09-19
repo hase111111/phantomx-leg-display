@@ -1,3 +1,4 @@
+
 #-*- coding: utf-8 -*-
 
 class TriangleChecker:
@@ -31,3 +32,8 @@ class TriangleChecker:
             return False
 
         return True
+
+if __name__ == "__main__":
+    tc = TriangleChecker()
+    print(tc.can_make_triangle(3,4,5)) # True
+    print(tc.can_make_triangle(3,4,7)) # False

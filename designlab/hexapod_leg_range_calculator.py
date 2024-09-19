@@ -1,11 +1,11 @@
 #-*- coding: utf-8 -*-
 
 import math
-from .triangle_checker import TriangleChecker
+from triangle_checker import TriangleChecker
 
 class HexapodLegRangeCalculator:
 
-    # privateなメソッドや変数は、メソッド名の前にアンダースコアを付ける．定数は通例大文字で書く(pythonには定数，C++におけるconstはない)
+    # public な定数
     COXA_LENGTH = 52.0      # [mm]
     FEMUR_LENGTH = 66.0     # [mm]
     TIBIA_LENGTH = 130.0    # [mm]

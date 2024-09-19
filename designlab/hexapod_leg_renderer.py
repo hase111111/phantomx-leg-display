@@ -1,15 +1,17 @@
+
 #-*- coding: utf-8 -*-
 
-from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 import matplotlib.pyplot as plt
 import matplotlib.patches as patch
 import math
 
+from hexapod_leg_range_calculator import HexapodLegRangeCalculator
+
 class HexapodLegRenderer:
 
-    __calc = HexapodLegRangeCalculator()
+    _calc = HexapodLegRangeCalculator()
 
-    __WEDGE_R = 20              # 扇形の半径
+    _WEDGE_R = 20              # 扇形の半径
 
     _leg_graph = None          # 通常の脚のグラフ
     _error_joint = None        # 範囲外の間接に色をつけるためのグラフ  
@@ -39,16 +41,16 @@ class HexapodLegRenderer:
         イベントを設定する,初期化処理.2度目以降の呼び出しは無視される\n
         '''
 
-        print("HexapodLegRenderer.set_event : イベントを設定します")
+        print("HexapodLegRenderer.set_event : Set the event")
 
         # すでに初期化済みの場合は何もしない
         if self._alreadly_init:
-            print("HexapodLegRenderer.set_event() : すでに初期化済みです")
+            print("HexapodLegRenderer.set_event() : Already initialized.")
             return
         
         # figまたはaxがNoneの場合は何もしない
         if fig == None or ax == None:
-            print("HexapodLegRenderer.set_event() : figまたはaxがNoneです")
+            print("HexapodLegRenderer.set_event() : fig or ax is None")
             return
 
         self._fig = fig
@@ -57,8 +59,8 @@ class HexapodLegRenderer:
         self._femur_circle = plt.Circle([0,0],color='black',fill=False)
         self._tibia_circle = plt.Circle([0,0],color='black',fill=False)
 
-        self._femur_circle.set_radius(self.__calc.FEMUR_LENGTH)    #半径を設定
-        self._tibia_circle.set_radius(self.__calc.TIBIA_LENGTH)
+        self._femur_circle.set_radius(self._calc.FEMUR_LENGTH)    #半径を設定
+        self._tibia_circle.set_radius(self._calc.TIBIA_LENGTH)
 
         self._femur_circle.set_alpha(0.1)                          #透明度を設定
         self._tibia_circle.set_alpha(0.1)
@@ -67,8 +69,8 @@ class HexapodLegRenderer:
         ax.add_artist(self._tibia_circle)
 
         #角度用の扇形を登録
-        self._femur_wedge = patch.Wedge([0,0], self.__WEDGE_R, 0, 10)
-        self._tibia_wedge = patch.Wedge([0,0], self.__WEDGE_R, 0, 10)
+        self._femur_wedge = patch.Wedge([0,0], self._WEDGE_R, 0, 10)
+        self._tibia_wedge = patch.Wedge([0,0], self._WEDGE_R, 0, 10)
 
         ax.add_artist(self._femur_wedge)
         ax.add_artist(self._tibia_wedge)
@@ -93,10 +95,10 @@ class HexapodLegRenderer:
         self._error_joint.set_color('red')       #色を変える
 
         # マウスが動いたときに呼び出す関数を設定
-        fig.canvas.mpl_connect('motion_notify_event', self.__render)    
+        fig.canvas.mpl_connect('motion_notify_event', self._render)    
 
         # マウスが左クリックされたときに呼び出す関数を設定
-        fig.canvas.mpl_connect('button_press_event', self.__render_click)
+        fig.canvas.mpl_connect('button_press_event', self._render_click)
 
         # 角度を表示するためのテーブルを登録
         self._angle_table = ax_table.table(cellText=[
@@ -113,7 +115,7 @@ class HexapodLegRenderer:
 
         return
 
-    def __render(self,event):
+    def _render(self,event):
 
         # マウスポイント地点を取得
         mouse_x = event.xdata
@@ -124,7 +126,7 @@ class HexapodLegRenderer:
             return
 
         # 脚の角度を計算
-        res,self._joint_pos,angle = self.__calc.calc_inverse_kinematics_xz(mouse_x, mouse_z, self._reverse)
+        res,self._joint_pos,angle = self._calc.calc_inverse_kinematics_xz(mouse_x, mouse_z, self._reverse)
         self._leg_graph.set_data(self._joint_pos)
         self._leg_graph.set_visible(True)
 
@@ -147,15 +149,15 @@ class HexapodLegRenderer:
             self._leg_graph.set_color('blue')
 
             #可動範囲外ならばそのプロットの色を変える
-            if not self.__calc.is_theta2_in_range(angle[1]) or not self.__calc.is_theta3_in_range(angle[2]):
+            if not self._calc.is_theta2_in_range(angle[1]) or not self._calc.is_theta3_in_range(angle[2]):
 
                 error_point = [[],[]]
                 
-                if not self.__calc.is_theta2_in_range(angle[1]):
+                if not self._calc.is_theta2_in_range(angle[1]):
                     error_point[0].append(self._joint_pos[0][1])
                     error_point[1].append(self._joint_pos[1][1])
 
-                if not self.__calc.is_theta3_in_range(angle[2]):
+                if not self._calc.is_theta3_in_range(angle[2]):
                     error_point[0].append(self._joint_pos[0][2])
                     error_point[1].append(self._joint_pos[1][2])
 
@@ -172,7 +174,7 @@ class HexapodLegRenderer:
         self._angle_table._cells[(2,1)]._text.set_text("{:.3f}".format(math.degrees(angle[1])))
         self._angle_table._cells[(3,1)]._text.set_text("{:.3f}".format(math.degrees(angle[2])))
 
-        ar_a,ar_s,ar_ls,ar_rs = self.__calc.calc_inverse_kinematics_xz_arduino(mouse_x, -mouse_z)
+        ar_a,ar_s,ar_ls,ar_rs = self._calc.calc_inverse_kinematics_xz_arduino(mouse_x, -mouse_z)
         self._angle_table._cells[(4,1)]._text.set_text(str(ar_s[0]))
         self._angle_table._cells[(5,1)]._text.set_text(str(ar_s[1]))
         self._angle_table._cells[(6,1)]._text.set_text(str(ar_s[2]))
@@ -220,7 +222,7 @@ class HexapodLegRenderer:
         plt.draw()
         return
 
-    def __render_click(self,event):
+    def _render_click(self,event):
 
         left_click_index = 1
         middle_click_index = 2
@@ -233,7 +235,7 @@ class HexapodLegRenderer:
         # 中クリックされた場合は反転
         elif event.button == middle_click_index:
             self._reverse = not self._reverse
-            self.__render(event)
+            self._render(event)
 
         # 左クリックされた場合は表示を更新
         elif event.button == left_click_index:
@@ -270,4 +272,27 @@ class HexapodLegRenderer:
         self._fig_name = file_name
 
 if __name__ == "__main__":
-    print("hexapod_leg_renderer.py" + "\nここで実行しても何も起こりません。")
+    # 足の描画を行う
+    fig = plt.figure()
+    ax = fig.add_subplot(1,2,1)
+    ax_table = fig.add_subplot(1,2,2)
+
+    leg_renderer = HexapodLegRenderer()
+    leg_renderer.set_event(fig, ax, ax_table)
+    leg_renderer.set_circle(True)
+    leg_renderer.set_wedge(True)
+    leg_renderer.set_img_file_name("result/img.png")
+
+    X_MIN = -100.0
+    X_MAX = 300.0
+    Z_MIN = -200.0
+    Z_MAX = 200.0
+
+    ax.set_xlim(X_MIN, X_MAX)   # x 軸の範囲を設定
+    ax.set_ylim(Z_MIN, Z_MAX)   # z 軸の範囲を設定
+    ax.set_xlabel('x [mm]')     # x軸のラベルを設定
+    ax.set_ylabel('z [mm]')     # y軸のラベルを設定
+
+    ax.set_aspect('equal')  # x,y軸のスケールを揃える
+
+    plt.show()
