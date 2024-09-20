@@ -90,7 +90,7 @@ class HexapodLegPower:
   
         return
 
-    def set_step(self,step):
+    def set_step(self, step):
         # type: (float) -> None
         '''
         何mmごとに力の分布を計算するかを設定する\n
@@ -148,7 +148,7 @@ class HexapodLegPower:
         ans = 0
 
         # 逆運動学解が得られた場合は，トルクの計算をする
-        power_list = np.arange(1,20,1)    #6から12までの0.5刻みのリスト
+        power_list = np.arange(1, 20, 1)    #6から12までの0.5刻みのリスト
         for p in power_list:
 
             # ヤコビ行列を作成
@@ -218,7 +218,7 @@ class HexapodLegPower:
 if __name__ == "__main__":
     # 力の分布を描画する
     fig = plt.figure()
-    ax = fig.add_subplot(1,1,1)
+    ax = fig.add_subplot(1, 1, 1)
 
     hexapod_leg_power = HexapodLegPower()
     hexapod_leg_power.set_step(2.0)
