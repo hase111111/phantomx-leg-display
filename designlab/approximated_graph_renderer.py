@@ -26,7 +26,7 @@ class ApproximatedGraphRenderer:
         '''
         self._calc = HexapodLegRangeCalculator()  # 計算機のインスタンスを作成
 
-    def render(self,ax,z_min,z_max):
+    def render(self, ax, z_min, z_max):
         # type: (plt.axis,float,float) -> None
         '''        
         近似された(Approximated)脚可動範囲の表示を行う．
@@ -66,9 +66,9 @@ class ApproximatedGraphRenderer:
             return
         
         # 近似された(Approximated)脚可動範囲の計算を行う
-        z = np.arange(self._Z_MIN,self._Z_MAX,self._GRAPH_STEP)     # GRAPH_STEP刻みでZ_MINからZ_MAXまでの配列zを作成
+        z = np.arange(self._Z_MIN, self._Z_MAX, self._GRAPH_STEP)     # GRAPH_STEP刻みでZ_MINからZ_MAXまでの配列zを作成
 
-        approximated_x_min = np.full_like(z,self._calc.get_approximate_min_leg_raudus())   # xと同じ要素数で値がすべてMIN_LEG_RADIUSの配列zを作成
+        approximated_x_min = np.full_like(z, self._calc.get_approximate_min_leg_raudus())   # xと同じ要素数で値がすべてMIN_LEG_RADIUSの配列zを作成
 
         approximated_x_max = []
         for i in range(len(z)):
@@ -76,8 +76,8 @@ class ApproximatedGraphRenderer:
 
         if self._draw_additional_line:
             # 補助線を描画する
-            self._ax.plot(approximated_x_min, z, color=self._color,alpha=0.1)
-            self._ax.plot(approximated_x_max, z, color=self._color,alpha=0.1)
+            self._ax.plot(approximated_x_min, z, color=self._color, alpha=0.1)
+            self._ax.plot(approximated_x_max, z, color=self._color, alpha=0.1)
 
         # xとzで囲まれた範囲をfillする
         if self._draw_fill:
@@ -90,10 +90,10 @@ class ApproximatedGraphRenderer:
                 alpha=self._alpha
             )  
         else:
-            self._ax.plot(approximated_x_min, z, color=self._color,alpha=self._alpha)
-            self._ax.plot(approximated_x_max, z, color=self._color,alpha=self._alpha)
+            self._ax.plot(approximated_x_min, z, color=self._color, alpha=self._alpha)
+            self._ax.plot(approximated_x_max, z, color=self._color, alpha=self._alpha)
 
-    def set_draw_additional_line(self,draw_additional_line):
+    def set_draw_additional_line(self, draw_additional_line):
         # type: (bool) -> None
         '''
         補助線を描画するかどうかを設定する
@@ -105,7 +105,7 @@ class ApproximatedGraphRenderer:
         '''
         self._draw_additional_line = draw_additional_line
     
-    def set_draw_fill(self,draw_fill):
+    def set_draw_fill(self, draw_fill):
         # type: (bool) -> None
         '''
         fillするかどうかを設定する
@@ -117,7 +117,7 @@ class ApproximatedGraphRenderer:
         '''
         self._draw_fill = draw_fill
 
-    def set_color(self,color):
+    def set_color(self, color):
         # type: (str) -> None
         '''
         色を設定する
@@ -129,7 +129,7 @@ class ApproximatedGraphRenderer:
         '''
         self._color = color
 
-    def set_alpha(self,alpha):
+    def set_alpha(self, alpha):
         # type: (float) -> None
         '''
         透明度を設定する
@@ -141,7 +141,7 @@ class ApproximatedGraphRenderer:
         '''
         self._alpha = alpha
 
-    def set_min_leg_radius(self,min_leg_radius):
+    def set_min_leg_radius(self, min_leg_radius):
         # type: (float) -> None
         '''
         脚の最小半径を設定する
@@ -161,9 +161,9 @@ if __name__ == "__main__":
     
     app_graph = ApproximatedGraphRenderer()
     
-    app_graph.render(ax,-200,100)
+    app_graph.render(ax, -200, 100)
     
-    ax.set_xlim(-100,300)
-    ax.set_ylim(-300,300)
+    ax.set_xlim(-100, 300)
+    ax.set_ylim(-300, 300)
     
     plt.show()  # 表示する
