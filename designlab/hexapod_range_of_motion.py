@@ -4,7 +4,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
+from hexapod_leg_range_calculator import HexapodLegRangeCalculator
 
 class HexapodRangeOfMotion:
 
@@ -16,17 +16,17 @@ class HexapodRangeOfMotion:
         self._calc = HexapodLegRangeCalculator()
         return
     
-    def render(self,ax):
+    def render(self, ax):
 
-        print("HexapodLegRangeCalculator.render : 脚の可動範囲を描画します")
+        print("HexapodLegRangeCalculator.render : Draw the range of motion of the legs")
 
-        self.render_upper_leg_range(ax,'black',0.3)
+        self.render_upper_leg_range(ax, 'black', 0.3)
 
-        self.render_lower_leg_range(ax,'black',1)
+        self.render_lower_leg_range(ax, 'black', 1)
 
         return
     
-    def render_upper_leg_range(self,ax,color_value,alpha_vaule):
+    def render_upper_leg_range(self, ax, color_value, alpha_vaule):
 
         if ax == None:
             return
@@ -45,7 +45,7 @@ class HexapodRangeOfMotion:
 
         return     
     
-    def render_lower_leg_range(self,ax,color_value,alpha_vaule):
+    def render_lower_leg_range(self, ax, color_value, alpha_vaule):
         
         if ax == None:
             return
@@ -64,7 +64,7 @@ class HexapodRangeOfMotion:
 
         return  
     
-    def _make_leg_range(self,theta2_min,theta2_max,theta3_min,theta3_max,color_value,alpha_vaule):
+    def _make_leg_range(self, theta2_min, theta2_max, theta3_min, theta3_max, color_value, alpha_vaule):
         # type: (float,float,float,float,str,float) -> None
         '''
         脚の可動範囲を描画する\n
@@ -97,18 +97,18 @@ class HexapodRangeOfMotion:
         tibia_range = np.arange(theta3_min, theta3_max, self._STEP)
 
         # femur joint (min ~ max) , tibia joint (min)
-        self._make_leg_line(femur_range,[theta3_min],color_value,alpha_vaule)
+        self._make_leg_line(femur_range, [theta3_min], color_value, alpha_vaule)
 
         # femur joint (min ~ max) , tibia joint (max)
-        self._make_leg_line(femur_range,[theta3_max],color_value,alpha_vaule)
+        self._make_leg_line(femur_range,[theta3_max],color_value, alpha_vaule)
 
         # femur joint (min) , tibia joint (min ~ max)
-        self._make_leg_line([theta2_min],tibia_range,color_value,alpha_vaule)
+        self._make_leg_line([theta2_min], tibia_range, color_value,alpha_vaule)
 
         # femur joint (max) , tibia joint (min ~ max)
-        self._make_leg_line([theta2_max],tibia_range,color_value,alpha_vaule)
+        self._make_leg_line([theta2_max], tibia_range, color_value, alpha_vaule)
 
-    def _make_leg_line(self,theta2,theta3,color_value,alpha_vaule):
+    def _make_leg_line(self, theta2, theta3, color_value, alpha_vaule):
         # type: (list[float],list[float],str,float) -> None
         '''
         間接を回しながら，脚先の座標をプロットしていく
@@ -134,12 +134,22 @@ class HexapodRangeOfMotion:
 
         for i in range(len(theta2)):
             for j in range(len(theta3)):
-                res = self._calc.get_leg_position_xz(theta2[i],theta3[j])
+                res = self._calc.get_leg_position_xz(theta2[i], theta3[j])
 
                 if res[0]:
                     line_x.append(res[1])
                     line_z.append(res[2])
 
-        self._ax.plot(line_x,line_z,color=color_value,alpha=alpha_vaule)
+        self._ax.plot(line_x, line_z, color=color_value, alpha=alpha_vaule)
 
         return
+
+if __name__ == '__main__':
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    rom = HexapodRangeOfMotion()
+    rom.render(ax)
+
+    ax.set_aspect('equal')
+    plt.show()
