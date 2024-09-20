@@ -35,5 +35,5 @@ class TriangleChecker:
 
 if __name__ == "__main__":
     tc = TriangleChecker()
-    print(tc.can_make_triangle(3,4,5)) # True
-    print(tc.can_make_triangle(3,4,7)) # False
+    print(tc.can_make_triangle(3, 4, 5)) # True
+    print(tc.can_make_triangle(3, 4, 7)) # False

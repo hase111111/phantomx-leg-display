@@ -36,7 +36,7 @@ class HexapodLegRenderer:
     def __init__(self):
         return    
     
-    def set_event(self,fig,ax,ax_table):
+    def set_event(self, fig, ax, ax_table):
         '''
         イベントを設定する,初期化処理.2度目以降の呼び出しは無視される\n
         '''
@@ -115,7 +115,7 @@ class HexapodLegRenderer:
 
         return
 
-    def _render(self,event):
+    def _render(self, event):
 
         # マウスポイント地点を取得
         mouse_x = event.xdata
@@ -274,8 +274,8 @@ class HexapodLegRenderer:
 if __name__ == "__main__":
     # 足の描画を行う
     fig = plt.figure()
-    ax = fig.add_subplot(1,2,1)
-    ax_table = fig.add_subplot(1,2,2)
+    ax = fig.add_subplot(1, 2, 1)
+    ax_table = fig.add_subplot(1, 2, 2)
 
     leg_renderer = HexapodLegRenderer()
     leg_renderer.set_event(fig, ax, ax_table)

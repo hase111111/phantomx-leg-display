@@ -16,7 +16,7 @@ class MouseGridRenderer:
     def __init__(self):
         return    
     
-    def set_event(self,fig,ax):
+    def set_event(self, fig, ax):
         # type: (plt.figure,plt.axis) -> None
         '''
         イベントを設定する,2度目以降の呼び出しは無視される\n
@@ -31,14 +31,14 @@ class MouseGridRenderer:
             matplotlibのaxisオブジェクト
         '''
 
-        print("MouseGridRenderer.set_event() : マウスグリッドの描画を開始します")
+        print("MouseGridRenderer.set_event() : Starts drawing the mouse grid")
 
         if self._alreadly_init:
-            print("MouseGridRenderer.set_event() : すでに初期化済みです")
+            print("MouseGridRenderer.set_event() : Already initialized.")
             return
 
         if fig == None or ax == None:
-            print("MouseGridRenderer.set_event() : figまたはaxがNoneです")
+            print("MouseGridRenderer.set_event() : fig or ax is None")
             return
         
         # マウスポイント地点を表示するための線を登録，
@@ -61,7 +61,7 @@ class MouseGridRenderer:
 
         return
 
-    def _on_move(self,event):
+    def _on_move(self, event):
         
         # マウスポイント地点を取得
         x = event.xdata
@@ -77,7 +77,7 @@ class MouseGridRenderer:
 
         return
     
-    def set_alpha(self,alpha):
+    def set_alpha(self, alpha):
         # type: (float) -> None
         '''
         マウスポイント地点を表示するための線の透明度を設定する\n
@@ -93,7 +93,7 @@ class MouseGridRenderer:
 
         return
     
-    def set_color(self,color):
+    def set_color(self, color):
         # type: (str) -> None
         '''
         マウスポイント地点を表示するための線の色を設定する\n
@@ -108,3 +108,6 @@ class MouseGridRenderer:
         self._color = color
 
         return
+
+if __name__ == '__main__':
+    print("MouseGridRenderer")
