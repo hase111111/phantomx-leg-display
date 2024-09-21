@@ -152,18 +152,3 @@ class ApproximatedGraphRenderer:
             脚の最小半径
         '''
         self._calc.set_approximate_min_leg_raudus(min_leg_radius)
-
-if __name__ == "__main__":
-    # 近似された脚可動範囲の表示を行う
-
-    # 以下グラフの作成，描画
-    fig,ax = plt.subplots()
-
-    app_graph = ApproximatedGraphRenderer()
-
-    app_graph.render(ax, -200, 100)
-
-    ax.set_xlim(-100, 300)
-    ax.set_ylim(-300, 300)
-
-    plt.show()  # 表示する

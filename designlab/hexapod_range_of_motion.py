@@ -15,8 +15,17 @@ class HexapodRangeOfMotion:
     def __init__(self):
         self._calc = HexapodLegRangeCalculator()
         return
-    
+
     def render(self, ax):
+        # type: (plt.axis) -> None
+        '''
+        脚の可動範囲を描画する
+
+        Parameters
+        ----------
+        ax : plt.axis
+            matplotlibのaxisオブジェクト
+        '''
 
         print("HexapodLegRangeCalculator.render : Draw the range of motion of the legs")
 
@@ -25,12 +34,25 @@ class HexapodRangeOfMotion:
         self.render_lower_leg_range(ax, 'black', 1)
 
         return
-    
+
     def render_upper_leg_range(self, ax, color_value, alpha_vaule):
+        # type: (plt.axis,str,float) -> None
+        '''
+        上脚の可動範囲を描画する
+
+        Parameters
+        ----------
+        ax : plt.axis
+            matplotlibのaxisオブジェクト
+        color_value : str
+            色
+        alpha_vaule : float
+            透明度
+        '''
 
         if ax == None:
             return
-        
+
         if self._ax == None:
             self._ax = ax
 
@@ -43,13 +65,26 @@ class HexapodRangeOfMotion:
             alpha_vaule
         )
 
-        return     
-    
+        return
+
     def render_lower_leg_range(self, ax, color_value, alpha_vaule):
-        
+        # type: (plt.axis,str,float) -> None
+        '''
+        下脚の可動範囲を描画する
+
+        Parameters
+        ----------
+        ax : plt.axis
+            matplotlibのaxisオブジェクト
+        color_value : str
+            色
+        alpha_vaule : float
+            透明度
+        '''
+
         if ax == None:
             return
-        
+
         if self._ax == None:
             self._ax = ax
 
@@ -62,8 +97,8 @@ class HexapodRangeOfMotion:
             alpha_vaule
         )
 
-        return  
-    
+        return
+
     def _make_leg_range(self, theta2_min, theta2_max, theta3_min, theta3_max, color_value, alpha_vaule):
         # type: (float,float,float,float,str,float) -> None
         '''
@@ -91,7 +126,7 @@ class HexapodRangeOfMotion:
         if self._ax == None:
             print("ax is None")
             return
-        
+
         # minからmaxまでstep刻みで配列を作成
         femur_range = np.arange(theta2_min, theta2_max, self._STEP)
         tibia_range = np.arange(theta3_min, theta3_max, self._STEP)
@@ -128,7 +163,7 @@ class HexapodRangeOfMotion:
         if self._ax == None:
             print("ax is None")
             return
-        
+
         line_x = []
         line_z = []
 
@@ -143,13 +178,3 @@ class HexapodRangeOfMotion:
         self._ax.plot(line_x, line_z, color=color_value, alpha=alpha_vaule)
 
         return
-
-if __name__ == '__main__':
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-
-    rom = HexapodRangeOfMotion()
-    rom.render(ax)
-
-    ax.set_aspect('equal')
-    plt.show()

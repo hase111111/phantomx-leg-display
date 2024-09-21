@@ -295,29 +295,3 @@ class HexapodLegRenderer:
         '''
 
         self._fig_name = file_name
-
-if __name__ == "__main__":
-    # 足の描画を行う
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 2, 1)
-    ax_table = fig.add_subplot(1, 2, 2)
-
-    leg_renderer = HexapodLegRenderer()
-    leg_renderer.set_event(fig, ax, ax_table)
-    leg_renderer.set_circle(True)
-    leg_renderer.set_wedge(True)
-    leg_renderer.set_img_file_name("result/img.png")
-
-    X_MIN = -100.0
-    X_MAX = 300.0
-    Z_MIN = -200.0
-    Z_MAX = 200.0
-
-    ax.set_xlim(X_MIN, X_MAX)   # x 軸の範囲を設定
-    ax.set_ylim(Z_MIN, Z_MAX)   # z 軸の範囲を設定
-    ax.set_xlabel('x [mm]')     # x軸のラベルを設定
-    ax.set_ylabel('z [mm]')     # y軸のラベルを設定
-
-    ax.set_aspect('equal')  # x,y軸のスケールを揃える
-
-    plt.show()

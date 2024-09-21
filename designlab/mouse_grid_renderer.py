@@ -14,8 +14,8 @@ class MouseGridRenderer:
     _alreadly_init = False     # 初期化フラグ
 
     def __init__(self):
-        return    
-    
+        return
+
     def set_event(self, fig, ax):
         # type: (plt.figure,plt.axis) -> None
         '''
@@ -40,11 +40,11 @@ class MouseGridRenderer:
         if fig == None or ax == None:
             print("MouseGridRenderer.set_event() : fig or ax is None")
             return
-        
+
         # マウスポイント地点を表示するための線を登録，
         self._y_axis = ax.axvline(-1)
         self._x_axis = ax.axhline(-1)
-   
+
         self._y_axis.set_linestyle('--')
         self._x_axis.set_linestyle('--')
 
@@ -55,14 +55,14 @@ class MouseGridRenderer:
         self._x_axis.set_color(self._color)
 
         # マウスが動いたときに呼び出す関数を設定
-        fig.canvas.mpl_connect('motion_notify_event', self._on_move)  
+        fig.canvas.mpl_connect('motion_notify_event', self._on_move)
 
         self._alreadly_init = True
 
         return
 
     def _on_move(self, event):
-        
+
         # マウスポイント地点を取得
         x = event.xdata
         y = event.ydata
@@ -70,13 +70,13 @@ class MouseGridRenderer:
         if x == None or y == None:
             # マウスポイント地点が取得できなかった場合は何もしない
             return
-        
+
         # マウスポイント地点を表示するための線の位置を更新
         self._y_axis.set_xdata(x)
         self._x_axis.set_ydata(y)
 
         return
-    
+
     def set_alpha(self, alpha):
         # type: (float) -> None
         '''
@@ -92,7 +92,7 @@ class MouseGridRenderer:
         self._alpha = alpha
 
         return
-    
+
     def set_color(self, color):
         # type: (str) -> None
         '''
@@ -108,6 +108,3 @@ class MouseGridRenderer:
         self._color = color
 
         return
-
-if __name__ == '__main__':
-    print("MouseGridRenderer")

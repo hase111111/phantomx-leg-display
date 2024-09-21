@@ -214,21 +214,3 @@ class HexapodLegPower:
         )
 
         return jacobian
-
-if __name__ == "__main__":
-    # 力の分布を描画する
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1)
-
-    hexapod_leg_power = HexapodLegPower()
-    hexapod_leg_power.set_step(2.0)
-    hexapod_leg_power.render(fig, ax, -100, 300, -200, 200)
-
-    ax.set_xlim(-100, 300)
-    ax.set_ylim(-200, 200)
-
-    ax.set_xlabel('x [mm]')
-    ax.set_ylabel('z [mm]')
-    ax.set_aspect('equal')
-
-    plt.show()
