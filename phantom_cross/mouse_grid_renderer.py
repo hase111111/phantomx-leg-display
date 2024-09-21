@@ -31,14 +31,14 @@ class MouseGridRenderer:
             matplotlibのaxisオブジェクト
         '''
 
-        print("MouseGridRenderer.set_event() : Starts drawing the mouse grid")
+        print("MouseGridRenderer.set_event: Starts drawing the mouse grid")
 
         if self._alreadly_init:
-            print("MouseGridRenderer.set_event() : Already initialized.")
+            print("MouseGridRenderer.set_event: Already initialized.")
             return
 
         if fig == None or ax == None:
-            print("MouseGridRenderer.set_event() : fig or ax is None")
+            print("MouseGridRenderer.set_event: fig or ax is None")
             return
 
         # マウスポイント地点を表示するための線を登録，

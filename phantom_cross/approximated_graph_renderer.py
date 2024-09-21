@@ -46,8 +46,8 @@ class ApproximatedGraphRenderer:
         self._Z_MIN = z_min
         self._Z_MAX = z_max
 
-        print("ApproximatedGraphRenderer.render() : Shows approximate leg range of motion")
-        print("ApproximatedGraphRenderer.render() : " +
+        print("ApproximatedGraphRenderer.render: Shows approximate leg range of motion")
+        print("ApproximatedGraphRenderer.render: " +
               "z_min = " + str(self._Z_MIN) + ", " +
               "z_max = " + str(self._Z_MAX) + ", " +
               "draw_additional_line = " + str(self._draw_additional_line) +  ", " +
@@ -57,12 +57,12 @@ class ApproximatedGraphRenderer:
 
         # axがNoneの場合は何もしない
         if self._ax == None:
-            print("ax is None")
+            print("ApproximatedGraphRenderer.render: ax is None")
             return
 
         # z_minとz_maxの大小関係を確認
         if self._Z_MIN > self._Z_MAX:
-            print("z_min must be less than z_max")
+            print("ApproximatedGraphRenderer.render: z_min must be less than z_max")
             return
 
         # 近似された(Approximated)脚可動範囲の計算を行う

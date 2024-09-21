@@ -27,7 +27,7 @@ class HexapodRangeOfMotion:
             matplotlibのaxisオブジェクト
         '''
 
-        print("HexapodLegRangeCalculator.render : Draw the range of motion of the legs")
+        print("HexapodLegRangeCalculator.render: Draw the range of motion of the legs")
 
         self.render_upper_leg_range(ax, 'black', 0.3)
 

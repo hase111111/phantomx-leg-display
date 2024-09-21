@@ -41,16 +41,16 @@ class HexapodLegRenderer:
         イベントを設定する,初期化処理.2度目以降の呼び出しは無視される\n
         '''
 
-        print("HexapodLegRenderer.set_event : Set the event")
+        print("HexapodLegRenderer.set_event: Set the event")
 
         # すでに初期化済みの場合は何もしない
         if self._alreadly_init:
-            print("HexapodLegRenderer.set_event() : Already initialized.")
+            print("HexapodLegRenderer.set_event: Already initialized.")
             return
 
         # figまたはaxがNoneの場合は何もしない
         if fig == None or ax == None:
-            print("HexapodLegRenderer.set_event() : fig or ax is None")
+            print("HexapodLegRenderer.set_event: fig or ax is None")
             return
 
         self._fig = fig

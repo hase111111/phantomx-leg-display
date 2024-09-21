@@ -34,7 +34,7 @@ class HexapodLegPower:
         大変時間のかかる処理なので，実行には時間がかかる\n
         '''
 
-        print("HexapodLegPower.render: 力の分布を描画します.時間のかかる処理のため,10秒程度お待ちください.")
+        print("HexapodLegPower.render: Draws the distribution of forces. Please wait 10 seconds for this time-consuming process.")
 
         # min < max でない場合は終了する
         if x_min >= x_max:
