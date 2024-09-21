@@ -89,7 +89,7 @@ if __name__ == "__main__":
     ax.set_aspect('equal')  # x,y軸のスケールを揃える
 
     ax_table.set_visible(False) # 表示しない
-    
+
     # ax.set_xlim(50, 250)   # x 軸の範囲を設定
     # ax.set_ylim(-200, 1)   # z 軸の範囲を設定
 

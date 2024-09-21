@@ -10,6 +10,7 @@ from .mouse_grid_renderer import MouseGridRenderer
 from .hexapod_range_of_motion import HexapodRangeOfMotion
 from .hexapod_leg_power import HexapodLegPower
 from .triangle_checker import TriangleChecker
+from .graph_dispalyer import display_graph
 
 # パッケージのバージョン
 __version__ = "1.0.0"
@@ -21,5 +22,6 @@ __all__ = [
     "MouseGridRenderer",
     "HexapodRangeOfMotion",
     "HexapodLegPower",
-    "TriangleChecker"
+    "TriangleChecker",
+    "display_graph"
 ]
