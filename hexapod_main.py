@@ -18,7 +18,7 @@ import matplotlib as mpl
 mpl.use('tkagg')
 import matplotlib.pyplot as plt
 import numpy as np
-import designlab as dl
+import phantom_cross as dl
 
 
 # 定数を定義
