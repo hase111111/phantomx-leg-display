@@ -91,6 +91,10 @@ class MouseGridRenderer:
 
         self._alpha = alpha
 
+        # 値が異常な場合は例外を投げる
+        if self._alpha < 0.0 or self._alpha > 1.0:
+            raise ValueError("MouseGridRenderer.set_alpha: alpha is out of range")
+
         return
 
     def set_color(self, color):

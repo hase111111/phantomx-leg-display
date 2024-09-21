@@ -31,7 +31,7 @@ class HexapodRangeOfMotion:
 
         self.render_upper_leg_range(ax, 'black', 0.3)
 
-        self.render_lower_leg_range(ax, 'black', 1)
+        self.render_lower_leg_range(ax, 'black', 1.0)
 
         return
 

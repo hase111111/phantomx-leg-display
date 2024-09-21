@@ -102,10 +102,9 @@ class HexapodLegPower:
             何mmごとに力の分布を計算するか
         '''
 
-        # stepが1以下の場合は終了する
-        if step <= 0:
-            print("HexapodLegPower.set_step: step <= 0")
-            return
+        # stepが1以下の場合は例外を投げる
+        if step <= 1:
+            raise ValueError("HexapodLegPower.set_step: step is less than or equal to 1")
 
         self._step = step
 

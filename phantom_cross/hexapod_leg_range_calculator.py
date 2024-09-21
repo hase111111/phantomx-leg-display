@@ -17,15 +17,15 @@ class HexapodLegRangeCalculator:
     THETA3_MIN = math.radians(-145.0) # [rad]
     THETA3_MAX = math.radians(25.5)   # [rad]
 
-    _PRINT_FLAG = False
-    _MIN_RADIUS = 120.0     # [mm]
+    _DEBUG_FLAG = False
+    _min_radius = 120.0     # [mm]
 
     _approximate_max_leg_raudus = []    #近似された脚の可動範囲の最大半径のリスト，z軸の座標軸の取り方が逆なので，zを反転させる
 
     def __init__(self):
         self._init_approximate_max_leg_raudus()    # 脚の最大半径を計算する
 
-        if self._PRINT_FLAG:
+        if self._DEBUG_FLAG:
             print(self._approximate_max_leg_raudus)
 
         return
@@ -41,7 +41,12 @@ class HexapodLegRangeCalculator:
             脚の最小半径 [mm]
         '''
 
-        self._MIN_RADIUS = r
+        self._min_radius = r
+
+        # 異常な値の場合は例外を投げる
+        if self._min_radius < 0:
+            raise ValueError("r must be greater than 0")
+
         return
 
     def get_approximate_min_leg_raudus(self):
@@ -55,7 +60,7 @@ class HexapodLegRangeCalculator:
             脚の最小半径 [mm]
         '''
 
-        return self._MIN_RADIUS
+        return self._min_radius
 
     def get_approximate_max_leg_raudus(self, z):
         # type: (float) -> float
@@ -75,15 +80,15 @@ class HexapodLegRangeCalculator:
 
         # zが範囲外の場合は0を返す
         if  -z < 0 or len(self._approximate_max_leg_raudus) < -z:
-            return self._MIN_RADIUS
+            return self._min_radius
 
         # Z軸の座標軸の取り方が逆なので、zを反転させる
         r = self._approximate_max_leg_raudus[(int)(-z)]
 
-        if(self._MIN_RADIUS < r):
+        if(self._min_radius < r):
             return r
         else:
-            return self._MIN_RADIUS
+            return self._min_radius
 
     def get_leg_position_xz(self, theta2, theta3):
         # type: (float, float) -> tuple[bool, float, float]
@@ -331,7 +336,7 @@ class HexapodLegRangeCalculator:
                 q2_theta = q2_upper / q2_lower
 
                 if (q2_theta < -1.0) or (q2_theta > 1.0):
-                    if self._PRINT_FLAG:
+                    if self._DEBUG_FLAG:
                         print("[error] : q2_theta:" + str(q2_theta) + " x:" + str(x) + " z:" + str(z))
                     continue
                 q2 = math.acos(q2_theta)

@@ -129,6 +129,10 @@ class ApproximatedGraphRenderer:
         '''
         self._color = color
 
+        # 値が異常な場合は例外を投げる
+        if self._color == None:
+            raise ValueError("ApproximatedGraphRenderer.set_color: color is None")
+
     def set_alpha(self, alpha):
         # type: (float) -> None
         '''
@@ -140,6 +144,10 @@ class ApproximatedGraphRenderer:
             透明度
         '''
         self._alpha = alpha
+
+        # 値が異常な場合は例外を投げる
+        if self._alpha < 0.0 or self._alpha > 1.0:
+            raise ValueError("ApproximatedGraphRenderer.set_alpha: alpha is out of range")
 
     def set_min_leg_radius(self, min_leg_radius):
         # type: (float) -> None
