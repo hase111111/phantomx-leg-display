@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
     # 脚が出せる力のグラフを描画
     hexapod_leg_power = dl.HexapodLegPower()
-    hexapod_leg_power.set_step(2.0) 
+    hexapod_leg_power.set_step(2.0)
     #hexapod_leg_power.render(fig, ax,X_MIN,X_MAX,Z_MIN,Z_MAX)
 
     # 脚の可動範囲の近似値を描画

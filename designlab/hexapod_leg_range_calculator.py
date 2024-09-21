@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 
 import math
-from triangle_checker import TriangleChecker
+from .triangle_checker import TriangleChecker
 
 class HexapodLegRangeCalculator:
 
@@ -28,8 +28,8 @@ class HexapodLegRangeCalculator:
         if self._PRINT_FLAG:
             print(self._approximate_max_leg_raudus)
 
-        return    
-    
+        return
+
     def set_approximate_min_leg_raudus(self, r):
         # type: (float) -> None
         '''
@@ -45,8 +45,18 @@ class HexapodLegRangeCalculator:
         return
 
     def get_approximate_min_leg_raudus(self):
+        # type: () -> float
+        '''
+        脚の最小半径を返す
+
+        Returns
+        -------
+        res : float
+            脚の最小半径 [mm]
+        '''
+
         return self._MIN_RADIUS
-        
+
     def get_approximate_max_leg_raudus(self, z):
         # type: (float) -> float
         '''
@@ -74,7 +84,7 @@ class HexapodLegRangeCalculator:
             return r
         else:
             return self._MIN_RADIUS
-    
+
     def get_leg_position_xz(self, theta2, theta3):
         # type: (float, float) -> tuple[bool, float, float]
         '''
@@ -100,7 +110,7 @@ class HexapodLegRangeCalculator:
             return (False, 0.0, 0.0)
         if not self.is_theta3_in_range(theta3):
             return (False, 0.0, 0.0)
-        
+
         # 脚の位置を計算する
         x = self.COXA_LENGTH + self.FEMUR_LENGTH * math.cos(theta2) + self.TIBIA_LENGTH * math.cos(theta2 + theta3)
         z = self.FEMUR_LENGTH * math.sin(theta2) + self.TIBIA_LENGTH * math.sin(theta2 + theta3)
@@ -119,7 +129,7 @@ class HexapodLegRangeCalculator:
             脚の付け根から見た脚先のz座標 [mm]
         reverse_flag : bool
             逆運動学解は2つあるが、どちらを選択するかを決めるフラグ.Trueにすると脚先が上を向く.
-        
+
         Returns
         -------
         res : tuple[bool, list[tuple[float, float]], list[float]]
@@ -160,7 +170,7 @@ class HexapodLegRangeCalculator:
             #距離が近い方を選択
             angle_f = angle_ft
             angle_t = 0
-            
+
             if distance > distance_phase:
                 angle_f = angle_ft_phase
                 angle_t = -math.pi
@@ -198,7 +208,7 @@ class HexapodLegRangeCalculator:
         )
         angle[2] = self._clamp_angle(angle[2]) # -180度~180度に収める
         return True,joint_pos,angle
-    
+
     def calc_inverse_kinematics_xz_arduino(self, x, z):
         # type: (float, float) -> tuple[list[float], list[float], list[float], list[float]]
         '''
@@ -261,7 +271,7 @@ class HexapodLegRangeCalculator:
         right_servo_angle.append(354 + servo_angle[2])
 
         return angle, servo_angle, left_servo_angle, right_servo_angle
-    
+
     def is_theta1_in_range(self, theta1):
         # type: (float) -> bool
         '''
@@ -279,7 +289,7 @@ class HexapodLegRangeCalculator:
         if theta2 < self.THETA2_MIN or theta2 > self.THETA2_MAX:
             return False
         return True
-    
+
     def is_theta3_in_range(self, theta3):
         # type: (float) -> bool
         '''
@@ -288,7 +298,7 @@ class HexapodLegRangeCalculator:
         if theta3 < self.THETA3_MIN or theta3 > self.THETA3_MAX:
             return False
         return True
-    
+
     def _init_approximate_max_leg_raudus(self):
         '''
         脚の最大半径を計算する privateメソッド
@@ -298,13 +308,13 @@ class HexapodLegRangeCalculator:
         z_max = int(self.FEMUR_LENGTH+self.TIBIA_LENGTH)
         x_min = int(self.COXA_LENGTH)
         x_max = int(self.COXA_LENGTH+self.FEMUR_LENGTH+self.TIBIA_LENGTH)
-        
+
         # 全て0で初期化
         for z in range(z_min, z_max):
             self._approximate_max_leg_raudus.append(0.0)
 
         # 脚の最大半径を計算する
-        for z in range(z_min, z_max):    
+        for z in range(z_min, z_max):
             for x in range(x_min,x_max):
                 line_end_x = (float)(x)
                 line_end_y = 0
@@ -316,7 +326,7 @@ class HexapodLegRangeCalculator:
                     im += 0.0000001
 
                 q1 = -math.atan2(line_end_z,ik_true_x)
-                q2_upper = math.pow(self.FEMUR_LENGTH, 2.0) + math.pow(im, 2.0) - math.pow(self.TIBIA_LENGTH, 2.0) 
+                q2_upper = math.pow(self.FEMUR_LENGTH, 2.0) + math.pow(im, 2.0) - math.pow(self.TIBIA_LENGTH, 2.0)
                 q2_lower = 2.0 * self.FEMUR_LENGTH * im
                 q2_theta = q2_upper / q2_lower
 

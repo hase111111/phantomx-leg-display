@@ -9,7 +9,7 @@ import numpy as np
 import math
 import tqdm
 
-from hexapod_leg_range_calculator import HexapodLegRangeCalculator
+from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 
 class HexapodLegPower:
 
@@ -25,7 +25,7 @@ class HexapodLegPower:
     def __init__(self):
         self._calc = HexapodLegRangeCalculator()
         return
-    
+
     def render(self, fig, ax, x_min, x_max, z_min, z_max):
         # type: (plt.fig ,plt.Axes, float, float, float, float) -> None
         '''
@@ -40,7 +40,7 @@ class HexapodLegPower:
         if x_min >= x_max:
             print("HexapodLegPower.render: x_min >= x_max")
             return
-        
+
         if z_min >= z_max:
             print("HexapodLegPower.render: z_min >= z_max")
             return
@@ -49,15 +49,15 @@ class HexapodLegPower:
         if self._calc == None:
             print("HexapodLegPower.render: self.__calc is None")
             return
-        
+
         # グラフがインスタンス化されていない場合は，axを設定する
         if self._ax == None:
-        
+
             # axがNoneの場合は終了する
-            if ax == None: 
+            if ax == None:
                 print("HexapodLegPower.render: ax is None")
                 return
-            
+
             self._ax = ax
 
         if fig == None:
@@ -87,7 +87,7 @@ class HexapodLegPower:
         # カラーバーを表示する
         cbar = fig.colorbar(power_contourf)
         cbar.set_label("[N]", fontsize=20)
-  
+
         return
 
     def set_step(self, step):
@@ -110,7 +110,7 @@ class HexapodLegPower:
         self._step = step
 
         return
-    
+
     def _get_max_power(self, x, z, power_x, power_z):
         # type: (float, float, float, float) -> float
         '''
@@ -141,10 +141,10 @@ class HexapodLegPower:
 
             # もう一つの逆運動学解を求める
             is_sucess,joint_pos,angle = self._calc.calc_inverse_kinematics_xz(x, z, True)
-            
+
             if not is_sucess or (is_sucess and (not self._calc.is_theta2_in_range(angle[1]) or not self._calc.is_theta3_in_range(angle[2]))):
                 return 0.0
-        
+
         ans = 0
 
         # 逆運動学解が得られた場合は，トルクの計算をする
@@ -167,7 +167,7 @@ class HexapodLegPower:
 
             # トルクの絶対値を計算する
             femur_tauqe = math.fabs(tauqe[0][0])
-            tibia_tauqe = math.fabs(tauqe[1][0])    
+            tibia_tauqe = math.fabs(tauqe[1][0])
 
             # トルクの最大値を超えていないか判定する．超えたら終了，超えていなければ記録して次のループへ
             if femur_tauqe < self._TORQUE_MAX and tibia_tauqe < self._TORQUE_MAX:
@@ -192,7 +192,7 @@ class HexapodLegPower:
         Returns
         -------
 
-        
+
         jacobian : np.matrix
             2*2のヤコビ行列
         '''
@@ -201,7 +201,7 @@ class HexapodLegPower:
         if self._calc == None:
             print("HexapodLegPower.__make_jacobian: self.__calc is None")
             return np.matrix([[0,0],[0,0]])
-        
+
         Lf = self._calc.FEMUR_LENGTH
         Lt = self._calc.TIBIA_LENGTH
 

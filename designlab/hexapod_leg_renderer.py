@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patch
 import math
 
-from hexapod_leg_range_calculator import HexapodLegRangeCalculator
+from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 
 class HexapodLegRenderer:
 
@@ -14,7 +14,7 @@ class HexapodLegRenderer:
     _WEDGE_R = 20              # 扇形の半径
 
     _leg_graph = None          # 通常の脚のグラフ
-    _error_joint = None        # 範囲外の間接に色をつけるためのグラフ  
+    _error_joint = None        # 範囲外の間接に色をつけるためのグラフ
     _leg_graph_click = None    # クリックされたときに表示する固定されたグラフ
     _angle_table = None        # 角度を表示するためのテーブル
     _femur_circle = None       # 脚の可動範囲を表示するための円
@@ -34,8 +34,8 @@ class HexapodLegRenderer:
     _fig_name = "result/img.png"
 
     def __init__(self):
-        return    
-    
+        return
+
     def set_event(self, fig, ax, ax_table):
         '''
         イベントを設定する,初期化処理.2度目以降の呼び出しは無視される\n
@@ -47,14 +47,14 @@ class HexapodLegRenderer:
         if self._alreadly_init:
             print("HexapodLegRenderer.set_event() : Already initialized.")
             return
-        
+
         # figまたはaxがNoneの場合は何もしない
         if fig == None or ax == None:
             print("HexapodLegRenderer.set_event() : fig or ax is None")
             return
 
         self._fig = fig
-        
+
         # 脚の付け根の円を登録
         self._femur_circle = plt.Circle([0,0],color='black',fill=False)
         self._tibia_circle = plt.Circle([0,0],color='black',fill=False)
@@ -95,7 +95,7 @@ class HexapodLegRenderer:
         self._error_joint.set_color('red')       #色を変える
 
         # マウスが動いたときに呼び出す関数を設定
-        fig.canvas.mpl_connect('motion_notify_event', self._render)    
+        fig.canvas.mpl_connect('motion_notify_event', self._render)
 
         # マウスが左クリックされたときに呼び出す関数を設定
         fig.canvas.mpl_connect('button_press_event', self._render_click)
@@ -138,7 +138,7 @@ class HexapodLegRenderer:
         self._femur_wedge.set_center([self._joint_pos[0][1],self._joint_pos[1][1]])
         self._femur_wedge.set_theta1(min([0, math.degrees(angle[1])]))
         self._femur_wedge.set_theta2(max([0, math.degrees(angle[1])]))
-        
+
         self._tibia_wedge.set_center([self._joint_pos[0][2],self._joint_pos[1][2]])
         self._tibia_wedge.set_theta1(min([math.degrees(angle[1]), math.degrees(angle[1] + angle[2])]))
         self._tibia_wedge.set_theta2(max([math.degrees(angle[1]), math.degrees(angle[1] + angle[2])]))
@@ -152,7 +152,7 @@ class HexapodLegRenderer:
             if not self._calc.is_theta2_in_range(angle[1]) or not self._calc.is_theta3_in_range(angle[2]):
 
                 error_point = [[],[]]
-                
+
                 if not self._calc.is_theta2_in_range(angle[1]):
                     error_point[0].append(self._joint_pos[0][1])
                     error_point[1].append(self._joint_pos[1][1])
@@ -246,10 +246,18 @@ class HexapodLegRenderer:
 
         plt.draw()
         return
-    
+
     def set_circle(self, vaild):
         #type : (bool) -> None
-        
+        '''
+        円を表示するかどうかを設定する
+
+        Parameters
+        ----------
+        vaild : bool
+            円を表示するかどうか
+        '''
+
         if vaild:
             self._femur_circle.set_visible(True)
             self._tibia_circle.set_visible(True)
@@ -259,7 +267,15 @@ class HexapodLegRenderer:
 
     def set_wedge(self, vaild):
         #type : (bool) -> None
-        
+        '''
+        扇形を表示するかどうかを設定する
+
+        Parameters
+        ----------
+        vaild : bool
+            扇形を表示するかどうか
+        '''
+
         if vaild:
             self._femur_wedge.set_visible(True)
             self._tibia_wedge.set_visible(True)
@@ -269,6 +285,15 @@ class HexapodLegRenderer:
 
     def set_img_file_name(self, file_name):
         #type : (str) -> None
+        '''
+        画像を保存するときのファイル名を設定する
+
+        Parameters
+        ----------
+        file_name : str
+            画像を保存するときのファイル名
+        '''
+
         self._fig_name = file_name
 
 if __name__ == "__main__":
