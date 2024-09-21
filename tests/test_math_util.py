@@ -1,13 +1,10 @@
 
 import unittest
-import os, sys
-
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-from designlab.triangle_checker import TriangleChecker
+import phantom_cross as pc
 
 class TestTriangleChecker(unittest.TestCase):
     def setUp(self):
-        self.triangle_checker = TriangleChecker()
+        self.triangle_checker = pc.TriangleChecker()
 
     def test_can_make_triangle(self):
         self.assertTrue(self.triangle_checker.can_make_triangle(3, 4, 5))
@@ -20,7 +17,6 @@ class TestTriangleChecker(unittest.TestCase):
         self.assertFalse(self.triangle_checker.can_make_triangle(1, 1, 2))
         self.assertFalse(self.triangle_checker.can_make_triangle(1, 2, 1))
         self.assertFalse(self.triangle_checker.can_make_triangle(2, 1, 1))
-
 
 if __name__ == '__main__':
     unittest.main()
