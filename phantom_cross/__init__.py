@@ -13,7 +13,7 @@ from .triangle_checker import TriangleChecker
 from .graph_dispalyer import display_graph
 
 # パッケージのバージョン
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 __all__ = [
     "HexapodLegRangeCalculator",
