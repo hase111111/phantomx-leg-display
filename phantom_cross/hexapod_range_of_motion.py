@@ -8,13 +8,34 @@ import numpy as np
 from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 from .hexapod_param import HexapodParam
 
+
 class HexapodRangeOfMotion:
 
     def __init__(self, hexapod_leg_range_calc: HexapodLegRangeCalculator, hexapod_param: HexapodParam,
-                 ax: axes.Axes) -> None:
+                 ax: axes.Axes, *, color: str = 'black', upper_alpha: float= 0.3, lowwer_alpha: float= 1.0) -> None:
+        '''
+        Parameters
+        ----------
+        hexapod_leg_range_calc : HexapodLegRangeCalculator
+            脚の可動範囲を計算するためのインスタンス
+        hexapod_param : HexapodParam
+            パラメータを格納するためのインスタンス
+        ax : matplotlib.axes.Axes
+            matplotlibのaxesオブジェクト
+        color : str
+            色
+        upper_alpha : float
+            上向きの可動範囲の透明度
+        lowwer_alpha : float
+            下向きの可動範囲の透明度
+        '''
         self._calc = hexapod_leg_range_calc
         self._param = hexapod_param
         self._ax = ax
+
+        self._color = color
+        self._upper_alpha = upper_alpha
+        self._lowwer_alpha = lowwer_alpha
 
         self._STEP = 0.001
         
@@ -32,57 +53,39 @@ class HexapodRangeOfMotion:
         '''脚の可動範囲を描画する．'''
 
         print("HexapodLegRangeCalculator.render: Draw the range of motion of the legs")
+        print("HexapodLegRangeCalculator.render: " 
+              + "color: " + self._color + ", " 
+              + "upper_alpha: " + str(self._upper_alpha) 
+              + ", lowwer_alpha: " + str(self._lowwer_alpha)
+              + ", (step: " + str(self._STEP) + ")")
 
-        self.render_upper_leg_range(self._ax, 'black', 0.3)
+        self.render_upper_leg_range()
+        self.render_lower_leg_range()
 
-        self.render_lower_leg_range(self._ax, 'black', 1.0)
-
-        return
-
-    def render_upper_leg_range(self, color_value: str, alpha_vaule: float) -> None:
-        '''
-        上脚の可動範囲を描画する．
-
-        Parameters
-        ----------
-        color_value : str
-            色
-        alpha_vaule : float
-            透明度
-        '''
+    def render_upper_leg_range(self) -> None:
+        '''逆運動学解2つのうち，上向きの可動範囲を描画する．'''
 
         self._make_leg_range(
             self._param.theta2_min,
             self._param.theta2_max,
             0,
             self._param.theta3_max,
-            color_value,
-            alpha_vaule
+            self._color,
+            self._upper_alpha
         )
 
 
-    def render_lower_leg_range(self, color_value: str, alpha_vaule: float) -> None:
-        '''
-        下脚の可動範囲を描画する．
-
-        Parameters
-        ----------
-        color_value : str
-            色
-        alpha_vaule : float
-            透明度
-        '''
+    def render_lower_leg_range(self) -> None:
+        '''逆運動学解2つのうち，下向きの可動範囲を描画する．'''
 
         self._make_leg_range(
             self._param.theta2_min,
             self._param.theta2_max,
             self._param.theta3_min,
             0,
-            color_value,
-            alpha_vaule
+            self._color,
+            self._lowwer_alpha
         )
-
-        return
 
     def _make_leg_range(
             self, theta2_min: float, theta2_max: float, theta3_min: float, theta3_max: float, 

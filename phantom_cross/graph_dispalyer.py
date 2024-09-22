@@ -14,11 +14,13 @@ from .mouse_grid_renderer import MouseGridRenderer
 from .hexapod_range_of_motion import HexapodRangeOfMotion
 from .hexapod_param import HexapodParam
 
-def display_graph(*, display_table = True,
+def display_graph(*, 
+                  display_table = True,
                   x_min = -100.0, x_max = 300.0, z_min = -200.0, z_max = 200.0,
                   display_leg_power = False, leg_power_step = 2.0,
-                  display_approximated_graph = True, set_approx_fill = True, set_approx_color = 'green',
+                  display_approximated_graph = True, set_approx_fill = True, color_approx = 'green',
                   set_approx_alpha = 0.5, 
+                  color_rom = 'black', alpha_upper_rom = 0.3, alpha_lower_rom = 1.0,
                   set_display_circle = True, set_display_wedge = True, set_display_img_file_name = "result/img_main.png",
                   display_mouse_grid = True, display_ground_line = True, ground_z = -25.0,
                   do_not_show = False):
@@ -105,7 +107,7 @@ def display_graph(*, display_table = True,
     # 脚の可動範囲の近似値を描画
     app_graph = ApproximatedGraphRenderer(
         hexapod_calc, ax, z_min=Z_MIN, z_max=Z_MAX,
-        draw_additional_line=True, draw_fill=set_approx_fill, color=set_approx_color, alpha=set_approx_alpha)
+        draw_additional_line=True, draw_fill=set_approx_fill, color=color_approx, alpha=set_approx_alpha)
 
     if display_approximated_graph:
         app_graph.render()
@@ -123,8 +125,10 @@ def display_graph(*, display_table = True,
         mouse_grid_renderer.set_event(fig, ax)
 
     # 脚の可動範囲を描画する
-    hexapod_range_of_motion = HexapodRangeOfMotion(hexapod_calc, hexapod_pram, ax)
-    hexapod_range_of_motion.render_lower_leg_range('black', 1.0)
+    hexapod_range_of_motion = HexapodRangeOfMotion(
+        hexapod_calc, hexapod_pram, ax,
+        color=color_rom, upper_alpha=alpha_upper_rom, lowwer_alpha=alpha_lower_rom)
+    hexapod_range_of_motion.render()
 
     ax.set_xlim(X_MIN, X_MAX)   # x 軸の範囲を設定
     ax.set_ylim(Z_MIN, Z_MAX)   # z 軸の範囲を設定
