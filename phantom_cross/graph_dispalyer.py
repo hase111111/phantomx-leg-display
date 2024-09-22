@@ -97,8 +97,7 @@ def display_graph(*, display_table = True,
     hexapod_calc = HexapodLegRangeCalculator(hexapod_pram)
 
     # 脚が出せる力のグラフを描画
-    hexapod_leg_power = HexapodLegPower(hexapod_calc)
-    hexapod_leg_power.set_step(leg_power_step)
+    hexapod_leg_power = HexapodLegPower(hexapod_calc, hexapod_pram, step=leg_power_step)
     if display_leg_power:
         hexapod_leg_power.render(fig, ax, X_MIN, X_MAX, Z_MIN, Z_MAX)
 

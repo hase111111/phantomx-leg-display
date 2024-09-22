@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 
 import matplotlib as mpl
+import matplotlib.axis as axis
 import matplotlib.pyplot as plt
 import copy
 import numpy as np
@@ -9,25 +10,26 @@ import math
 import tqdm
 
 from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
+from .hexapod_param import HexapodParam
+
 
 class HexapodLegPower:
-    _ax = None
 
-    _step = 1.0            # 何mmごとに力の分布を計算するか，小さくしすぎると計算時間がかかる
-
-    _TORQUE_MAX = 1800.0   # ストールトルク(停動トルク) [N*mm]
-
-    _PRINT_DEV = int(20)   # 何%ごとに進捗を表示するか. 5%ごとならば，20回に1回表示するため20を指定する
-
-    def __init__(self, calc_instance: HexapodLegRangeCalculator) -> None:
+    def __init__(self, calc_instance: HexapodLegRangeCalculator, hexapod_param: HexapodParam, *, step: float = 1.0) -> None:
         self._calc = calc_instance
+        self._step = step
 
-    def render(self, fig, ax, x_min, x_max, z_min, z_max):
-        # type: (plt.fig ,plt.Axes, float, float, float, float) -> None
+        self._TORQUE_MAX = hexapod_param.torque_max
+        self._PRINT_DEV = int(20)   # 何%ごとに進捗を表示するか. 5%ごとならば，20回に1回表示するため20を指定する
+
+        if step <= 1:
+            raise ValueError("HexapodLegPower.set_step: step is less than or equal to 1")
+
+    def render(self, fig: plt.Figure, ax: axis.Axis, x_min: float, x_max: float, z_min: float, z_max: float) -> None:
         '''
-        x_min < x < x_max , z_min < z < z_max の範囲でグラフを描画する\n
-        力の大きさは，等高線で表現する\n
-        大変時間のかかる処理なので，実行には時間がかかる\n
+        x_min < x < x_max , z_min < z < z_max の範囲でグラフを描画する．\n
+        力の大きさは，等高線で表現する．\n
+        大変時間のかかる処理なので，実行には時間がかかる．\n
         '''
 
         print("HexapodLegPower.render: Draws the distribution of forces. Please wait 10 seconds for this time-consuming process.")
@@ -49,24 +51,14 @@ class HexapodLegPower:
             print("HexapodLegPower.render: z_min >= z_max")
             return
 
-        # 計算機がインスタンス化されていない場合は終了する
         if self._calc == None:
-            print("HexapodLegPower.render: self.__calc is None")
-            return
+            raise ValueError("HexapodLegPower.render: self.__calc is None")
 
-        # グラフがインスタンス化されていない場合は，axを設定する
-        if self._ax == None:
-
-            # axがNoneの場合は終了する
-            if ax == None:
-                print("HexapodLegPower.render: ax is None")
-                return
-
-            self._ax = ax
+        if ax == None:
+            raise ValueError("HexapodLegPower.render: ax is None")
 
         if fig == None:
-            print("HexapodLegPower.render: fig is None")
-            return
+            raise ValueError("HexapodLegPower.render: fig is None")
 
         # x_min < x < x_max , z_min < z < z_max の範囲でグラフを描画するため，minからmaxまでself.__STEPづつ増やした数値を格納した配列を作成する
         x_range = np.arange(x_min, x_max, self._step)
@@ -86,31 +78,11 @@ class HexapodLegPower:
         cmap = copy.copy(mpl.cm.get_cmap("jet"))
         cmap.set_under('silver')
         cmap.set_over('silver')
-        power_contourf = self._ax.contourf(x_range, z_range, power_array, cmap=cmap, levels=20, vmin=4.0, vmax=20.0)
+        power_contourf = ax.contourf(x_range, z_range, power_array, cmap=cmap, levels=20, vmin=4.0, vmax=20.0)
 
         # カラーバーを表示する
         cbar = fig.colorbar(power_contourf)
         cbar.set_label("[N]", fontsize=20)
-
-        return
-
-    def set_step(self, step):
-        # type: (float) -> None
-        '''
-        何mmごとに力の分布を計算するかを設定する\n
-        小さくしすぎると計算時間がかかる\n
-
-        Parameters
-        ----------
-        step : float
-            何mmごとに力の分布を計算するか
-        '''
-
-        # stepが1以下の場合は例外を投げる
-        if step <= 1:
-            raise ValueError("HexapodLegPower.set_step: step is less than or equal to 1")
-
-        self._step = step
 
         return
 
@@ -180,8 +152,7 @@ class HexapodLegPower:
 
         return (float)(ans)
 
-    def _make_jacobian(self, theta2, theta3):
-        # type: (float, float) -> np.matrix
+    def _make_jacobian(self, theta2: float, theta3: float) -> np.matrix:
         '''
         ヤコビ行列を計算する
 
