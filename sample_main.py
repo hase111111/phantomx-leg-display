@@ -29,7 +29,7 @@ if __name__ == "__main__":
     # Display the phantom cross graph without displaying the table and the legend of the power.
     pc.display_graph(display_table=False,
                      display_leg_power=True,
-                     leg_power_step=10.0,
+                     leg_power_step=7.0,
                      set_display_circle=False,
                      set_display_wedge=False,
                      display_mouse_grid=False)

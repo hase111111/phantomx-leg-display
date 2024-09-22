@@ -123,8 +123,8 @@ def display_graph(*, display_table = True,
         mouse_grid_renderer.set_event(fig, ax)
 
     # 脚の可動範囲を描画する
-    hexapod_range_of_motion = HexapodRangeOfMotion(hexapod_calc, hexapod_pram)
-    hexapod_range_of_motion.render_lower_leg_range(ax, 'black', 1.0)
+    hexapod_range_of_motion = HexapodRangeOfMotion(hexapod_calc, hexapod_pram, ax)
+    hexapod_range_of_motion.render_lower_leg_range('black', 1.0)
 
     ax.set_xlim(X_MIN, X_MAX)   # x 軸の範囲を設定
     ax.set_ylim(Z_MIN, Z_MAX)   # z 軸の範囲を設定

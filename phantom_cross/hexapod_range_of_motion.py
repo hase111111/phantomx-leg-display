@@ -1,7 +1,7 @@
 
 #-*- coding: utf-8 -*-
 
-import matplotlib.axis as axis
+import matplotlib.axes as axes
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -9,53 +9,47 @@ from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 from .hexapod_param import HexapodParam
 
 class HexapodRangeOfMotion:
-    _ax = None
-    _STEP = 0.001
 
-    def __init__(self, hexapod_leg_range_calc: HexapodLegRangeCalculator, hexapod_param: HexapodParam) -> None:
+    def __init__(self, hexapod_leg_range_calc: HexapodLegRangeCalculator, hexapod_param: HexapodParam,
+                 ax: axes.Axes) -> None:
         self._calc = hexapod_leg_range_calc
         self._param = hexapod_param
+        self._ax = ax
+
+        self._STEP = 0.001
         
         # 例外を投げる
         if self._calc == None:
-            raise ValueError("calc_instance is None")
+            raise ValueError("hexapod_leg_range_calc is None")
         
         if self._param == None:
-            raise ValueError("param_instance is None")
+            raise ValueError("hexapod_param is None")
+        
+        if self._ax == None:
+            raise ValueError("ax is None")
 
-    def render(self, ax: axis.Axis) -> None:
-        '''
-        脚の可動範囲を描画する
-
-        Parameters
-        ----------
-        ax : matplotlib.axis.Axis
-            matplotlibのaxisオブジェクト
-        '''
+    def render(self) -> None:
+        '''脚の可動範囲を描画する．'''
 
         print("HexapodLegRangeCalculator.render: Draw the range of motion of the legs")
 
-        self.render_upper_leg_range(ax, 'black', 0.3)
+        self.render_upper_leg_range(self._ax, 'black', 0.3)
 
-        self.render_lower_leg_range(ax, 'black', 1.0)
+        self.render_lower_leg_range(self._ax, 'black', 1.0)
 
         return
 
-    def render_upper_leg_range(self, ax: axis.Axis, color_value: str, alpha_vaule: float) -> None:
+    def render_upper_leg_range(self, color_value: str, alpha_vaule: float) -> None:
         '''
-        上脚の可動範囲を描画する
+        上脚の可動範囲を描画する．
 
         Parameters
         ----------
-        ax : matplotlib.axis.Axis
-            matplotlibのaxisオブジェクト
         color_value : str
             色
         alpha_vaule : float
             透明度
         '''
-
-        self._ax = ax
 
         self._make_leg_range(
             self._param.theta2_min,
@@ -67,26 +61,17 @@ class HexapodRangeOfMotion:
         )
 
 
-    def render_lower_leg_range(self, ax, color_value, alpha_vaule):
-        # type: (plt.axis,str,float) -> None
+    def render_lower_leg_range(self, color_value: str, alpha_vaule: float) -> None:
         '''
-        下脚の可動範囲を描画する
+        下脚の可動範囲を描画する．
 
         Parameters
         ----------
-        ax : plt.axis
-            matplotlibのaxisオブジェクト
         color_value : str
             色
         alpha_vaule : float
             透明度
         '''
-
-        if ax == None:
-            return
-
-        if self._ax == None:
-            self._ax = ax
 
         self._make_leg_range(
             self._param.theta2_min,
@@ -99,13 +84,14 @@ class HexapodRangeOfMotion:
 
         return
 
-    def _make_leg_range(self, theta2_min, theta2_max, theta3_min, theta3_max, color_value, alpha_vaule):
-        # type: (float,float,float,float,str,float) -> None
+    def _make_leg_range(
+            self, theta2_min: float, theta2_max: float, theta3_min: float, theta3_max: float, 
+            color_value: str, alpha_vaule: float):
         '''
-        脚の可動範囲を描画する\n
-        1つの間接を最大値に固定して,もう一つの間接を最小値から最大値まで動かす\n
-        次に,最小値に固定して,もう一つの間接を最小値から最大値まで動かす\n
-        今度は逆にして描画を行うと,脚の可動範囲が描画できる\n
+        脚の可動範囲を描画する．\n
+        1つの間接を最大値に固定して,もう一つの間接を最小値から最大値まで動かす．\n
+        次に,最小値に固定して,もう一つの間接を最小値から最大値まで動かす．\n
+        今度は逆にして描画を行うと,脚の可動範囲が描画できる．
 
         Parameters
         ----------
@@ -122,10 +108,6 @@ class HexapodRangeOfMotion:
         alpha_vaule : float
             透明度
         '''
-
-        if self._ax == None:
-            print("ax is None")
-            return
 
         # minからmaxまでstep刻みで配列を作成
         femur_range = np.arange(theta2_min, theta2_max, self._STEP)
@@ -145,7 +127,7 @@ class HexapodRangeOfMotion:
 
     def _make_leg_line(self, theta2: list[float], theta3: list[float], color_value: str, alpha_vaule: float) -> None:
         '''
-        間接を回しながら，脚先の座標をプロットしていく
+        間接を回しながら，脚先の座標をプロットしていく．
 
         Parameters
         ----------
@@ -159,9 +141,6 @@ class HexapodRangeOfMotion:
             透明度
         '''
 
-        if self._ax == None:
-            raise ValueError("ax is None")
-
         line_x = []
         line_z = []
 
@@ -174,5 +153,3 @@ class HexapodRangeOfMotion:
                     line_z.append(res[2])
 
         self._ax.plot(line_x, line_z, color=color_value, alpha=alpha_vaule)
-
-        return
