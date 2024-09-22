@@ -18,7 +18,7 @@ def display_graph(*, display_table = True,
                   x_min = -100.0, x_max = 300.0, z_min = -200.0, z_max = 200.0,
                   display_leg_power = False, leg_power_step = 2.0,
                   display_approximated_graph = True, set_approx_fill = True, set_approx_color = 'green',
-                  set_approx_alpha = 0.5, set_approx_min_leg_radius = 120,
+                  set_approx_alpha = 0.5, 
                   set_display_circle = True, set_display_wedge = True, set_display_img_file_name = "result/img_main.png",
                   display_mouse_grid = True, display_ground_line = True, ground_z = -25.0,
                   do_not_show = False):
@@ -50,8 +50,6 @@ def display_graph(*, display_table = True,
         脚の可動範囲の近似値の色
     set_approx_alpha: float
         脚の可動範囲の近似値の透明度
-    set_approx_min_leg_radius: float
-        脚の可動範囲の近似値の最小半径
     set_display_circle: bool
         脚を円で表示するかどうか
     set_display_wedge: bool
@@ -102,14 +100,12 @@ def display_graph(*, display_table = True,
         hexapod_leg_power.render(X_MIN, X_MAX, Z_MIN, Z_MAX)
 
     # 脚の可動範囲の近似値を描画
-    app_graph = ApproximatedGraphRenderer(hexapod_calc)
-    app_graph.set_draw_additional_line(True)
-    app_graph.set_draw_fill(set_approx_fill)
-    app_graph.set_alpha(set_approx_alpha)
-    app_graph.set_color(set_approx_color)
-    app_graph.set_min_leg_radius(set_approx_min_leg_radius)
+    app_graph = ApproximatedGraphRenderer(
+        hexapod_calc, ax, z_min=Z_MIN, z_max=Z_MAX,
+        draw_additional_line=True, draw_fill=set_approx_fill, color=set_approx_color, alpha=set_approx_alpha)
+
     if display_approximated_graph:
-        app_graph.render(ax, Z_MIN, Z_MAX)
+        app_graph.render()
 
     # 脚を描画
     leg_renderer = HexapodLegRenderer(hexapod_calc, hexapod_pram)

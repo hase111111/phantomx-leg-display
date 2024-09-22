@@ -2,69 +2,53 @@
 #-*- coding: utf-8 -*-
 
 # モジュールのインポート
+import matplotlib.axes as axes
 import matplotlib.pyplot as plt
 import numpy as np
 
 from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 
 class ApproximatedGraphRenderer:
-    _ax = None
-    _Z_MIN = 0
-    _Z_MAX = 0
-    _GRAPH_STEP = 0.01
 
-    _draw_additional_line = True    # 補助線を描画するかどうか
-    _draw_fill = True               # fillするかどうか
-    _color = 'green'
-    _alpha = 1.0
+    def __init__(self, hexapod_leg_range_calc: HexapodLegRangeCalculator, ax : axes.Axes,
+                 z_min: float = -300, z_max: float = 300,
+                 draw_additional_line: bool = True, draw_fill: bool = True,
+                 color: str = 'green', alpha: float = 1.0) -> None:
+        self._calc = hexapod_leg_range_calc
+        self._ax = ax
+        self._GRAPH_STEP = 0.01
 
-    _calc = None
+        if self._calc == None:
+            raise ValueError("calc_instance is None")
+        
+        if self._ax == None:
+            raise ValueError("ax is None")
 
-    def __init__(self, calc_instance: HexapodLegRangeCalculator) -> None:
-        self._calc = calc_instance
+        self.set_draw_additional_line(draw_additional_line)
+        self.set_draw_fill(draw_fill)
+        self.set_color(color)
+        self.set_alpha(alpha)
+        self.set_range(z_min, z_max)
 
-    def render(self, ax, z_min, z_max):
-        # type: (plt.axis,float,float) -> None
+    def render(self) -> None:
         '''
         近似された(Approximated)脚可動範囲の表示を行う．
-        セット関数はこの関数の前に呼び出す必要がある
-
-        Parameters
-        ----------
-        ax : plt.axis
-            matplotlibのaxisオブジェクト
-        z_min : float
-            zの最小値
-        z_max : float
-            zの最大値
+        セット関数はこの関数の前に呼び出す必要がある．
         '''
-
-        self._ax = ax
-        self._Z_MIN = z_min
-        self._Z_MAX = z_max
 
         print("ApproximatedGraphRenderer.render: Shows approximate leg range of motion")
         print("ApproximatedGraphRenderer.render: " +
-              "z_min = " + str(self._Z_MIN) + "[mm], " +
-              "z_max = " + str(self._Z_MAX) + "[mm], " +
+              "z_min = " + str(self._z_min) + "[mm], " +
+              "z_max = " + str(self._z_max) + "[mm], " +
               "draw_additional_line = " + str(self._draw_additional_line) +  ", " +
               "color = " + self._color +  ", " +
               "alpha = " + str(self._alpha) +  ", " +
-              "draw_fill = " + str(self._draw_fill) 
+              "draw_fill = " + str(self._draw_fill) +
+              "(step = " + str(self._GRAPH_STEP) + ")"
         )
 
-        # axがNoneの場合は何もしない
-        if self._ax == None:
-            print("ApproximatedGraphRenderer.render: ax is None")
-            return
-
-        # z_minとz_maxの大小関係を確認
-        if self._Z_MIN > self._Z_MAX:
-            print("ApproximatedGraphRenderer.render: z_min must be less than z_max")
-            return
-
         # 近似された(Approximated)脚可動範囲の計算を行う
-        z = np.arange(self._Z_MIN, self._Z_MAX, self._GRAPH_STEP)     # GRAPH_STEP刻みでZ_MINからZ_MAXまでの配列zを作成
+        z = np.arange(self._z_min, self._z_max, self._GRAPH_STEP)     # GRAPH_STEP刻みでZ_MINからZ_MAXまでの配列zを作成
 
         approximated_x_min = np.full_like(z, self._calc.get_approximate_min_leg_raudus())   # xと同じ要素数で値がすべてMIN_LEG_RADIUSの配列zを作成
 
@@ -91,8 +75,26 @@ class ApproximatedGraphRenderer:
             self._ax.plot(approximated_x_min, z, color=self._color, alpha=self._alpha)
             self._ax.plot(approximated_x_max, z, color=self._color, alpha=self._alpha)
 
-    def set_draw_additional_line(self, draw_additional_line):
-        # type: (bool) -> None
+    def set_range(self, z_min: float, z_max: float) -> None:
+        '''
+        近似された(Approximated)脚可動範囲の範囲を設定する．\n
+
+        Parameters
+        ----------
+        z_min : float
+            zの最小値
+        z_max : float
+            zの最大値
+        '''
+
+        self._z_min = z_min
+        self._z_max = z_max
+
+        # z_minとz_maxの大小関係を確認
+        if self._z_min > self._z_max:
+            raise ValueError("ApproximatedGraphRenderer.set_range: z_min is greater than z_max")
+
+    def set_draw_additional_line(self, draw_additional_line: bool) -> None:
         '''
         補助線を描画するかどうかを設定する
 
@@ -103,8 +105,7 @@ class ApproximatedGraphRenderer:
         '''
         self._draw_additional_line = draw_additional_line
 
-    def set_draw_fill(self, draw_fill):
-        # type: (bool) -> None
+    def set_draw_fill(self, draw_fill: bool) -> None:
         '''
         fillするかどうかを設定する
 
@@ -115,8 +116,7 @@ class ApproximatedGraphRenderer:
         '''
         self._draw_fill = draw_fill
 
-    def set_color(self, color):
-        # type: (str) -> None
+    def set_color(self, color: str) -> None:
         '''
         色を設定する
 
@@ -127,12 +127,7 @@ class ApproximatedGraphRenderer:
         '''
         self._color = color
 
-        # 値が異常な場合は例外を投げる
-        if self._color == None:
-            raise ValueError("ApproximatedGraphRenderer.set_color: color is None")
-
-    def set_alpha(self, alpha):
-        # type: (float) -> None
+    def set_alpha(self, alpha: float) -> None:
         '''
         透明度を設定する
 
@@ -146,15 +141,3 @@ class ApproximatedGraphRenderer:
         # 値が異常な場合は例外を投げる
         if self._alpha < 0.0 or self._alpha > 1.0:
             raise ValueError("ApproximatedGraphRenderer.set_alpha: alpha is out of range")
-
-    def set_min_leg_radius(self, min_leg_radius):
-        # type: (float) -> None
-        '''
-        脚の最小半径を設定する
-
-        Parameters
-        ----------
-        min_leg_radius : float
-            脚の最小半径
-        '''
-        self._calc.set_approximate_min_leg_raudus(min_leg_radius)
