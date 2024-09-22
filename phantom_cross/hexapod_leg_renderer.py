@@ -6,6 +6,7 @@ import matplotlib.patches as patch
 import math
 
 from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
+from .hexapod_param import HexapodParam
 
 class HexapodLegRenderer:
     _WEDGE_R = 20              # 扇形の半径
@@ -30,8 +31,9 @@ class HexapodLegRenderer:
 
     _fig_name = "result/img.png"
 
-    def __init__(self, calc_instance: HexapodLegRangeCalculator) -> None:
+    def __init__(self, calc_instance: HexapodLegRangeCalculator, hexapod_param: HexapodParam) -> None:
         self._calc = calc_instance
+        self._param = hexapod_param
 
     def set_event(self, fig, ax, ax_table):
         '''
@@ -56,16 +58,18 @@ class HexapodLegRenderer:
         self._femur_circle = plt.Circle([0,0],color='black',fill=False)
         self._tibia_circle = plt.Circle([0,0],color='black',fill=False)
 
-        self._femur_circle.set_radius(self._calc.FEMUR_LENGTH)    #半径を設定
-        self._tibia_circle.set_radius(self._calc.TIBIA_LENGTH)
+        # 半径を設定
+        self._femur_circle.set_radius(self._param.femur_length)    
+        self._tibia_circle.set_radius(self._param.tibia_length)
 
-        self._femur_circle.set_alpha(0.1)                          #透明度を設定
+        # 透明度を設定
+        self._femur_circle.set_alpha(0.1)                          
         self._tibia_circle.set_alpha(0.1)
 
         ax.add_artist(self._femur_circle)
         ax.add_artist(self._tibia_circle)
 
-        #角度用の扇形を登録
+        # 角度用の扇形を登録
         self._femur_wedge = patch.Wedge([0,0], self._WEDGE_R, 0, 10)
         self._tibia_wedge = patch.Wedge([0,0], self._WEDGE_R, 0, 10)
 
@@ -74,22 +78,22 @@ class HexapodLegRenderer:
 
         # 脚の描画
         self._leg_graph, = ax.plot(self._joint_pos[0],self._joint_pos[1])
-        self._leg_graph.set_linewidth(5)       #太さを変える
-        self._leg_graph.set_marker('o')        #点を描画する
-        self._leg_graph.set_markersize(10)     #点の大きさを変える
+        self._leg_graph.set_linewidth(5)       # 太さを変える
+        self._leg_graph.set_marker('o')        # 点を描画する
+        self._leg_graph.set_markersize(10)     # 点の大きさを変える
 
         self._leg_graph_click, = ax.plot(self._joint_pos[0],self._joint_pos[1])
-        self._leg_graph_click.set_linewidth(5)       #太さを変える
-        self._leg_graph_click.set_marker('o')        #点を描画する
-        self._leg_graph_click.set_markersize(10)     #点の大きさを変える
-        self._leg_graph_click.set_visible(False)     #非表示にする
+        self._leg_graph_click.set_linewidth(5)       # 太さを変える
+        self._leg_graph_click.set_marker('o')        # 点を描画する
+        self._leg_graph_click.set_markersize(10)     # 点の大きさを変える
+        self._leg_graph_click.set_visible(False)     # 非表示にする
 
-        #可動範囲外の間接に色をつけるためのグラフ
+        # 可動範囲外の間接に色をつけるためのグラフ
         self._error_joint, = ax.plot(self._joint_pos[0],self._joint_pos[1])
-        self._error_joint.set_linewidth(0)       #線を消す
-        self._error_joint.set_marker('o')        #点を描画する
-        self._error_joint.set_markersize(12)     #点の大きさを変える
-        self._error_joint.set_color('red')       #色を変える
+        self._error_joint.set_linewidth(0)       # 線を消す
+        self._error_joint.set_marker('o')        # 点を描画する
+        self._error_joint.set_markersize(12)     # 点の大きさを変える
+        self._error_joint.set_color('red')       # 色を変える
 
         # マウスが動いたときに呼び出す関数を設定
         fig.canvas.mpl_connect('motion_notify_event', self._render)

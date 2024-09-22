@@ -112,7 +112,7 @@ def display_graph(*, display_table = True,
         app_graph.render(ax, Z_MIN, Z_MAX)
 
     # 脚を描画
-    leg_renderer = HexapodLegRenderer(hexapod_calc)
+    leg_renderer = HexapodLegRenderer(hexapod_calc, hexapod_pram)
     leg_renderer.set_event(fig, ax, ax_table)
     leg_renderer.set_circle(set_display_circle)
     leg_renderer.set_wedge(set_display_wedge)
@@ -124,7 +124,7 @@ def display_graph(*, display_table = True,
         mouse_grid_renderer.set_event(fig, ax)
 
     # 脚の可動範囲を描画する
-    hexapod_range_of_motion = HexapodRangeOfMotion(hexapod_calc)
+    hexapod_range_of_motion = HexapodRangeOfMotion(hexapod_calc, hexapod_pram)
     hexapod_range_of_motion.render_lower_leg_range(ax, 'black', 1.0)
 
     ax.set_xlim(X_MIN, X_MAX)   # x 軸の範囲を設定

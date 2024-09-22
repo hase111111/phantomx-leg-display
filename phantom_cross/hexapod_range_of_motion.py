@@ -6,19 +6,22 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
+from .hexapod_param import HexapodParam
 
 class HexapodRangeOfMotion:
     _ax = None
     _STEP = 0.001
 
-    def __init__(self, calc_instance: HexapodLegRangeCalculator) -> None:
-        self._calc = calc_instance
+    def __init__(self, hexapod_leg_range_calc: HexapodLegRangeCalculator, hexapod_param: HexapodParam) -> None:
+        self._calc = hexapod_leg_range_calc
+        self._param = hexapod_param
         
         # 例外を投げる
         if self._calc == None:
             raise ValueError("calc_instance is None")
         
-        return
+        if self._param == None:
+            raise ValueError("param_instance is None")
 
     def render(self, ax: axis.Axis) -> None:
         '''
@@ -52,22 +55,17 @@ class HexapodRangeOfMotion:
             透明度
         '''
 
-        if ax == None:
-            return
-
-        if self._ax == None:
-            self._ax = ax
+        self._ax = ax
 
         self._make_leg_range(
-            HexapodLegRangeCalculator.THETA2_MIN,
-            HexapodLegRangeCalculator.THETA2_MAX,
+            self._param.theta2_min,
+            self._param.theta2_max,
             0,
-            HexapodLegRangeCalculator.THETA3_MAX,
+            self._param.theta3_max,
             color_value,
             alpha_vaule
         )
 
-        return
 
     def render_lower_leg_range(self, ax, color_value, alpha_vaule):
         # type: (plt.axis,str,float) -> None
@@ -91,9 +89,9 @@ class HexapodRangeOfMotion:
             self._ax = ax
 
         self._make_leg_range(
-            HexapodLegRangeCalculator.THETA2_MIN,
-            HexapodLegRangeCalculator.THETA2_MAX,
-            HexapodLegRangeCalculator.THETA3_MIN,
+            self._param.theta2_min,
+            self._param.theta2_max,
+            self._param.theta3_min,
             0,
             color_value,
             alpha_vaule

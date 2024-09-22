@@ -7,31 +7,26 @@ from .hexapod_param import HexapodParam
 
 class HexapodLegRangeCalculator:
 
-    # public な定数
-    COXA_LENGTH = 52.0      # [mm]
-    FEMUR_LENGTH = 66.0     # [mm]
-    TIBIA_LENGTH = 130.0    # [mm]
-    THETA1_MIN = math.radians(-81.0)  # [rad]
-    THETA1_MAX = math.radians(81.0)   # [rad]
-    THETA2_MIN = math.radians(-105)   # [rad]
-    THETA2_MAX = math.radians(99.0)   # [rad]
-    THETA3_MIN = math.radians(-145.0) # [rad]
-    THETA3_MAX = math.radians(25.5)   # [rad]
+    # # public な定数
+    # COXA_LENGTH = 52.0      # [mm]
+    # FEMUR_LENGTH = 66.0     # [mm]
+    # TIBIA_LENGTH = 130.0    # [mm]
+    # THETA1_MIN = math.radians(-81.0)  # [rad]
+    # THETA1_MAX = math.radians(81.0)   # [rad]
+    # THETA2_MIN = math.radians(-105)   # [rad]
+    # THETA2_MAX = math.radians(99.0)   # [rad]
+    # THETA3_MIN = math.radians(-145.0) # [rad]
+    # THETA3_MAX = math.radians(25.5)   # [rad]
 
     _DEBUG_FLAG = False
     _min_radius = 120.0     # [mm]
 
     _approximate_max_leg_raudus = []    #近似された脚の可動範囲の最大半径のリスト，z軸の座標軸の取り方が逆なので，zを反転させる
 
-    def __init__(self, param: HexapodParam) -> None:
+    def __init__(self, hexapod_param: HexapodParam) -> None:
+        self._param = hexapod_param
         self._init_approximate_max_leg_raudus()    # 脚の最大半径を計算する
 
-        self._param = param
-
-        if self._DEBUG_FLAG:
-            print(self._approximate_max_leg_raudus)
-
-        return
 
     def set_approximate_min_leg_raudus(self, r: float) -> None:
         '''
@@ -116,12 +111,11 @@ class HexapodLegRangeCalculator:
             return (False, 0.0, 0.0)
 
         # 脚の位置を計算する
-        x = self.COXA_LENGTH + self.FEMUR_LENGTH * math.cos(theta2) + self.TIBIA_LENGTH * math.cos(theta2 + theta3)
-        z = self.FEMUR_LENGTH * math.sin(theta2) + self.TIBIA_LENGTH * math.sin(theta2 + theta3)
+        x = self._param.coxa_length + self._param.femur_length * math.cos(theta2) + self._param.tibia_length * math.cos(theta2 + theta3)
+        z = self._param.femur_length * math.sin(theta2) + self._param.tibia_length * math.sin(theta2 + theta3)
         return (True,x,z)
 
-    def calc_inverse_kinematics_xz(self, x, z, reverse_flag = False):
-        # type: (float, float, bool) -> tuple[bool, list[tuple[float, float]], list[float]]
+    def calc_inverse_kinematics_xz(self, x: float, z: float, reverse_flag: bool = False) -> tuple[bool, list[tuple[float, float]], list[float]]:
         '''
         逆運動学を計算する
 
@@ -149,23 +143,23 @@ class HexapodLegRangeCalculator:
         joint_pos[1].append(0)
 
         # 第1関節
-        joint_pos[0].append(self.COXA_LENGTH)
+        joint_pos[0].append(self._param.coxa_length)
         joint_pos[1].append(0)
         angle.append(0)
 
         #長さが足りない場合は計算できない
         triangle_checker = TriangleChecker()
-        if not triangle_checker.can_make_triangle(self.TIBIA_LENGTH, self.FEMUR_LENGTH, math.sqrt(math.pow(x - self.COXA_LENGTH, 2.0) + math.pow(z, 2.0))):
-            angle_ft = math.atan2(z, x - self.COXA_LENGTH)
+        if not triangle_checker.can_make_triangle(self._param.tibia_length, self._param.femur_length, math.sqrt(math.pow(x - self._param.coxa_length, 2.0) + math.pow(z, 2.0))):
+            angle_ft = math.atan2(z, x - self._param.coxa_length)
             angle_ft_phase = angle_ft + math.pi #180度位相をずらす
             angle_ft_phase = angle_ft_phase > math.pi * 2.0 and angle_ft_phase - math.pi * 2.0 or angle_ft_phase
 
             #候補点を計算
-            candidate_x = joint_pos[0][1] + (self.FEMUR_LENGTH + self.TIBIA_LENGTH) * math.cos(angle_ft)
-            candidate_z = joint_pos[1][1] + (self.FEMUR_LENGTH + self.TIBIA_LENGTH) * math.sin(angle_ft)
+            candidate_x = joint_pos[0][1] + (self._param.femur_length + self._param.tibia_length) * math.cos(angle_ft)
+            candidate_z = joint_pos[1][1] + (self._param.femur_length + self._param.tibia_length) * math.sin(angle_ft)
 
-            candidate_x_phase = joint_pos[0][1] + self.FEMUR_LENGTH * math.cos(angle_ft_phase) + self.TIBIA_LENGTH * math.cos(angle_ft)
-            candidate_z_phase = joint_pos[1][1] + self.FEMUR_LENGTH * math.sin(angle_ft_phase) + self.TIBIA_LENGTH * math.sin(angle_ft)
+            candidate_x_phase = joint_pos[0][1] + self._param.femur_length * math.cos(angle_ft_phase) + self._param.tibia_length * math.cos(angle_ft)
+            candidate_z_phase = joint_pos[1][1] + self._param.femur_length * math.sin(angle_ft_phase) + self._param.tibia_length * math.sin(angle_ft)
 
             #候補点との距離を計算
             distance = math.sqrt(math.pow(candidate_x - x, 2.0) + math.pow(candidate_z - z, 2.0))
@@ -179,11 +173,11 @@ class HexapodLegRangeCalculator:
                 angle_f = angle_ft_phase
                 angle_t = -math.pi
 
-            joint_pos[0].append(joint_pos[0][1] + self.FEMUR_LENGTH * math.cos(angle_f))
-            joint_pos[1].append(joint_pos[1][1] + self.FEMUR_LENGTH * math.sin(angle_f))
+            joint_pos[0].append(joint_pos[0][1] + self._param.femur_length * math.cos(angle_f))
+            joint_pos[1].append(joint_pos[1][1] + self._param.femur_length * math.sin(angle_f))
 
-            joint_pos[0].append(joint_pos[0][2] + self.TIBIA_LENGTH * math.cos(angle_f + angle_t))
-            joint_pos[1].append(joint_pos[1][2] + self.TIBIA_LENGTH * math.sin(angle_f + angle_t))
+            joint_pos[0].append(joint_pos[0][2] + self._param.tibia_length * math.cos(angle_f + angle_t))
+            joint_pos[1].append(joint_pos[1][2] + self._param.tibia_length * math.sin(angle_f + angle_t))
 
             angle.append(angle_f)
             angle.append(angle_t)
@@ -191,18 +185,18 @@ class HexapodLegRangeCalculator:
             return False,joint_pos,angle
 
         # 第2関節
-        coxa_to_leg_end = math.sqrt(math.pow(x - self.COXA_LENGTH, 2.0) + math.pow(z, 2.0))
-        q1 = math.atan2(z, x - self.COXA_LENGTH)
-        q2_upper = math.pow(self.FEMUR_LENGTH, 2.0) + math.pow(coxa_to_leg_end, 2.0) - math.pow(self.TIBIA_LENGTH, 2.0)
-        q2_lower = 2.0 * self.FEMUR_LENGTH * coxa_to_leg_end
+        coxa_to_leg_end = math.sqrt(math.pow(x - self._param.coxa_length, 2.0) + math.pow(z, 2.0))
+        q1 = math.atan2(z, x - self._param.coxa_length)
+        q2_upper = math.pow(self._param.femur_length, 2.0) + math.pow(coxa_to_leg_end, 2.0) - math.pow(self._param.tibia_length, 2.0)
+        q2_lower = 2.0 * self._param.femur_length * coxa_to_leg_end
 
         q2 = math.acos(q2_upper / q2_lower)
         if reverse_flag:
             q2 = -q2
         angle.append(q1 + q2)
         angle[1] = self._clamp_angle(angle[1]) # -180度~180度に収める
-        joint_pos[0].append((self.FEMUR_LENGTH * math.cos(angle[1])) + joint_pos[0][1])
-        joint_pos[1].append((self.FEMUR_LENGTH * math.sin(angle[1])) + joint_pos[1][1])
+        joint_pos[0].append((self._param.femur_length * math.cos(angle[1])) + joint_pos[0][1])
+        joint_pos[1].append((self._param.femur_length * math.sin(angle[1])) + joint_pos[1][1])
 
         # 第3関節
         joint_pos[0].append(x)
@@ -237,13 +231,13 @@ class HexapodLegRangeCalculator:
         angle = []
         angle.append(0.0)   # 第1関節の角度は0度
 
-        trueX = x - self.COXA_LENGTH
+        trueX = x - self._param.coxa_length
         im = math.sqrt(math.pow(trueX,2)+math.pow(z,2))    # length of imaginary leg
 
         # get femur angle above horizon...
         q1 = -math.atan2(z,trueX)
-        d1 = math.pow(self.FEMUR_LENGTH, 2) - math.pow(self.TIBIA_LENGTH, 2) + math.pow(im, 2)
-        d2 = 2 * self.FEMUR_LENGTH * im
+        d1 = math.pow(self._param.femur_length, 2) - math.pow(self._param.tibia_length, 2) + math.pow(im, 2)
+        d2 = 2 * self._param.femur_length * im
         try:
             q2 = math.acos(d1 / d2)
         except:
@@ -251,8 +245,8 @@ class HexapodLegRangeCalculator:
         angle.append(q1 + q2)
 
         # and tibia angle from femur...
-        d1 = math.pow(self.FEMUR_LENGTH, 2) - math.pow(im, 2) + math.pow(self.TIBIA_LENGTH, 2)
-        d2 = 2 * self.TIBIA_LENGTH * self.FEMUR_LENGTH
+        d1 = math.pow(self._param.femur_length, 2) - math.pow(im, 2) + math.pow(self._param.tibia_length, 2)
+        d2 = 2 * self._param.tibia_length * self._param.femur_length
         try:
             angle.append(math.acos(d1 / d2) - math.pi / 2)
         except:
@@ -279,7 +273,7 @@ class HexapodLegRangeCalculator:
         '''
         第1関節の角度が範囲内かを判定する．
         '''
-        if theta1 < self.THETA1_MIN or theta1 > self.THETA1_MAX:
+        if theta1 < self._param.theta1_min or theta1 > self._param.theta1_max:
             return False
         return True
 
@@ -287,7 +281,7 @@ class HexapodLegRangeCalculator:
         '''
         第2関節の角度が範囲内かを判定する．
         '''
-        if theta2 < self.THETA2_MIN or theta2 > self.THETA2_MAX:
+        if theta2 < self._param.theta2_min or theta2 > self._param.theta2_max:
             return False
         return True
 
@@ -295,7 +289,7 @@ class HexapodLegRangeCalculator:
         '''
         第3関節の角度が範囲内かを判定する．
         '''
-        if theta3 < self.THETA3_MIN or theta3 > self.THETA3_MAX:
+        if theta3 < self._param.theta3_min or theta3 > self._param.theta3_max:
             return False
         return True
 
@@ -305,9 +299,9 @@ class HexapodLegRangeCalculator:
         '''
 
         z_min = 0
-        z_max = int(self.FEMUR_LENGTH+self.TIBIA_LENGTH)
-        x_min = int(self.COXA_LENGTH)
-        x_max = int(self.COXA_LENGTH+self.FEMUR_LENGTH+self.TIBIA_LENGTH)
+        z_max = int(self._param.femur_length+self._param.tibia_length)
+        x_min = int(self._param.coxa_length)
+        x_max = int(self._param.coxa_length+self._param.femur_length+self._param.tibia_length)
 
         # 全て0で初期化
         for z in range(z_min, z_max):
@@ -320,14 +314,14 @@ class HexapodLegRangeCalculator:
                 line_end_y = 0
                 line_end_z = (float)(z)
 
-                ik_true_x = math.sqrt(math.pow(line_end_x, 2.0) + math.pow(line_end_y, 2.0)) - self.COXA_LENGTH
+                ik_true_x = math.sqrt(math.pow(line_end_x, 2.0) + math.pow(line_end_y, 2.0)) - self._param.coxa_length
                 im = math.sqrt(math.pow(ik_true_x, 2.0) + math.pow(line_end_z, 2.0))
                 if im == 0:
                     im += 0.0000001
 
                 q1 = -math.atan2(line_end_z,ik_true_x)
-                q2_upper = math.pow(self.FEMUR_LENGTH, 2.0) + math.pow(im, 2.0) - math.pow(self.TIBIA_LENGTH, 2.0)
-                q2_lower = 2.0 * self.FEMUR_LENGTH * im
+                q2_upper = math.pow(self._param.femur_length, 2.0) + math.pow(im, 2.0) - math.pow(self._param.tibia_length, 2.0)
+                q2_lower = 2.0 * self._param.femur_length * im
                 q2_theta = q2_upper / q2_lower
 
                 if (q2_theta < -1.0) or (q2_theta > 1.0):

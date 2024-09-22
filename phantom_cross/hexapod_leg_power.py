@@ -19,7 +19,7 @@ class HexapodLegPower:
         self._calc = calc_instance
         self._step = step
 
-        self._TORQUE_MAX = hexapod_param.torque_max
+        self._param = hexapod_param
         self._PRINT_DEV = int(20)   # 何%ごとに進捗を表示するか. 5%ごとならば，20回に1回表示するため20を指定する
 
         if step <= 1:
@@ -39,7 +39,7 @@ class HexapodLegPower:
                 "z_min = " + str(z_min) + "[mm], " +
                 "z_max = " + str(z_max) + "[mm], " +
                 "step = " + str(self._step) + "[mm], " +
-                "torque_max = " + str(self._TORQUE_MAX) + "[N*mm] "
+                "torque_max = " + str(self._param.torque_max) + "[N*mm] "
         )
 
         # min < max でない場合は終了する
@@ -145,7 +145,7 @@ class HexapodLegPower:
             tibia_tauqe = math.fabs(tauqe[1][0])
 
             # トルクの最大値を超えていないか判定する．超えたら終了，超えていなければ記録して次のループへ
-            if femur_tauqe < self._TORQUE_MAX and tibia_tauqe < self._TORQUE_MAX:
+            if femur_tauqe < self._param.torque_max and tibia_tauqe < self._param.torque_max:
                 ans = p
             else:
                 break
@@ -165,8 +165,6 @@ class HexapodLegPower:
 
         Returns
         -------
-
-
         jacobian : np.matrix
             2*2のヤコビ行列
         '''
@@ -176,8 +174,8 @@ class HexapodLegPower:
             print("HexapodLegPower.__make_jacobian: self.__calc is None")
             return np.matrix([[0,0],[0,0]])
 
-        Lf = self._calc.FEMUR_LENGTH
-        Lt = self._calc.TIBIA_LENGTH
+        Lf = self._param.femur_length
+        Lt = self._param.tibia_length
 
         # 2*2のヤコビ行列を作成
         jacobian = np.matrix(
