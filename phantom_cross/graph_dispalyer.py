@@ -7,6 +7,7 @@ mpl.use('tkagg')
 import matplotlib.pyplot as plt
 
 from .hexapod_leg_power import HexapodLegPower
+from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 from .approximated_graph_renderer import ApproximatedGraphRenderer
 from .hexapod_leg_renderer import HexapodLegRenderer
 from .mouse_grid_renderer import MouseGridRenderer
@@ -75,6 +76,8 @@ def display_graph(*, display_table = True,
         表のaxes
     '''
 
+    hexapod_calc = HexapodLegRangeCalculator()
+
     X_MIN = x_min
     X_MAX = x_max
     Z_MIN = z_min
@@ -121,7 +124,7 @@ def display_graph(*, display_table = True,
         mouse_grid_renderer.set_event(fig, ax)
 
     # 脚の可動範囲を描画する
-    hexapod_range_of_motion = HexapodRangeOfMotion()
+    hexapod_range_of_motion = HexapodRangeOfMotion(hexapod_calc)
     hexapod_range_of_motion.render_lower_leg_range(ax, 'black', 1.0)
 
     ax.set_xlim(X_MIN, X_MAX)   # x 軸の範囲を設定

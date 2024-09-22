@@ -1,29 +1,32 @@
 
 #-*- coding: utf-8 -*-
 
+import matplotlib.axis as axis
 import matplotlib.pyplot as plt
 import numpy as np
 
 from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 
 class HexapodRangeOfMotion:
-
-    _calc = None
     _ax = None
     _STEP = 0.001
 
-    def __init__(self):
-        self._calc = HexapodLegRangeCalculator()
+    def __init__(self, calc_instance: HexapodLegRangeCalculator) -> None:
+        self._calc = calc_instance
+        
+        # 例外を投げる
+        if self._calc == None:
+            raise ValueError("calc_instance is None")
+        
         return
 
-    def render(self, ax):
-        # type: (plt.axis) -> None
+    def render(self, ax: axis.Axis) -> None:
         '''
         脚の可動範囲を描画する
 
         Parameters
         ----------
-        ax : plt.axis
+        ax : matplotlib.axis.Axis
             matplotlibのaxisオブジェクト
         '''
 
@@ -35,14 +38,13 @@ class HexapodRangeOfMotion:
 
         return
 
-    def render_upper_leg_range(self, ax, color_value, alpha_vaule):
-        # type: (plt.axis,str,float) -> None
+    def render_upper_leg_range(self, ax: axis.Axis, color_value: str, alpha_vaule: float) -> None:
         '''
         上脚の可動範囲を描画する
 
         Parameters
         ----------
-        ax : plt.axis
+        ax : matplotlib.axis.Axis
             matplotlibのaxisオブジェクト
         color_value : str
             色
@@ -143,8 +145,7 @@ class HexapodRangeOfMotion:
         # femur joint (max) , tibia joint (min ~ max)
         self._make_leg_line([theta2_max], tibia_range, color_value, alpha_vaule)
 
-    def _make_leg_line(self, theta2, theta3, color_value, alpha_vaule):
-        # type: (list[float],list[float],str,float) -> None
+    def _make_leg_line(self, theta2: list[float], theta3: list[float], color_value: str, alpha_vaule: float) -> None:
         '''
         間接を回しながら，脚先の座標をプロットしていく
 
@@ -161,8 +162,7 @@ class HexapodRangeOfMotion:
         '''
 
         if self._ax == None:
-            print("ax is None")
-            return
+            raise ValueError("ax is None")
 
         line_x = []
         line_z = []
