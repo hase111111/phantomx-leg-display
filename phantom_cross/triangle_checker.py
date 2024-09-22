@@ -1,9 +1,10 @@
 
 #-*- coding: utf-8 -*-
 
+import numpy as np
+
 class TriangleChecker:
-    def can_make_triangle(self, len1, len2, len3):
-        # type: (float,float,float) -> bool
+    def can_make_triangle(self, len1: float, len2: float, len3: float) -> bool:
         '''
         与えられた3つの辺の長さから、三角形が成立するかを判定する関数\n
         三角形が作れるならばTrueを返す\n
@@ -22,13 +23,13 @@ class TriangleChecker:
             辺3の長さ
         '''
 
-        if len1 + len2 <= len3:
+        if np.abs(len1) + np.abs(len2) <= np.abs(len3):
             return False
 
-        if len2 + len3 <= len1:
+        if np.abs(len2) + np.abs(len3) <= np.abs(len1):
             return False
 
-        if len3 + len1 <= len2:
+        if np.abs(len3) + np.abs(len1) <= np.abs(len2):
             return False
 
         return True
