@@ -3,6 +3,7 @@
 
 import math
 from .triangle_checker import TriangleChecker
+from .hexapod_param import HexapodParam
 
 class HexapodLegRangeCalculator:
 
@@ -22,18 +23,19 @@ class HexapodLegRangeCalculator:
 
     _approximate_max_leg_raudus = []    #近似された脚の可動範囲の最大半径のリスト，z軸の座標軸の取り方が逆なので，zを反転させる
 
-    def __init__(self):
+    def __init__(self, param: HexapodParam) -> None:
         self._init_approximate_max_leg_raudus()    # 脚の最大半径を計算する
+
+        self._param = param
 
         if self._DEBUG_FLAG:
             print(self._approximate_max_leg_raudus)
 
         return
 
-    def set_approximate_min_leg_raudus(self, r):
-        # type: (float) -> None
+    def set_approximate_min_leg_raudus(self, r: float) -> None:
         '''
-        脚の最小半径を設定する
+        脚の最小半径を設定する．
 
         Parameters
         ----------
@@ -49,10 +51,9 @@ class HexapodLegRangeCalculator:
 
         return
 
-    def get_approximate_min_leg_raudus(self):
-        # type: () -> float
+    def get_approximate_min_leg_raudus(self) -> float:
         '''
-        脚の最小半径を返す
+        脚の最小半径を返す．
 
         Returns
         -------
@@ -62,10 +63,9 @@ class HexapodLegRangeCalculator:
 
         return self._min_radius
 
-    def get_approximate_max_leg_raudus(self, z):
-        # type: (float) -> float
+    def get_approximate_max_leg_raudus(self, z: float) -> float:
         '''
-        脚の最大半径を返す
+        脚の最大半径を返す．
 
         Parameters
         ----------
@@ -90,8 +90,7 @@ class HexapodLegRangeCalculator:
         else:
             return self._min_radius
 
-    def get_leg_position_xz(self, theta2, theta3):
-        # type: (float, float) -> tuple[bool, float, float]
+    def get_leg_position_xz(self, theta2: float, theta3: float) -> tuple[bool, float, float]:
         '''
         第1関節の角度を無視して、第2関節と第3関節の角度から脚先の位置を計算する\n
         出力は計算できたかを表すboolean,x,z平面における座標のタプル
@@ -106,8 +105,8 @@ class HexapodLegRangeCalculator:
         Returns
         -------
         res : tuple[bool, float, float]
-            間接の可動範囲外の場合はfalseを返す\n
-            脚先の位置のタプル,x[mm],z[mm]
+            間接の可動範囲外の場合はfalseを返す．\n
+            脚先の位置のタプル,x[mm],z[mm]．
         '''
 
         # 間接の可動範囲外の場合はFalseを返す
@@ -214,8 +213,7 @@ class HexapodLegRangeCalculator:
         angle[2] = self._clamp_angle(angle[2]) # -180度~180度に収める
         return True,joint_pos,angle
 
-    def calc_inverse_kinematics_xz_arduino(self, x, z):
-        # type: (float, float) -> tuple[list[float], list[float], list[float], list[float]]
+    def calc_inverse_kinematics_xz_arduino(self, x: float, z: float) -> tuple[list[float], list[float], list[float], list[float]]:
         '''
         coxa jointが回転していない場合の逆運動学を計算する
         脚が水平に伸びる方向にx,上方向にzをとる
@@ -277,36 +275,33 @@ class HexapodLegRangeCalculator:
 
         return angle, servo_angle, left_servo_angle, right_servo_angle
 
-    def is_theta1_in_range(self, theta1):
-        # type: (float) -> bool
+    def is_theta1_in_range(self, theta1: float) -> bool:
         '''
-        第1関節の角度が範囲内かを判定する\n
+        第1関節の角度が範囲内かを判定する．
         '''
         if theta1 < self.THETA1_MIN or theta1 > self.THETA1_MAX:
             return False
         return True
 
-    def is_theta2_in_range(self, theta2):
-        # type: (float) -> bool
+    def is_theta2_in_range(self, theta2: float) -> bool:
         '''
-        第2関節の角度が範囲内かを判定する\n
+        第2関節の角度が範囲内かを判定する．
         '''
         if theta2 < self.THETA2_MIN or theta2 > self.THETA2_MAX:
             return False
         return True
 
-    def is_theta3_in_range(self, theta3):
-        # type: (float) -> bool
+    def is_theta3_in_range(self, theta3: float) -> bool:
         '''
-        第3関節の角度が範囲内かを判定する\n
+        第3関節の角度が範囲内かを判定する．
         '''
         if theta3 < self.THETA3_MIN or theta3 > self.THETA3_MAX:
             return False
         return True
 
-    def _init_approximate_max_leg_raudus(self):
+    def _init_approximate_max_leg_raudus(self) -> None:
         '''
-        脚の最大半径を計算する privateメソッド
+        脚の最大半径を計算する privateメソッド．
         '''
 
         z_min = 0
@@ -346,10 +341,19 @@ class HexapodLegRangeCalculator:
 
         return
 
-    def _clamp_angle(self, angle):
-        # type: (float) -> float
+    def _clamp_angle(self, angle: float) -> float:
         '''
-        角度を-180 ~ 180の範囲にする
+        角度を-180 ~ 180の範囲にする．
+
+        Parameters
+        ----------
+        angle : float
+            角度 [rad]
+
+        Returns
+        -------
+        res : float
+            角度 [rad]
         '''
         if angle > math.pi:
             angle -= math.pi * 2.0

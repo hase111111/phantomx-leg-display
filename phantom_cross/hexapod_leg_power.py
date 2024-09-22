@@ -1,7 +1,6 @@
 
 #-*- coding: utf-8 -*-
 
-# モジュールのインポート
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import copy
@@ -12,8 +11,6 @@ import tqdm
 from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 
 class HexapodLegPower:
-
-    _calc = None
     _ax = None
 
     _step = 1.0            # 何mmごとに力の分布を計算するか，小さくしすぎると計算時間がかかる
@@ -22,9 +19,8 @@ class HexapodLegPower:
 
     _PRINT_DEV = int(20)   # 何%ごとに進捗を表示するか. 5%ごとならば，20回に1回表示するため20を指定する
 
-    def __init__(self):
-        self._calc = HexapodLegRangeCalculator()
-        return
+    def __init__(self, calc_instance: HexapodLegRangeCalculator) -> None:
+        self._calc = calc_instance
 
     def render(self, fig, ax, x_min, x_max, z_min, z_max):
         # type: (plt.fig ,plt.Axes, float, float, float, float) -> None

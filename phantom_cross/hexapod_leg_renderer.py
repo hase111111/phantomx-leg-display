@@ -8,9 +8,6 @@ import math
 from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 
 class HexapodLegRenderer:
-
-    _calc = HexapodLegRangeCalculator()
-
     _WEDGE_R = 20              # 扇形の半径
 
     _leg_graph = None          # 通常の脚のグラフ
@@ -33,8 +30,8 @@ class HexapodLegRenderer:
 
     _fig_name = "result/img.png"
 
-    def __init__(self):
-        return
+    def __init__(self, calc_instance: HexapodLegRangeCalculator) -> None:
+        self._calc = calc_instance
 
     def set_event(self, fig, ax, ax_table):
         '''

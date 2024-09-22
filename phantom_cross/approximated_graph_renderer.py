@@ -20,11 +20,8 @@ class ApproximatedGraphRenderer:
 
     _calc = None
 
-    def __init__(self):
-        '''
-        コンストラクタ pythonでは__init__がコンストラクタになる
-        '''
-        self._calc = HexapodLegRangeCalculator()  # 計算機のインスタンスを作成
+    def __init__(self, calc_instance: HexapodLegRangeCalculator) -> None:
+        self._calc = calc_instance
 
     def render(self, ax, z_min, z_max):
         # type: (plt.axis,float,float) -> None

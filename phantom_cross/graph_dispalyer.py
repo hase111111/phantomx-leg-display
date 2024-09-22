@@ -12,6 +12,7 @@ from .approximated_graph_renderer import ApproximatedGraphRenderer
 from .hexapod_leg_renderer import HexapodLegRenderer
 from .mouse_grid_renderer import MouseGridRenderer
 from .hexapod_range_of_motion import HexapodRangeOfMotion
+from .hexapod_param import HexapodParam
 
 def display_graph(*, display_table = True,
                   x_min = -100.0, x_max = 300.0, z_min = -200.0, z_max = 200.0,
@@ -76,8 +77,6 @@ def display_graph(*, display_table = True,
         表のaxes
     '''
 
-    hexapod_calc = HexapodLegRangeCalculator()
-
     X_MIN = x_min
     X_MAX = x_max
     Z_MIN = z_min
@@ -94,15 +93,17 @@ def display_graph(*, display_table = True,
         ax_table.set_visible(False) # 表示しない
 
     # 以下グラフの作成，描画
+    hexapod_pram = HexapodParam()
+    hexapod_calc = HexapodLegRangeCalculator(hexapod_pram)
 
     # 脚が出せる力のグラフを描画
-    hexapod_leg_power = HexapodLegPower()
+    hexapod_leg_power = HexapodLegPower(hexapod_calc)
     hexapod_leg_power.set_step(leg_power_step)
     if display_leg_power:
         hexapod_leg_power.render(fig, ax, X_MIN, X_MAX, Z_MIN, Z_MAX)
 
     # 脚の可動範囲の近似値を描画
-    app_graph = ApproximatedGraphRenderer()
+    app_graph = ApproximatedGraphRenderer(hexapod_calc)
     app_graph.set_draw_additional_line(True)
     app_graph.set_draw_fill(set_approx_fill)
     app_graph.set_alpha(set_approx_alpha)
@@ -112,7 +113,7 @@ def display_graph(*, display_table = True,
         app_graph.render(ax, Z_MIN, Z_MAX)
 
     # 脚を描画
-    leg_renderer = HexapodLegRenderer()
+    leg_renderer = HexapodLegRenderer(hexapod_calc)
     leg_renderer.set_event(fig, ax, ax_table)
     leg_renderer.set_circle(set_display_circle)
     leg_renderer.set_wedge(set_display_wedge)
