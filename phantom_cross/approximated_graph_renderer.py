@@ -48,11 +48,12 @@ class ApproximatedGraphRenderer:
 
         print("ApproximatedGraphRenderer.render: Shows approximate leg range of motion")
         print("ApproximatedGraphRenderer.render: " +
-              "z_min = " + str(self._Z_MIN) + ", " +
-              "z_max = " + str(self._Z_MAX) + ", " +
+              "z_min = " + str(self._Z_MIN) + "[mm], " +
+              "z_max = " + str(self._Z_MAX) + "[mm], " +
               "draw_additional_line = " + str(self._draw_additional_line) +  ", " +
               "color = " + self._color +  ", " +
-              "alpha = " + str(self._alpha)
+              "alpha = " + str(self._alpha) +  ", " +
+              "draw_fill = " + str(self._draw_fill) 
         )
 
         # axがNoneの場合は何もしない

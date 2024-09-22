@@ -35,6 +35,14 @@ class HexapodLegPower:
         '''
 
         print("HexapodLegPower.render: Draws the distribution of forces. Please wait 10 seconds for this time-consuming process.")
+        print("HexapodLegPower.render: " +
+                "x_min = " + str(x_min) + "[mm], " +
+                "x_max = " + str(x_max) + "[mm], " +    
+                "z_min = " + str(z_min) + "[mm], " +
+                "z_max = " + str(z_max) + "[mm], " +
+                "step = " + str(self._step) + "[mm], " +
+                "torque_max = " + str(self._TORQUE_MAX) + "[N*mm] "
+        )
 
         # min < max でない場合は終了する
         if x_min >= x_max:
