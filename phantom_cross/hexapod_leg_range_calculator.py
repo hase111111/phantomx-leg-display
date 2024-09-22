@@ -7,21 +7,10 @@ from .hexapod_param import HexapodParam
 
 class HexapodLegRangeCalculator:
 
-    # # public な定数
-    # COXA_LENGTH = 52.0      # [mm]
-    # FEMUR_LENGTH = 66.0     # [mm]
-    # TIBIA_LENGTH = 130.0    # [mm]
-    # THETA1_MIN = math.radians(-81.0)  # [rad]
-    # THETA1_MAX = math.radians(81.0)   # [rad]
-    # THETA2_MIN = math.radians(-105)   # [rad]
-    # THETA2_MAX = math.radians(99.0)   # [rad]
-    # THETA3_MIN = math.radians(-145.0) # [rad]
-    # THETA3_MAX = math.radians(25.5)   # [rad]
-
     _DEBUG_FLAG = False
     _min_radius = 120.0     # [mm]
 
-    _approximate_max_leg_raudus = []    #近似された脚の可動範囲の最大半径のリスト，z軸の座標軸の取り方が逆なので，zを反転させる
+    _approximate_max_leg_raudus = []    # 近似された脚の可動範囲の最大半径のリスト，z軸の座標軸の取り方が逆なので，zを反転させる
 
     def __init__(self, hexapod_param: HexapodParam) -> None:
         self._param = hexapod_param

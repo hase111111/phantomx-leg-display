@@ -43,7 +43,7 @@ class ApproximatedGraphRenderer:
               "draw_additional_line = " + str(self._draw_additional_line) +  ", " +
               "color = " + self._color +  ", " +
               "alpha = " + str(self._alpha) +  ", " +
-              "draw_fill = " + str(self._draw_fill) +
+              "draw_fill = " + str(self._draw_fill) + ", " +
               "(step = " + str(self._GRAPH_STEP) + ")"
         )
 

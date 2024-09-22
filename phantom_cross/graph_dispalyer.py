@@ -95,9 +95,12 @@ def display_graph(*, display_table = True,
     hexapod_calc = HexapodLegRangeCalculator(hexapod_pram)
 
     # 脚が出せる力のグラフを描画
-    hexapod_leg_power = HexapodLegPower(hexapod_calc, hexapod_pram, fig, ax, step=leg_power_step)
+    hexapod_leg_power = HexapodLegPower(
+        hexapod_calc, hexapod_pram, fig, ax, 
+        x_min=X_MIN, x_max=X_MAX, z_min=Z_MIN, z_max=Z_MAX, step=leg_power_step)
+
     if display_leg_power:
-        hexapod_leg_power.render(X_MIN, X_MAX, Z_MIN, Z_MAX)
+        hexapod_leg_power.render()
 
     # 脚の可動範囲の近似値を描画
     app_graph = ApproximatedGraphRenderer(

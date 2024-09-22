@@ -17,7 +17,8 @@ class HexapodLegPower:
 
     def __init__(
             self, hexapod_leg_range_calc: HexapodLegRangeCalculator, hexapod_param: HexapodParam, 
-            figure: plt.Figure, ax: axes.Axes, *, step: float = 1.0) -> None:
+            figure: plt.Figure, ax: axes.Axes, *, step: float = 1.0,
+            x_min: float = -300, x_max: float = 300, z_min: float = -300, z_max: float = 300) -> None:
         '''
         Parameters
         ----------
@@ -31,11 +32,20 @@ class HexapodLegPower:
             matplotlibのaxesオブジェクト
         step : float
             何mmごとに力の分布を計算するか
+        x_min : float
+            x軸の最小値
+        x_max : float
+            x軸の最大値
+        z_min : float
+            z軸の最小値
+        z_max : float
+            z軸の最大値
         '''
         self._calc = hexapod_leg_range_calc
         self._figure = figure
         self._ax = ax
         self.set_step(step)
+        self.set_range(x_min, x_max, z_min, z_max)
 
         self._param = hexapod_param
         self._PRINT_DIV = int(20)   # 何%ごとに進捗を表示するか. 5%ごとならば，20回に1回表示するため20を指定する
@@ -52,7 +62,7 @@ class HexapodLegPower:
         if self._ax == None:
             raise ValueError("HexapodLegPower.__init__: ax is None")
 
-    def render(self, x_min: float, x_max: float, z_min: float, z_max: float) -> None:
+    def render(self) -> None:
         '''
         x_min < x < x_max , z_min < z < z_max の範囲でグラフを描画する．\n
         力の大きさは，等高線で表現する．\n
@@ -61,24 +71,17 @@ class HexapodLegPower:
 
         print("HexapodLegPower.render: Draws the distribution of forces. Please wait 10 seconds for this time-consuming process.")
         print("HexapodLegPower.render: " +
-                "x_min = " + str(x_min) + "[mm], " +
-                "x_max = " + str(x_max) + "[mm], " +    
-                "z_min = " + str(z_min) + "[mm], " +
-                "z_max = " + str(z_max) + "[mm], " +
+                "x_min = " + str(self._x_min) + "[mm], " +
+                "x_max = " + str(self._x_max) + "[mm], " +    
+                "z_min = " + str(self._z_min) + "[mm], " +
+                "z_max = " + str(self._z_max) + "[mm], " +
                 "step = " + str(self._step) + "[mm], " +
                 "torque_max = " + str(self._param.torque_max) + "[N*mm] "
         )
 
-        # min < max でない場合は例外を投げる
-        if x_min >= x_max:
-            raise ValueError("HexapodLegPower.render: x_min >= x_max")
-
-        if z_min >= z_max:
-            raise ValueError("HexapodLegPower.render: z_min >= z_max")
-
         # x_min < x < x_max , z_min < z < z_max の範囲でグラフを描画するため，minからmaxまでself.__STEPづつ増やした数値を格納した配列を作成する
-        x_range = np.arange(x_min, x_max, self._step)
-        z_range = np.arange(z_min, z_max, self._step)
+        x_range = np.arange(self._x_min, self._x_max, self._step)
+        z_range = np.arange(self._z_min, self._z_max, self._step)
 
         # x*zの要素数を持つ2次元配列power_arrayを作成する(xが列，zが行)
         power_array = np.zeros((len(z_range),len(x_range)))
@@ -88,7 +91,7 @@ class HexapodLegPower:
             for j in tqdm.tqdm(range(len(z_range)), leave=False):
 
                 # j→i (z→x) の順で配列を参照することに注意
-                power_array[j][i] = self._get_max_power(x_range[i], z_range[j],0,1)
+                power_array[j][i] = self._get_max_power(x_range[i], z_range[j], 0,1)
 
         # power_arrayを等高線で描画する
         cmap = copy.copy(mpl.cm.get_cmap("jet"))
@@ -102,8 +105,7 @@ class HexapodLegPower:
 
         return
 
-    def _get_max_power(self, x, z, power_x, power_z):
-        # type: (float, float, float, float) -> float
+    def _get_max_power(self, x: float, z: float, power_x: float, power_z: float) -> float:
         '''
         x,zの座標における脚の力の最大値を返す
 
@@ -213,4 +215,30 @@ class HexapodLegPower:
         if self._step < 1:
             raise ValueError("HexapodLegPower.set_step: step is less than or equal to 1")
 
-        return
+    def set_range(self, x_min: float, x_max: float, z_min: float, z_max: float) -> None:
+        '''
+        脚の可動範囲を設定する
+
+        Parameters
+        ----------
+        x_min : float
+            x軸の最小値
+        x_max : float
+            x軸の最大値
+        z_min : float
+            z軸の最小値
+        z_max : float
+            z軸の最大値
+        '''
+
+        self._x_min = x_min
+        self._x_max = x_max
+        self._z_min = z_min
+        self._z_max = z_max 
+
+        if self._x_min >= self._x_max:
+            raise ValueError("HexapodLegPower.set_range: x_min >= x_max")
+        
+        if self._z_min >= self._z_max:
+            raise ValueError("HexapodLegPower.set_range: z_min >= z_max")
+        
