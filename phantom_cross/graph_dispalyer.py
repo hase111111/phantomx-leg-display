@@ -21,6 +21,7 @@ def display_graph(*,
                   display_approximated_graph = True, set_approx_fill = True, color_approx = 'green',
                   set_approx_alpha = 0.5, 
                   color_rom = 'black', alpha_upper_rom = 0.3, alpha_lower_rom = 1.0,
+                  color_mouse_grid = 'black', alpha_mouse_grid = 0.5,
                   set_display_circle = True, set_display_wedge = True, set_display_img_file_name = "result/img_main.png",
                   display_mouse_grid = True, display_ground_line = True, ground_z = -25.0,
                   do_not_show = False):
@@ -113,16 +114,14 @@ def display_graph(*,
         app_graph.render()
 
     # 脚を描画
-    leg_renderer = HexapodLegRenderer(hexapod_calc, hexapod_pram)
-    leg_renderer.set_event(fig, ax, ax_table)
-    leg_renderer.set_circle(set_display_circle)
-    leg_renderer.set_wedge(set_display_wedge)
+    leg_renderer = HexapodLegRenderer(hexapod_calc, hexapod_pram, fig, ax, ax_table, display_circle=set_display_circle, display_wedge=set_display_wedge)
     leg_renderer.set_img_file_name(set_display_img_file_name)
+    leg_renderer.render()
 
     # マウスがグラフのどこをポイントしているかを示す線を描画する
-    mouse_grid_renderer = MouseGridRenderer()
+    mouse_grid_renderer = MouseGridRenderer(fig, ax, alpha=alpha_mouse_grid, color=color_mouse_grid)
     if display_mouse_grid:
-        mouse_grid_renderer.set_event(fig, ax)
+        mouse_grid_renderer.render()
 
     # 脚の可動範囲を描画する
     hexapod_range_of_motion = HexapodRangeOfMotion(

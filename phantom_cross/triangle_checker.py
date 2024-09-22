@@ -6,12 +6,13 @@ import numpy as np
 class TriangleChecker:
     def can_make_triangle(self, len1: float, len2: float, len3: float) -> bool:
         '''
-        与えられた3つの辺の長さから、三角形が成立するかを判定する関数\n
-        三角形が作れるならばTrueを返す\n
+        与えられた3つの辺の長さから、三角形が成立するかを判定する関数．\n
+        三角形が作れるならばTrueを返す．\n
         a, b, cにおいて
         a + b > c かつ
         b + c > a かつ
         c + a > b
+        が成り立てば三角形が作れる．
 
         Parameters
         ----------

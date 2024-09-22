@@ -7,40 +7,41 @@ import matplotlib.pyplot as plt
 
 class MouseGridRenderer:
 
-    def __init__(self):
+    def __init__(self, fig: plt.Figure, ax: axes.Axes, *,
+                 alpha: float = 0.5, color: str = 'black') -> None:
         self._alreadly_init: bool = False     # 初期化フラグ
-        self._alpha = 0.5
-        self._color = 'black'
-        self._x_axis: lines.Line2D = None             # マウスポイント地点を表示するための線
-        self._y_axis: lines.Line2D = None             # マウスポイント地点を表示するための線
 
-    def set_event(self, fig: plt.Figure, ax: axes.Axes) -> None:
+        self._fig = fig
+        self._ax = ax
+
+        if self._fig == None:
+            raise ValueError("MouseGridRenderer.__init__: fig is None") 
+        
+        if self._ax == None:
+            raise ValueError("MouseGridRenderer.__init__: ax is None")
+
+        self.set_alpha(alpha)
+        self.set_color(color)
+
+    def render(self) -> None:
         '''
-        イベントを設定する,2度目以降の呼び出しは無視される\n
-        この関数を呼んだ後に,matplotlibのfigureオブジェクトを表示すると,マウスポイント地点を表示するための線が表示される\n
-        plt.show()の前に呼び出す,またはこの関数の後にplt.draw()を呼び出す必要がある
-
-        Parameters
-        ----------
-        fig : plt.figure
-            matplotlibのfigureオブジェクト
-        ax : plt.axis
-            matplotlibのaxisオブジェクト
+        イベントを設定する,2度目以降の呼び出しは無視される．\n
+        この関数を呼んだ後に,matplotlibのfigureオブジェクトを表示すると,マウスポイント地点を表示するための線が表示される．\n
+        plt.show()の前に呼び出す,またはこの関数の後にplt.draw()を呼び出す必要がある．
         '''
 
-        print("MouseGridRenderer.set_event: Starts drawing the mouse grid")
+        print("MouseGridRenderer.render: Starts drawing the mouse grid")
+        print("MouseGridRenderer.render: "
+                + "alpha: " + str(self._alpha)
+                + ", color: " + self._color)
 
         if self._alreadly_init:
             print("MouseGridRenderer.set_event: Already initialized.")
             return
 
-        if fig == None or ax == None:
-            print("MouseGridRenderer.set_event: fig or ax is None")
-            return
-
         # マウスポイント地点を表示するための線を登録，
-        self._y_axis = ax.axvline(-1)
-        self._x_axis = ax.axhline(-1)
+        self._y_axis = self._ax.axvline(-1)
+        self._x_axis = self._ax.axhline(-1)
 
         self._y_axis.set_linestyle('--')
         self._x_axis.set_linestyle('--')
@@ -52,7 +53,7 @@ class MouseGridRenderer:
         self._x_axis.set_color(self._color)
 
         # マウスが動いたときに呼び出す関数を設定
-        fig.canvas.mpl_connect('motion_notify_event', self._on_move)
+        self._fig.canvas.mpl_connect('motion_notify_event', self._on_move)
 
         self._alreadly_init = True
 

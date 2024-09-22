@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 
 import math
+
 from .triangle_checker import TriangleChecker
 from .hexapod_param import HexapodParam
 
