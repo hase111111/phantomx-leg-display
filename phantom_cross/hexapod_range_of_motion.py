@@ -33,9 +33,9 @@ class HexapodRangeOfMotion:
         self._param = hexapod_param
         self._ax = ax
 
-        self._color = color
-        self._upper_alpha = upper_alpha
-        self._lowwer_alpha = lowwer_alpha
+        self.set_color(color)
+        self.set_upper_alpha(upper_alpha)
+        self.set_lowwer_alpha(lowwer_alpha)
 
         self._STEP = 0.001
         
@@ -74,7 +74,6 @@ class HexapodRangeOfMotion:
             self._upper_alpha
         )
 
-
     def render_lower_leg_range(self) -> None:
         '''逆運動学解2つのうち，下向きの可動範囲を描画する．'''
 
@@ -87,6 +86,50 @@ class HexapodRangeOfMotion:
             self._lowwer_alpha
         )
 
+    def set_color(self, color: str) -> None:
+        '''
+        色を設定する．
+
+        Parameters
+        ----------
+        color : str
+            色
+        '''
+
+        self._color = color
+
+    def set_upper_alpha(self, alpha: float) -> None:
+        '''
+        上向きの可動範囲の透明度を設定する．
+
+        Parameters
+        ----------
+        alpha : float
+            透明度
+        '''
+
+        self._upper_alpha = alpha
+
+        # 例外を投げる
+        if self._upper_alpha < 0 or self._upper_alpha > 1:
+            raise ValueError("The value of upper_alpha is out of range. The value must be between 0 and 1.")
+
+    def set_lowwer_alpha(self, alpha: float) -> None:
+        '''
+        下向きの可動範囲の透明度を設定する．
+
+        Parameters
+        ----------
+        alpha : float
+            透明度
+        '''
+
+        self._lowwer_alpha = alpha
+
+        # 例外を投げる
+        if self._lowwer_alpha < 0 or self._lowwer_alpha > 1:
+            raise ValueError("The value of lowwer_alpha is out of range. The value must be between 0 and 1.")
+        
     def _make_leg_range(
             self, theta2_min: float, theta2_max: float, theta3_min: float, theta3_max: float, 
             color_value: str, alpha_vaule: float):
