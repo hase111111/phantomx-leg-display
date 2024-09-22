@@ -1,23 +1,20 @@
 
 #-*- coding: utf-8 -*-
 
+import matplotlib.lines as lines
+import matplotlib.axes as axes
 import matplotlib.pyplot as plt
 
 class MouseGridRenderer:
 
-    _alpha = 0.5
-    _color = 'black'
-
-    _y_axis = None             # マウスポイント地点を表示するための線
-    _x_axis = None             # マウスポイント地点を表示するための線
-
-    _alreadly_init = False     # 初期化フラグ
-
     def __init__(self):
-        return
+        self._alreadly_init: bool = False     # 初期化フラグ
+        self._alpha = 0.5
+        self._color = 'black'
+        self._x_axis: lines.Line2D = None             # マウスポイント地点を表示するための線
+        self._y_axis: lines.Line2D = None             # マウスポイント地点を表示するための線
 
-    def set_event(self, fig, ax):
-        # type: (plt.figure,plt.axis) -> None
+    def set_event(self, fig: plt.Figure, ax: axes.Axes) -> None:
         '''
         イベントを設定する,2度目以降の呼び出しは無視される\n
         この関数を呼んだ後に,matplotlibのfigureオブジェクトを表示すると,マウスポイント地点を表示するための線が表示される\n
@@ -68,20 +65,17 @@ class MouseGridRenderer:
         y = event.ydata
 
         if x == None or y == None:
-            # マウスポイント地点が取得できなかった場合は何もしない
+            # マウスポイント地点が取得できなかった場合は何もしない．
             return
 
-        # マウスポイント地点を表示するための線の位置を更新
+        # マウスポイント地点を表示するための線の位置を更新．
         self._y_axis.set_xdata(x)
         self._x_axis.set_ydata(y)
 
-        return
-
-    def set_alpha(self, alpha):
-        # type: (float) -> None
+    def set_alpha(self, alpha: float) -> None:
         '''
-        マウスポイント地点を表示するための線の透明度を設定する\n
-        set_event()の前にを呼び出す必要がある
+        マウスポイント地点を表示するための線の透明度を設定する．\n
+        set_event()の前にを呼び出す必要がある．
 
         Parameters
         ----------
@@ -95,13 +89,10 @@ class MouseGridRenderer:
         if self._alpha < 0.0 or self._alpha > 1.0:
             raise ValueError("MouseGridRenderer.set_alpha: alpha is out of range")
 
-        return
-
-    def set_color(self, color):
-        # type: (str) -> None
+    def set_color(self, color: str) -> None:
         '''
-        マウスポイント地点を表示するための線の色を設定する\n
-        set_event()の前にを呼び出す必要がある
+        マウスポイント地点を表示するための線の色を設定する．\n
+        描画の前にを呼び出す必要がある．
 
         Parameters
         ----------
@@ -110,5 +101,3 @@ class MouseGridRenderer:
         '''
 
         self._color = color
-
-        return
