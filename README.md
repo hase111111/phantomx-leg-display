@@ -7,7 +7,7 @@ Trossen Robotics社のPhantomX Hexapodの脚の可動域を表示するプログ
 <div align="center">
     <img src="/docs/img/table.jpg" width="95%">
     <p>
-        <img src="/docs/img/coordinate_axis.png" width="25%">
+        <img src="/docs/img/coordinate_axis.png" width="40%">
     </p>
 </div>
 
@@ -86,5 +86,18 @@ gd.display(hp)
 ### 操作方法
 
 脚は青色の線で表示され，脚先はマウスに追従します．
+脚先が可動範囲外に出た場合は，脚が赤色に変わります．
+また，間接の可動範囲外に出た場合は，ジョイントが赤色に変わります．
+
 左クリックすると脚先の位置が固定され，画像が保存されます．
 ホイールクリックすると，もうひとつの逆運動学解に切り替わります．
+
+## ライセンス
+
+MITライセンスです．
+
+詳細は，[LICENSE](LICENSE.txt)を参照してください．
+
+## 著者
+
+- [hase111111](https://github.com/hase111111)
