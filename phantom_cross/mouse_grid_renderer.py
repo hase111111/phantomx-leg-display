@@ -1,6 +1,10 @@
 
 #-*- coding: utf-8 -*-
 
+# Copyright (c) 2023 Taisei Hasegawa
+# Released under the MIT license
+# https://opensource.org/licenses/mit-license.php
+
 import matplotlib.lines as lines
 import matplotlib.axes as axes
 import matplotlib.pyplot as plt
