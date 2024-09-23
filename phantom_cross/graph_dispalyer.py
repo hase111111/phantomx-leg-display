@@ -14,7 +14,7 @@ from .mouse_grid_renderer import MouseGridRenderer
 from .hexapod_range_of_motion import HexapodRangeOfMotion
 from .hexapod_param import HexapodParam
 
-def display_graph(*, 
+def display_graph(hexapod_pram = HexapodParam(), *, 
                   display_table = True,
                   display_leg_power = False,
                   display_approximated_graph = True,
@@ -109,7 +109,6 @@ def display_graph(*,
         ax_table.set_visible(False) # 表示しない
 
     # 以下グラフの作成，描画
-    hexapod_pram = HexapodParam()
     hexapod_calc = HexapodLegRangeCalculator(hexapod_pram)
 
     # 脚が出せる力のグラフを描画
