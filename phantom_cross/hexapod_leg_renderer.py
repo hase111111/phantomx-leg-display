@@ -9,13 +9,14 @@ import math
 from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 from .hexapod_param import HexapodParam
 
-class HexapodLegRenderer:
 
-    _fig_name = "result/img.png"
+class HexapodLegRenderer:
 
     def __init__(self, hexapod_leg_range_calc: HexapodLegRangeCalculator, hexapod_param: HexapodParam, 
                  fig: plt.Figure, ax: axes.Axes, ax_table: axes.Axes, *,
                  display_circle: bool = True, display_wedge: bool = True) -> None:
+        self._fig_name = "result/img.png"
+
         self._calc = hexapod_leg_range_calc
         self._param = hexapod_param
 
@@ -26,10 +27,10 @@ class HexapodLegRenderer:
         self.set_circle(display_circle)
         self.set_wedge(display_wedge)
 
-        self._WEDGE_R = 20              # 扇形の半径
+        self._WEDGE_R = 20              # 扇形の半径．
 
-        self._joint_pos = [[0,0,0,0],[0,0,0,0]]         # 脚の関節の位置
-        self._joint_pos_click = [[0,0,0,0],[0,0,0,0]]   # クリックされたときに表示するグラフ用
+        self._joint_pos = [[0,0,0,0],[0,0,0,0]]         # 脚の関節の位置．
+        self._joint_pos_click = [[0,0,0,0],[0,0,0,0]]   # クリックされたときに表示するグラフ用．
 
         if self._calc == None:
             raise ValueError("calc_instance is None")
@@ -46,8 +47,8 @@ class HexapodLegRenderer:
         if self._ax_table == None:
             raise ValueError("ax_table is None")
 
-        self._alreadly_init = False     # 初期化フラグ
-        self._reverse = False           # 反転フラグ，逆運動学解の解が2つあるため，どちらを選ぶかを決める
+        self._alreadly_init = False     # 初期化フラグ．
+        self._reverse = False           # 反転フラグ，逆運動学解の解が2つあるため，どちらを選ぶかを決める．
 
     def render(self):
         '''イベントを設定する,初期化処理.2度目以降の呼び出しは無視される．'''
@@ -58,12 +59,12 @@ class HexapodLegRenderer:
                 "display_wedge = " + str(self._display_wedge)
         )
 
-        # すでに初期化済みの場合は何もしない
+        # すでに初期化済みの場合は何もしない．
         if self._alreadly_init:
             print("HexapodLegRenderer.set_event: Already initialized.")
             return
 
-        # 脚の可動範囲を表示するための円を登録
+        # 脚の可動範囲を表示するための円を登録．
         self._femur_circle = plt.Circle([0,0],color='black',fill=False)
         self._tibia_circle = plt.Circle([0,0],color='black',fill=False)
 
@@ -79,7 +80,7 @@ class HexapodLegRenderer:
         self._ax.add_artist(self._femur_circle)
         self._ax.add_artist(self._tibia_circle)
 
-        # 角度用の扇形を登録
+        # 角度用の扇形を登録．
         self._femur_wedge = patch.Wedge([0,0], self._WEDGE_R, 0, 10)
         self._tibia_wedge = patch.Wedge([0,0], self._WEDGE_R, 0, 10)
 
@@ -89,32 +90,32 @@ class HexapodLegRenderer:
         self._ax.add_artist(self._femur_wedge)
         self._ax.add_artist(self._tibia_wedge)
 
-        # 脚の描画
+        # 脚の描画．
         self._leg_graph, = self._ax.plot(self._joint_pos[0],self._joint_pos[1])
-        self._leg_graph.set_linewidth(5)       # 太さを変える
-        self._leg_graph.set_marker('o')        # 点を描画する
-        self._leg_graph.set_markersize(10)     # 点の大きさを変える
+        self._leg_graph.set_linewidth(5)       # 太さを変える．
+        self._leg_graph.set_marker('o')        # 点を描画する．
+        self._leg_graph.set_markersize(10)     # 点の大きさを変える．
 
         self._leg_graph_click, = self._ax.plot(self._joint_pos[0],self._joint_pos[1])
-        self._leg_graph_click.set_linewidth(5)       # 太さを変える
-        self._leg_graph_click.set_marker('o')        # 点を描画する
-        self._leg_graph_click.set_markersize(10)     # 点の大きさを変える
-        self._leg_graph_click.set_visible(False)     # 非表示にする
+        self._leg_graph_click.set_linewidth(5)       # 太さを変える．
+        self._leg_graph_click.set_marker('o')        # 点を描画する．
+        self._leg_graph_click.set_markersize(10)     # 点の大きさを変える．
+        self._leg_graph_click.set_visible(False)     # 非表示にする．
 
-        # 可動範囲外の間接に色をつけるためのグラフ
+        # 可動範囲外の間接に色をつけるためのグラフ．
         self._error_joint, = self._ax.plot(self._joint_pos[0],self._joint_pos[1])
-        self._error_joint.set_linewidth(0)       # 線を消す
-        self._error_joint.set_marker('o')        # 点を描画する
-        self._error_joint.set_markersize(12)     # 点の大きさを変える
-        self._error_joint.set_color('red')       # 色を変える
+        self._error_joint.set_linewidth(0)       # 線を消す．
+        self._error_joint.set_marker('o')        # 点を描画する．
+        self._error_joint.set_markersize(12)     # 点の大きさを変える．
+        self._error_joint.set_color('red')       # 色を変える．
 
-        # マウスが動いたときに呼び出す関数を設定
+        # マウスが動いたときに呼び出す関数を設定．
         self._fig.canvas.mpl_connect('motion_notify_event', self._on_update)
 
-        # マウスが左クリックされたときに呼び出す関数を設定
+        # マウスが左クリックされたときに呼び出す関数を設定．
         self._fig.canvas.mpl_connect('button_press_event', self._on_click)
 
-        # 角度を表示するためのテーブルを登録
+        # 角度を表示するためのテーブルを登録．
         self._angle_table = self._ax_table.table(cellText=[
             ["Joint","Angle [deg]"],["coxa",0],["femur",0],["tibia",0],
             ["coxa servo",0],["femur servo",0],["tibia servo",0],
@@ -124,31 +125,32 @@ class HexapodLegRenderer:
         self._ax_table.axis('off')
         self._ax_table.axis('tight')
 
-        # 初期化済みフラグを立てる
+        # 初期化済みフラグを立てる．
         self._alreadly_init = True
 
         return
 
     def _on_update(self, event):
+        '''マウスが動いたときに呼び出される関数．'''
 
-        # マウスポイント地点を取得
+        # マウスポイント地点を取得．
         mouse_x = event.xdata
         mouse_z = event.ydata
 
         if mouse_x == None or mouse_z == None:
-            # マウスポイント地点が取得できなかった場合は何もしない
+            # マウスポイント地点が取得できなかった場合は何もしない．
             return
 
-        # 脚の角度を計算
+        # 脚の角度を計算．
         res,self._joint_pos,angle = self._calc.calc_inverse_kinematics_xz(mouse_x, mouse_z, self._reverse)
         self._leg_graph.set_data(self._joint_pos)
         self._leg_graph.set_visible(True)
 
-        # 脚の付け根の円を描画
+        # 脚の付け根の円を描画．
         self._femur_circle.center = [self._joint_pos[0][1],self._joint_pos[1][1]]
         self._tibia_circle.center = [self._joint_pos[0][2],self._joint_pos[1][2]]
 
-        # 扇形を描画
+        # 扇形を描画．
         self._femur_wedge.set_center([self._joint_pos[0][1],self._joint_pos[1][1]])
         self._femur_wedge.set_theta1(min([0, math.degrees(angle[1])]))
         self._femur_wedge.set_theta2(max([0, math.degrees(angle[1])]))
@@ -158,11 +160,11 @@ class HexapodLegRenderer:
         self._tibia_wedge.set_theta2(max([math.degrees(angle[1]), math.degrees(angle[1] + angle[2])]))
 
 
-        # 失敗しているならば色を変える
+        # 失敗しているならば色を変える．
         if res:
             self._leg_graph.set_color('blue')
 
-            #可動範囲外ならばそのプロットの色を変える
+            # 可動範囲外ならばそのプロットの色を変える．
             if not self._calc.is_theta2_in_range(angle[1]) or not self._calc.is_theta3_in_range(angle[2]):
 
                 error_point = [[],[]]
@@ -183,7 +185,7 @@ class HexapodLegRenderer:
         else:
             self._leg_graph.set_color('red')
 
-        # 表を更新
+        # 表を更新．
         self._angle_table._cells[(1,1)]._text.set_text("{:.3f}".format(math.degrees(angle[0])))
         self._angle_table._cells[(2,1)]._text.set_text("{:.3f}".format(math.degrees(angle[1])))
         self._angle_table._cells[(3,1)]._text.set_text("{:.3f}".format(math.degrees(angle[2])))
@@ -232,7 +234,7 @@ class HexapodLegRenderer:
         else:
             self._angle_table._cells[(12,1)].set_facecolor(table_normal_color)
 
-        # グラフを再描画
+        # グラフを再描画．
         plt.draw()
         return
 
@@ -242,16 +244,16 @@ class HexapodLegRenderer:
         middle_click_index = 2
         right_click_index = 3
 
-        # 右クリックされた場合は表示を消す
+        # 右クリックされた場合は表示を消す．
         if event.button == right_click_index:
             self._leg_graph_click.set_visible(False)
 
-        # 中クリックされた場合は反転
+        # 中クリックされた場合は反転．
         elif event.button == middle_click_index:
             self._reverse = not self._reverse
             self._on_update(event)
 
-        # 左クリックされた場合は表示を更新
+        # 左クリックされた場合は表示を更新．
         elif event.button == left_click_index:
             self._fig.savefig(self._fig_name,transparent=True)
             self._leg_graph_click.set_visible(True)
@@ -263,36 +265,36 @@ class HexapodLegRenderer:
 
     def set_circle(self, vaild: bool) -> None:
         '''
-        円を表示するかどうかを設定する
+        円を表示するかどうかを設定する．
 
         Parameters
         ----------
         vaild : bool
-            円を表示するかどうか
+            円を表示するか．
         '''
 
         self._display_circle = vaild
 
     def set_wedge(self, vaild: bool) -> None:
         '''
-        扇形を表示するかどうかを設定する
+        扇形を表示するかどうかを設定する．
 
         Parameters
         ----------
         vaild : bool
-            扇形を表示するかどうか
+            扇形を表示するか．
         '''
 
         self._display_wedge = vaild
 
     def set_img_file_name(self, file_name: str) -> None:
         '''
-        画像を保存するときのファイル名を設定する
+        画像を保存するときのファイル名を設定する.
 
         Parameters
         ----------
         file_name : str
-            画像を保存するときのファイル名
+            画像を保存するときのファイル名.
         '''
 
         self._fig_name = file_name

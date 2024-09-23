@@ -10,9 +10,15 @@ from .hexapod_param import HexapodParam
 class HexapodLegRangeCalculator:
 
     def __init__(self, hexapod_param: HexapodParam) -> None:
+        '''
+        Parameters
+        ----------
+        hexapod_param : HexapodParam
+            パラメータを格納するためのインスタンス．
+        '''
+        self._DEBUG_FLAG = False
         self._param = hexapod_param
         self._init_approximate_max_leg_raudus()    # 脚の最大半径を計算する．
-        self._DEBUG_FLAG = False
 
         if self._param == None:
             raise ValueError("param_instance is None")
