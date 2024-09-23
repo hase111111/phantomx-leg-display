@@ -7,7 +7,7 @@
 
 import math
 
-from typing import Tuple
+from typing import Tuple, List
 
 from .triangle_checker import TriangleChecker
 from .hexapod_param import HexapodParam
@@ -121,7 +121,7 @@ class HexapodLegRangeCalculator:
         z = self._param.femur_length * math.sin(theta2) + self._param.tibia_length * math.sin(theta2 + theta3)
         return (True,x,z)
 
-    def calc_inverse_kinematics_xz(self, x: float, z: float, reverse_flag: bool = False) -> Tuple[bool, list[Tuple[float, float]], list[float]]:
+    def calc_inverse_kinematics_xz(self, x: float, z: float, reverse_flag: bool = False) -> Tuple[bool, List[Tuple[float, float]], List[float]]:
         '''
         逆運動学を計算する．
 
@@ -136,7 +136,7 @@ class HexapodLegRangeCalculator:
 
         Returns
         -------
-        res : Tuple[bool, list[Tuple[float, float]], list[float]]
+        res : Tuple[bool, List[Tuple[float, float]], List[float]]
             脚がとどかず計算できなければfalse,trueでも可動範囲外になることがある．\n
             脚の関節の座標のタプルのリスト,coxa(付け根),femur,tibia,脚先の順 x[mm],z[mm]\n
             脚の関節の角度のリスト,coxa(今回は0で固定),femur,tibiaの順 [rad]\n
@@ -213,7 +213,7 @@ class HexapodLegRangeCalculator:
         angle[2] = self._clamp_angle(angle[2])  # -180度～180度に収める．
         return True,joint_pos,angle
 
-    def calc_inverse_kinematics_xz_arduino(self, x: float, z: float) -> Tuple[list[float], list[float], list[float], list[float]]:
+    def calc_inverse_kinematics_xz_arduino(self, x: float, z: float) -> Tuple[List[float], List[float], List[float], List[float]]:
         '''
         coxa jointが回転していない場合の逆運動学を計算する．
         脚が水平に伸びる方向にx,上方向にzをとる．
@@ -228,7 +228,7 @@ class HexapodLegRangeCalculator:
 
         Returns
         -------
-        res : Tuple[list[float], list[float], list[float], list[float]]
+        res : Tuple[List[float], List[float], List[float], List[float]]
             3つの関節の角度のリスト,coxa,femur,tibiaの順 [rad]\n
             3つの関節のサーボ角のリスト,coxa,femur,tibiaの順 [0~1023],実際にはサーボが傾いてついているのでこの値をそのまま使用しない\n
             3つの関節の左足サーボ角のリスト,coxa,femur,tibiaの順 [0~1023]\n
