@@ -4,6 +4,13 @@
 Trossen Robotics社のPhantomX Hexapodの脚の可動域を表示するプログラムです．
 卒業研究のために作成したプログラムで，研究の題目は"グラフ探索を用いた多脚ロボットの歩容パターン生成における脚軌道生成失敗時の歩容パターンの再評価手法"です．
 
+<div align="center">
+    <img src="/docs/img/table.jpg" width="90%">
+    <p>
+        <img src="/docs/img/coordinate_axis.png" width="48%">
+    </p>
+</div>
+
 ## 概要
 
 3関節（yaw - pitch - pitch）の脚を持つ脚ロボットの1脚の可動域を表示するプログラムです．
@@ -58,10 +65,6 @@ gd = pc.GraphDisplayer()
 gd.display()
 ```
 
-脚は青色の線で表示され，脚先はマウスに追従します．
-左クリックすると脚先の位置が固定され，画像が保存されます．
-ホイールクリックすると，もうひとつの逆運動学解に切り替わります．
-
 ### HexapodParam
 
 脚のパラメータは構造体HexapodParamを用いて設定します．
@@ -79,3 +82,9 @@ hp.tibia_length = 100.0
 gd = pc.GraphDisplayer(hp)
 gd.display(hp)
 ```
+
+### 操作方法
+
+脚は青色の線で表示され，脚先はマウスに追従します．
+左クリックすると脚先の位置が固定され，画像が保存されます．
+ホイールクリックすると，もうひとつの逆運動学解に切り替わります．
