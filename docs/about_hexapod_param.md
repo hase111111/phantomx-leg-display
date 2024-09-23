@@ -36,7 +36,7 @@ class HexapodParam:
 `tibia_length`は，脚の第3関節から脚先までの長さを指定します．
 デフォルト値は130.0mmです．
 
-![脚の長さ](./img/link_joint.png)
+![脚の長さ](./img/link_joint.png)![a](./img/coordinate_axis.png)
 
 ### 間接の可動範囲
 
