@@ -48,6 +48,8 @@ pyton3 -m phantom_cross  # Python3の場合
 ### GraphDisplayerクラス
 
 脚の図示はGraphDisplayerクラスを用いて行います．
+下記のコードを実行すると，脚の可動域が表示されます．
+詳細な使用方法については，[](docs/about_graph_displayer.md)を参照してください．
 
 ```python
 import phantom_cross as pc
@@ -56,4 +58,23 @@ gd = pc.GraphDisplayer()
 gd.display()
 ```
 
-<!--sample_main1.pyを挿入する-->
+脚は青色の線で表示され，脚先はマウスに追従します．
+左クリックすると脚先の位置が固定され，画像が保存されます．
+ホイールクリックすると，もうひとつの逆運動学解に切り替わります．
+
+### HexapodParamクラス
+
+脚のパラメータはHexapodParamクラスを用いて設定します．
+パラメータを変更することで，他の脚ロボットにも対応可能です．
+
+```python
+import phantom_cross as pc
+
+hp = pc.HexapodParam()
+hp.coxa_length = 0.0
+hp.femur_length = 100.0
+hp.tibia_length = 100.0
+
+gd = pc.GraphDisplayer(hp)
+gd.display(hp)
+```
