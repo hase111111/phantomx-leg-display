@@ -7,7 +7,7 @@ displayメソッドは多くの引数を持ちますが，デフォルト値が�
 これらを変更することで，脚の図示をカスタマイズできます．
 
 <div style="text-align: center">
-    <img src="./img/simple.jpg" width="70%">
+    <img src="./img/simple.jpg" width="70%" class="center">
 </div>
 
 ## 目次
