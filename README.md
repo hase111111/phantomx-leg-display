@@ -26,8 +26,12 @@ yaw軸周りの回転は無視し，2次元平面上で表示を行います．
 
 ```bash
 pip install git+[このレポジトリのURL]
+pip3 install git+[このレポジトリのURL] # Python3の場合
 
 # ex) pip install git+https://github.com/hase111111/phantomx-leg-display.git
+
+# 更新する場合は以下のコマンドを実行してください
+# pip install --upgrade git+[このレポジトリのURL] -U
 ```
 
 インストールが完了したら，以下のコマンドでプログラムを実行してください．
@@ -35,6 +39,7 @@ pip install git+[このレポジトリのURL]
 
 ```bash
 python -m phantom_cross
+pyton3 -m phantom_cross  # Python3の場合
 
 # phantom_cross [version]
 # This is a package for hexapod robot.
@@ -43,3 +48,12 @@ python -m phantom_cross
 ### GraphDisplayerクラス
 
 脚の図示はGraphDisplayerクラスを用いて行います．
+
+```python
+import phantom_cross as pc
+
+gd = pc.GraphDisplayer()
+gd.display()
+```
+
+<!--sample_main1.pyを挿入する-->
