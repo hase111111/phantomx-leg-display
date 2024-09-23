@@ -105,7 +105,7 @@ class HexapodLegRangeCalculator:
 
         Returns
         -------
-        res : tuple[bool, float, float]
+        res : Tuple[bool, float, float]
             間接の可動範囲外の場合はfalseを返す．\n
             脚先の位置のタプル,x[mm],z[mm]．
         '''
@@ -121,7 +121,7 @@ class HexapodLegRangeCalculator:
         z = self._param.femur_length * math.sin(theta2) + self._param.tibia_length * math.sin(theta2 + theta3)
         return (True,x,z)
 
-    def calc_inverse_kinematics_xz(self, x: float, z: float, reverse_flag: bool = False) -> Tuple[bool, list[tuple[float, float]], list[float]]:
+    def calc_inverse_kinematics_xz(self, x: float, z: float, reverse_flag: bool = False) -> Tuple[bool, list[Tuple[float, float]], list[float]]:
         '''
         逆運動学を計算する．
 
@@ -136,7 +136,7 @@ class HexapodLegRangeCalculator:
 
         Returns
         -------
-        res : tuple[bool, list[tuple[float, float]], list[float]]
+        res : Tuple[bool, list[Tuple[float, float]], list[float]]
             脚がとどかず計算できなければfalse,trueでも可動範囲外になることがある．\n
             脚の関節の座標のタプルのリスト,coxa(付け根),femur,tibia,脚先の順 x[mm],z[mm]\n
             脚の関節の角度のリスト,coxa(今回は0で固定),femur,tibiaの順 [rad]\n
@@ -228,7 +228,7 @@ class HexapodLegRangeCalculator:
 
         Returns
         -------
-        res : tuple[list[float], list[float], list[float], list[float]]
+        res : Tuple[list[float], list[float], list[float], list[float]]
             3つの関節の角度のリスト,coxa,femur,tibiaの順 [rad]\n
             3つの関節のサーボ角のリスト,coxa,femur,tibiaの順 [0~1023],実際にはサーボが傾いてついているのでこの値をそのまま使用しない\n
             3つの関節の左足サーボ角のリスト,coxa,femur,tibiaの順 [0~1023]\n
