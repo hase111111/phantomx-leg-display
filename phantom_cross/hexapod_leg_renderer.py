@@ -54,7 +54,7 @@ class HexapodLegRenderer:
         self._alreadly_init = False     # 初期化フラグ．
         self._reverse = False           # 反転フラグ，逆運動学解の解が2つあるため，どちらを選ぶかを決める．
 
-    def render(self):
+    def render(self) -> None:
         '''イベントを設定する,初期化処理.2度目以降の呼び出しは無視される．'''
 
         print("HexapodLegRenderer.render: Starts drawing the leg")
@@ -134,7 +134,7 @@ class HexapodLegRenderer:
 
         return
 
-    def _on_update(self, event):
+    def _on_update(self, event) -> None:
         '''マウスが動いたときに呼び出される関数．'''
 
         # マウスポイント地点を取得．

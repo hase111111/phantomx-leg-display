@@ -52,7 +52,8 @@ class HexapodLegPower:
         self.set_range(x_min, x_max, z_min, z_max)
 
         self._param = hexapod_param
-        self._PRINT_DIV = int(20)   # 何%ごとに進捗を表示するか. 5%ごとならば，20回に1回表示するため20を指定する
+        # 何%ごとに進捗を表示するか. 5%ごとならば，20回に1回表示するため20を指定する．
+        self._PRINT_DIV = int(20)   
 
         if self._calc == None:
             raise ValueError("HexapodLegPower.__init__: calc_instance is None") 

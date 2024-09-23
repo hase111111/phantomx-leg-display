@@ -11,6 +11,8 @@ mpl.use('tkagg')
 import matplotlib.axes as axes
 import matplotlib.pyplot as plt
 
+from typing import Tuple
+
 from .hexapod_leg_power import HexapodLegPower
 from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 from .approximated_graph_renderer import ApproximatedGraphRenderer
@@ -37,7 +39,7 @@ class GraphDisplayer:
                     color_mouse_grid = 'black', alpha_mouse_grid = 0.5,
                     image_file_name = "result/img_main.png",
                     ground_z = -25.0,
-                    do_not_show = False) -> tuple[plt.Figure, axes.Axes, axes.Axes]:
+                    do_not_show = False) -> Tuple[plt.Figure, axes.Axes, axes.Axes]:
         '''
         x_min < x < x_max , z_min < z < z_max の範囲でグラフを描画する．\n
         変数の値を変更することで処理の内容を変更できる．

@@ -64,8 +64,7 @@ class MouseGridRenderer:
 
         return
 
-    def _on_move(self, event):
-
+    def _on_move(self, event) -> None:
         # マウスポイント地点を取得
         x = event.xdata
         y = event.ydata

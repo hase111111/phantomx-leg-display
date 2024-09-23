@@ -7,6 +7,8 @@
 
 import math
 
+from typing import Tuple
+
 from .triangle_checker import TriangleChecker
 from .hexapod_param import HexapodParam
 
@@ -89,7 +91,7 @@ class HexapodLegRangeCalculator:
         else:
             return self._min_radius
 
-    def get_leg_position_xz(self, theta2: float, theta3: float) -> tuple[bool, float, float]:
+    def get_leg_position_xz(self, theta2: float, theta3: float) -> Tuple[bool, float, float]:
         '''
         第1関節の角度を無視して、第2関節と第3関節の角度から脚先の位置を計算する．\n
         出力は計算できたかを表すboolean,x,z平面における座標のタプル．
@@ -119,7 +121,7 @@ class HexapodLegRangeCalculator:
         z = self._param.femur_length * math.sin(theta2) + self._param.tibia_length * math.sin(theta2 + theta3)
         return (True,x,z)
 
-    def calc_inverse_kinematics_xz(self, x: float, z: float, reverse_flag: bool = False) -> tuple[bool, list[tuple[float, float]], list[float]]:
+    def calc_inverse_kinematics_xz(self, x: float, z: float, reverse_flag: bool = False) -> Tuple[bool, list[tuple[float, float]], list[float]]:
         '''
         逆運動学を計算する．
 
@@ -211,7 +213,7 @@ class HexapodLegRangeCalculator:
         angle[2] = self._clamp_angle(angle[2])  # -180度～180度に収める．
         return True,joint_pos,angle
 
-    def calc_inverse_kinematics_xz_arduino(self, x: float, z: float) -> tuple[list[float], list[float], list[float], list[float]]:
+    def calc_inverse_kinematics_xz_arduino(self, x: float, z: float) -> Tuple[list[float], list[float], list[float], list[float]]:
         '''
         coxa jointが回転していない場合の逆運動学を計算する．
         脚が水平に伸びる方向にx,上方向にzをとる．
