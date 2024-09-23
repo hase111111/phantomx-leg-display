@@ -5,9 +5,9 @@ Trossen Robotics社のPhantomX Hexapodの脚の可動域を表示するプログ
 卒業研究のために作成したプログラムで，研究の題目は"グラフ探索を用いた多脚ロボットの歩容パターン生成における脚軌道生成失敗時の歩容パターンの再評価手法"です．
 
 <div align="center">
-    <img src="/docs/img/table.jpg" width="90%">
+    <img src="/docs/img/table.jpg" width="95%">
     <p>
-        <img src="/docs/img/coordinate_axis.png" width="48%">
+        <img src="/docs/img/coordinate_axis.png" width="25%">
     </p>
 </div>
 
