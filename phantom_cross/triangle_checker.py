@@ -3,6 +3,7 @@
 
 import numpy as np
 
+
 class TriangleChecker:
     def can_make_triangle(self, len1: float, len2: float, len3: float) -> bool:
         '''
@@ -17,11 +18,11 @@ class TriangleChecker:
         Parameters
         ----------
         len1 : float
-            辺1の長さ
+            辺1の長さ.
         len2 : float
-            辺2の長さ
+            辺2の長さ.
         len3 : float
-            辺3の長さ
+            辺3の長さ.
         '''
 
         if np.abs(len1) + np.abs(len2) <= np.abs(len3):

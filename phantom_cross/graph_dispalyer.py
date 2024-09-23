@@ -15,6 +15,7 @@ from .mouse_grid_renderer import MouseGridRenderer
 from .hexapod_range_of_motion import HexapodRangeOfMotion
 from .hexapod_param import HexapodParam
 
+
 class GraphDisplayer:
 
     def display(self, hexapod_pram = HexapodParam(), *, 

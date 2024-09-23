@@ -7,6 +7,7 @@ import numpy as np
 
 from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 
+
 class ApproximatedGraphRenderer:
 
     def __init__(self, hexapod_leg_range_calc: HexapodLegRangeCalculator, ax : axes.Axes,

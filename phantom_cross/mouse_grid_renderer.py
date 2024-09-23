@@ -5,6 +5,7 @@ import matplotlib.lines as lines
 import matplotlib.axes as axes
 import matplotlib.pyplot as plt
 
+
 class MouseGridRenderer:
 
     def __init__(self, fig: plt.Figure, ax: axes.Axes, *,

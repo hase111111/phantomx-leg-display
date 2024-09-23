@@ -3,6 +3,7 @@
 
 import math
 
+
 class HexapodParam:
     coxa_length: float = 52.0     # [mm]
     femur_length: float = 66.0    # [mm]
