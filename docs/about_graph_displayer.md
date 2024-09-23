@@ -10,10 +10,6 @@ displayメソッドは多くの引数を持ちますが，デフォルト値が�
     <img src="./img/simple.jpg" width="70%" class="center">
 </div>
 
-<center>
-    <img src="./img/simple.jpg" width="70%" class="center">
-</center>
-
 ## 目次
 
 - [displayメソッド](#displayメソッド)
@@ -74,17 +70,27 @@ def display(self, hexapod_pram = HexapodParam(), *,
 
 Trueの場合，テーブルを表示します．
 
+<div align="center">
+    <img src="./img/table.jpg" width="50%" class="center">
+</div>
+
 #### display_leg_power
 
 Trueの場合，脚先力を表示します．
 計算に時間がかかるため，不必要な場合はFalseを推奨します．
 
-![p](./img/power.jpg){ width=70% .center}
+<div align="center">
+    <img src="./img/power.jpg" width="50%" class="center">
+</div>
 
 #### display_approximated_graph
 
 Trueの場合，近似された可動範囲のグラフを表示します．
 近似された可動範囲については，卒業論文を参照してください．
+
+<div align="center">
+    <img src="./img/approx.jpg" width="50%" class="center">
+</div>
 
 #### display_mouse_grid
 
