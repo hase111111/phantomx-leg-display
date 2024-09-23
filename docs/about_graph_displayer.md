@@ -6,6 +6,8 @@ GraphDisplayerはdisplayメソッドのみを持ちます．
 displayメソッドは多くの引数を持ちますが，デフォルト値が設定されています．
 これらを変更することで，脚の図示をカスタマイズできます．
 
+![1](./img/simple.jpg){ width=70% .center}
+
 ## 目次
 
 - [displayメソッド](#displayメソッド)
@@ -70,6 +72,8 @@ Trueの場合，テーブルを表示します．
 
 Trueの場合，脚先力を表示します．
 計算に時間がかかるため，不必要な場合はFalseを推奨します．
+
+![p](./img/power.jpg){ width=70% .center}
 
 #### display_approximated_graph
 

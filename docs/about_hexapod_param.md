@@ -24,26 +24,41 @@ class HexapodParam:
 
 ### 脚の長さ
 
-`HexapodParam`では，各リンクの名前をPhantomXに倣い，coxa, femur, tibiaとしています．
+`HexapodParam`では，各リンクの名前をPhantomXに倣い，`coxa`, `femur`, `tibia`としています．
 また，パラメータはPhantomX Mk-2のリンクの長さをデフォルト値としています．
 
 `coxa_length`は，脚の第1関節から第2関節までの長さを指定します．
-デフォルト値は52.0mmです．
+単位はmmで，デフォルト値は52.0mmです．
 
 `femur_length`は，脚の第2関節から第3関節までの長さを指定します．
-デフォルト値は66.0mmです．
+単位はmmで，デフォルト値は66.0mmです．
 
 `tibia_length`は，脚の第3関節から脚先までの長さを指定します．
-デフォルト値は130.0mmです．
+単位はmmで，デフォルト値は130.0mmです．
 
-<p>
-    <img src="./img/link_joint.png">
-    <img src="./img/coordinate_axis.png">
-</p>
+すべてのパラメータは0以上の値を指定してください．
 
 ### 間接の可動範囲
 
+関節の角度を表す変数は`coxa`, `femur`, `tibia`の順に`theta1`, `theta2`, `theta3`としています．
 
+`theta1`は座標軸に対して右ねじの方向を正としています．
+`theta2` `theta3`は，下図における反時計回りを正としています．
+
+`theta1_max` `theta1_min`は，第1関節の最大・最小角度を指定します．
+単位はradで，デフォルト値はそれぞれ81.0度と-81.0度です．
+このプログラムでは2次元平面上に表示するため，実質的にこの値は無意味なものになります．
+
+`theta2_max` `theta2_min`は，第2関節の最大・最小角度を指定します．
+
+`theta3_max` `theta3_min`は，第3関節の最大・最小角度を指定します．
+
+すべて-πからπの範囲で指定してください．また，最小を最大より大きく指定しないでください．
+
+<p>
+    <img src="./img/link_joint.png" width=300>
+    <img src="./img/coordinate_axis.png" width=300>
+</p>
 
 ### その他のパラメータ
 
