@@ -55,10 +55,12 @@ class HexapodParam:
 
 すべて-πからπの範囲で指定してください．また，最小を最大より大きく指定しないでください．
 
-<p>
-    <img src="./img/link_joint.png" width=300>
-    <img src="./img/coordinate_axis.png" width=300>
-</p>
+<div align="center">
+    <p>
+        <img src="./img/link_joint.png" width="40%">
+        <img src="./img/coordinate_axis.png" width="40%">
+    </p>
+</div>
 
 ### その他のパラメータ
 
@@ -68,3 +70,15 @@ class HexapodParam:
 
 `approx_min_radius`は，近似された可動範囲のグラフを表示する際の最小半径を指定します．
 デフォルト値は140.0mmです．
+
+### サンプル
+
+以下の図は，`coxa_length=0,0`，`femur_length=100.0`，`tibia_length=100.0`のパラメータで表示したものです．
+また，可動域を`theta2_max=100.0`，`theta2_min=-100.0`，`theta3_max=100.0`，`theta3_min=-100.0`としています．
+
+[sample_main3.py](../sample_main3.py)では，`HexapodParam`を用いて脚の可動域を表示しています．
+詳細はそちらを参照してください．
+
+<div align="center">
+    <img src="./img/hexapod_param.jpg" width="70%" class="center">
+</div>
