@@ -79,9 +79,9 @@ def display_graph(*,
     image_file_name: str    
         脚を画像で表示する場合の画像ファイル名.
     ground_z: float
-        地面の高さ
+        地面の高さ．
     do_not_show: bool
-        show()を実行しないかどうか
+        show()を実行しない場合にTrueにする．
 
     Returns
     -------

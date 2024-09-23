@@ -14,4 +14,6 @@ class HexapodParam:
     theta3_max: float = math.radians(25.5)   # [rad]
     theta3_min: float = math.radians(-145.0) # [rad]
     torque_max: float = 1800.0    # [N*mm] ストールトルク(停動トルク) 
+
+    approx_min_radius: float = 140.0      # [mm]
     

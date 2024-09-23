@@ -6,17 +6,21 @@ import math
 from .triangle_checker import TriangleChecker
 from .hexapod_param import HexapodParam
 
+
 class HexapodLegRangeCalculator:
-
-    _DEBUG_FLAG = False
-    _min_radius = 120.0     # [mm]
-
-    _approximate_max_leg_raudus = []    # 近似された脚の可動範囲の最大半径のリスト，z軸の座標軸の取り方が逆なので，zを反転させる
 
     def __init__(self, hexapod_param: HexapodParam) -> None:
         self._param = hexapod_param
-        self._init_approximate_max_leg_raudus()    # 脚の最大半径を計算する
+        self._init_approximate_max_leg_raudus()    # 脚の最大半径を計算する．
+        self._DEBUG_FLAG = False
 
+        if self._param == None:
+            raise ValueError("param_instance is None")
+        
+        self._min_radius = self._param.approx_min_radius
+
+        if self._min_radius < 0:
+            raise ValueError("r must be greater than 0")
 
     def set_approximate_min_leg_raudus(self, r: float) -> None:
         '''
@@ -30,7 +34,7 @@ class HexapodLegRangeCalculator:
 
         self._min_radius = r
 
-        # 異常な値の場合は例外を投げる
+        # 異常な値の場合は例外を投げる．
         if self._min_radius < 0:
             raise ValueError("r must be greater than 0")
 
@@ -77,8 +81,8 @@ class HexapodLegRangeCalculator:
 
     def get_leg_position_xz(self, theta2: float, theta3: float) -> tuple[bool, float, float]:
         '''
-        第1関節の角度を無視して、第2関節と第3関節の角度から脚先の位置を計算する\n
-        出力は計算できたかを表すboolean,x,z平面における座標のタプル
+        第1関節の角度を無視して、第2関節と第3関節の角度から脚先の位置を計算する．\n
+        出力は計算できたかを表すboolean,x,z平面における座標のタプル．
 
         Parameters
         ----------
@@ -107,7 +111,7 @@ class HexapodLegRangeCalculator:
 
     def calc_inverse_kinematics_xz(self, x: float, z: float, reverse_flag: bool = False) -> tuple[bool, list[tuple[float, float]], list[float]]:
         '''
-        逆運動学を計算する
+        逆運動学を計算する．
 
         Parameters
         ----------
@@ -121,41 +125,41 @@ class HexapodLegRangeCalculator:
         Returns
         -------
         res : tuple[bool, list[tuple[float, float]], list[float]]
-            脚がとどかず計算できなければfalse,trueでも可動範囲外になることがある\n
+            脚がとどかず計算できなければfalse,trueでも可動範囲外になることがある．\n
             脚の関節の座標のタプルのリスト,coxa(付け根),femur,tibia,脚先の順 x[mm],z[mm]\n
             脚の関節の角度のリスト,coxa(今回は0で固定),femur,tibiaの順 [rad]\n
         '''
         joint_pos = [[],[]]
         angle = []
 
-        # 脚の付け根
+        # 脚の付け根．
         joint_pos[0].append(0)
         joint_pos[1].append(0)
 
-        # 第1関節
+        # 第1関節．
         joint_pos[0].append(self._param.coxa_length)
         joint_pos[1].append(0)
         angle.append(0)
 
-        #長さが足りない場合は計算できない
+        # 長さが足りない場合は計算できない．
         triangle_checker = TriangleChecker()
         if not triangle_checker.can_make_triangle(self._param.tibia_length, self._param.femur_length, math.sqrt(math.pow(x - self._param.coxa_length, 2.0) + math.pow(z, 2.0))):
             angle_ft = math.atan2(z, x - self._param.coxa_length)
-            angle_ft_phase = angle_ft + math.pi #180度位相をずらす
+            angle_ft_phase = angle_ft + math.pi # 180度位相をずらす．
             angle_ft_phase = angle_ft_phase > math.pi * 2.0 and angle_ft_phase - math.pi * 2.0 or angle_ft_phase
 
-            #候補点を計算
+            # 候補点を計算．
             candidate_x = joint_pos[0][1] + (self._param.femur_length + self._param.tibia_length) * math.cos(angle_ft)
             candidate_z = joint_pos[1][1] + (self._param.femur_length + self._param.tibia_length) * math.sin(angle_ft)
 
             candidate_x_phase = joint_pos[0][1] + self._param.femur_length * math.cos(angle_ft_phase) + self._param.tibia_length * math.cos(angle_ft)
             candidate_z_phase = joint_pos[1][1] + self._param.femur_length * math.sin(angle_ft_phase) + self._param.tibia_length * math.sin(angle_ft)
 
-            #候補点との距離を計算
+            # 候補点との距離を計算．
             distance = math.sqrt(math.pow(candidate_x - x, 2.0) + math.pow(candidate_z - z, 2.0))
             distance_phase = math.sqrt(math.pow(candidate_x_phase - x, 2.0) + math.pow(candidate_z_phase - z, 2.0))
 
-            #距離が近い方を選択
+            # 距離が近い方を選択．
             angle_f = angle_ft
             angle_t = 0
 
@@ -174,7 +178,7 @@ class HexapodLegRangeCalculator:
 
             return False,joint_pos,angle
 
-        # 第2関節
+        # 第2関節．
         coxa_to_leg_end = math.sqrt(math.pow(x - self._param.coxa_length, 2.0) + math.pow(z, 2.0))
         q1 = math.atan2(z, x - self._param.coxa_length)
         q2_upper = math.pow(self._param.femur_length, 2.0) + math.pow(coxa_to_leg_end, 2.0) - math.pow(self._param.tibia_length, 2.0)
@@ -184,24 +188,24 @@ class HexapodLegRangeCalculator:
         if reverse_flag:
             q2 = -q2
         angle.append(q1 + q2)
-        angle[1] = self._clamp_angle(angle[1]) # -180度~180度に収める
+        angle[1] = self._clamp_angle(angle[1])  # -180度～180度に収める．
         joint_pos[0].append((self._param.femur_length * math.cos(angle[1])) + joint_pos[0][1])
         joint_pos[1].append((self._param.femur_length * math.sin(angle[1])) + joint_pos[1][1])
 
-        # 第3関節
+        # 第3関節．
         joint_pos[0].append(x)
         joint_pos[1].append(z)
         angle.append(
             math.atan2( (joint_pos[1][3] - joint_pos[1][2]), (joint_pos[0][3] - joint_pos[0][2]) ) - angle[1]
         )
-        angle[2] = self._clamp_angle(angle[2]) # -180度~180度に収める
+        angle[2] = self._clamp_angle(angle[2])  # -180度～180度に収める．
         return True,joint_pos,angle
 
     def calc_inverse_kinematics_xz_arduino(self, x: float, z: float) -> tuple[list[float], list[float], list[float], list[float]]:
         '''
-        coxa jointが回転していない場合の逆運動学を計算する
-        脚が水平に伸びる方向にx,上方向にzをとる
-        Arduinoのプログラムの移植,どのように離散化を行うかの可視化のため
+        coxa jointが回転していない場合の逆運動学を計算する．
+        脚が水平に伸びる方向にx,上方向にzをとる．
+        Arduinoのプログラムの移植,どのように離散化を行うかの可視化のため．
 
         Parameters
         ----------
@@ -219,10 +223,10 @@ class HexapodLegRangeCalculator:
             3つの関節の右足サーボ角のリスト,coxa,femur,tibiaの順 [0~1023]\n
         '''
         angle = []
-        angle.append(0.0)   # 第1関節の角度は0度
+        angle.append(0.0)   # 第1関節の角度は0度．
 
         trueX = x - self._param.coxa_length
-        im = math.sqrt(math.pow(trueX,2)+math.pow(z,2))    # length of imaginary leg
+        im = math.sqrt(math.pow(trueX,2)+math.pow(z,2))    # length of imaginary leg.
 
         # get femur angle above horizon...
         q1 = -math.atan2(z,trueX)
@@ -288,16 +292,19 @@ class HexapodLegRangeCalculator:
         脚の最大半径を計算する privateメソッド．
         '''
 
+        # 近似された脚の可動範囲の最大半径のリスト，z軸の座標軸の取り方が逆なので，zを反転させる．
+        self._approximate_max_leg_raudus = []
+
         z_min = 0
         z_max = int(self._param.femur_length+self._param.tibia_length)
         x_min = int(self._param.coxa_length)
         x_max = int(self._param.coxa_length+self._param.femur_length+self._param.tibia_length)
 
-        # 全て0で初期化
+        # 全て0で初期化．
         for z in range(z_min, z_max):
             self._approximate_max_leg_raudus.append(0.0)
 
-        # 脚の最大半径を計算する
+        # 脚の最大半径を計算する．
         for z in range(z_min, z_max):
             for x in range(x_min,x_max):
                 line_end_x = (float)(x)

@@ -2,7 +2,6 @@
 #-*- coding: utf-8 -*-
 
 import matplotlib.axes as axes
-import matplotlib.pyplot as plt
 import numpy as np
 
 from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
@@ -17,17 +16,17 @@ class HexapodRangeOfMotion:
         Parameters
         ----------
         hexapod_leg_range_calc : HexapodLegRangeCalculator
-            脚の可動範囲を計算するためのインスタンス
+            脚の可動範囲を計算するためのインスタンス．
         hexapod_param : HexapodParam
-            パラメータを格納するためのインスタンス
+            パラメータを格納するためのインスタンス．
         ax : matplotlib.axes.Axes
-            matplotlibのaxesオブジェクト
+            matplotlibのaxesオブジェクト．
         color : str
-            色
+            色．
         upper_alpha : float
-            上向きの可動範囲の透明度
+            上向きの可動範囲の透明度．
         lowwer_alpha : float
-            下向きの可動範囲の透明度
+            下向きの可動範囲の透明度．
         '''
         self._calc = hexapod_leg_range_calc
         self._param = hexapod_param
@@ -93,7 +92,7 @@ class HexapodRangeOfMotion:
         Parameters
         ----------
         color : str
-            色
+            色．
         '''
 
         self._color = color
@@ -105,7 +104,7 @@ class HexapodRangeOfMotion:
         Parameters
         ----------
         alpha : float
-            透明度
+            透明度．
         '''
 
         self._upper_alpha = alpha
@@ -121,7 +120,7 @@ class HexapodRangeOfMotion:
         Parameters
         ----------
         alpha : float
-            透明度
+            透明度．
         '''
 
         self._lowwer_alpha = alpha
@@ -132,7 +131,7 @@ class HexapodRangeOfMotion:
         
     def _make_leg_range(
             self, theta2_min: float, theta2_max: float, theta3_min: float, theta3_max: float, 
-            color_value: str, alpha_vaule: float):
+            color_value: str, alpha_vaule: float) -> None:
         '''
         脚の可動範囲を描画する．\n
         1つの間接を最大値に固定して,もう一つの間接を最小値から最大値まで動かす．\n
@@ -142,17 +141,17 @@ class HexapodRangeOfMotion:
         Parameters
         ----------
         theta2_min : float
-            theta2の最小値
+            theta2の最小値．
         theta2_max : float
-            theta2の最大値
+            theta2の最大値．
         theta3_min : float
-            theta3の最小値
+            theta3の最小値．
         theta3_max : float
-            theta3の最大値
+            theta3の最大値．
         color_value : str
-            色
+            色．
         alpha_vaule : float
-            透明度
+            透明度．
         '''
 
         # minからmaxまでstep刻みで配列を作成
@@ -178,13 +177,13 @@ class HexapodRangeOfMotion:
         Parameters
         ----------
         theta2 : list[float]
-            theta2の配列
+            theta2の配列．
         theta3 : list[float]
-            theta3の配列
+            theta3の配列．
         color_value : str
-            色
+            色．
         alpha_vaule : float
-            透明度
+            透明度．
         '''
 
         line_x = []
