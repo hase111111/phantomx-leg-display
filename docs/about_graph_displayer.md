@@ -1,5 +1,5 @@
 
-# GraphDisplayer
+# GraphDisplayerについて
 
 GraphDisplayerクラスは，脚の図示を行うクラスです．
 GraphDisplayerはdisplayメソッドのみを持ちます．

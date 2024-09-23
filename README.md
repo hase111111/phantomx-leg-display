@@ -49,7 +49,7 @@ pyton3 -m phantom_cross  # Python3の場合
 
 脚の図示はGraphDisplayerクラスを用いて行います．
 下記のコードを実行すると，脚の可動域が表示されます．
-詳細な使用方法については，[](docs/about_graph_displayer.md)を参照してください．
+詳細な使用方法については，[GraphDisplayerについて](docs/about_graph_displayer.md)を参照してください．
 
 ```python
 import phantom_cross as pc
