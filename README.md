@@ -62,10 +62,11 @@ gd.display()
 左クリックすると脚先の位置が固定され，画像が保存されます．
 ホイールクリックすると，もうひとつの逆運動学解に切り替わります．
 
-### HexapodParamクラス
+### HexapodParam
 
-脚のパラメータはHexapodParamクラスを用いて設定します．
+脚のパラメータは構造体HexapodParamを用いて設定します．
 パラメータを変更することで，他の脚ロボットにも対応可能です．
+詳細な使用方法については，[HexapodParamについて](docs/about_hexapod_param.md)を参照してください．
 
 ```python
 import phantom_cross as pc
