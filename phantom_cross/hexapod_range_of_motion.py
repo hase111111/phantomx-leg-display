@@ -8,6 +8,8 @@
 import matplotlib.axes as axes
 import numpy as np
 
+from typing import List
+
 from .hexapod_leg_range_calculator import HexapodLegRangeCalculator
 from .hexapod_param import HexapodParam
 
@@ -174,15 +176,15 @@ class HexapodRangeOfMotion:
         # femur joint (max) , tibia joint (min ~ max)
         self._make_leg_line([theta2_max], tibia_range, color_value, alpha_vaule)
 
-    def _make_leg_line(self, theta2: list[float], theta3: list[float], color_value: str, alpha_vaule: float) -> None:
+    def _make_leg_line(self, theta2: List[float], theta3: List[float], color_value: str, alpha_vaule: float) -> None:
         '''
         間接を回しながら，脚先の座標をプロットしていく．
 
         Parameters
         ----------
-        theta2 : list[float]
+        theta2 : List[float]
             theta2の配列．
-        theta3 : list[float]
+        theta3 : List[float]
             theta3の配列．
         color_value : str
             色．
