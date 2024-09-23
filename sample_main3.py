@@ -38,6 +38,7 @@ if __name__ == "__main__":
         display_circle=False,
         display_wedge=False,
         display_approximated_graph=False,
+        display_ground_line=False,
         # display_leg_power=True,
 
         # leg_power_step=5.0,

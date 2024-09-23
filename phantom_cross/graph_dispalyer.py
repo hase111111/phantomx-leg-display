@@ -4,6 +4,7 @@
 # モジュールのインポート
 import matplotlib as mpl
 mpl.use('tkagg')
+import matplotlib.axes as axes
 import matplotlib.pyplot as plt
 
 from .hexapod_leg_power import HexapodLegPower
@@ -13,6 +14,10 @@ from .hexapod_leg_renderer import HexapodLegRenderer
 from .mouse_grid_renderer import MouseGridRenderer
 from .hexapod_range_of_motion import HexapodRangeOfMotion
 from .hexapod_param import HexapodParam
+
+_internal_fig: plt.Figure = None
+_internal_ax: axes.Axes = None
+_internal_ax_table: axes.Axes = None
 
 def display_graph(hexapod_pram = HexapodParam(), *, 
                   display_table = True,
@@ -82,15 +87,6 @@ def display_graph(hexapod_pram = HexapodParam(), *,
         地面の高さ．
     do_not_show: bool
         show()を実行しない場合にTrueにする．
-
-    Returns
-    -------
-    fig : matplotlib.figure.Figure
-        グラフのfigure
-    ax : matplotlib.axes.Axes
-        グラフのaxes
-    ax_table : matplotlib.axes.Axes
-        表のaxes
     '''
 
     X_MIN = x_min
@@ -98,63 +94,63 @@ def display_graph(hexapod_pram = HexapodParam(), *,
     Z_MIN = z_min
     Z_MAX = z_max
 
-    if display_table:
-        fig = plt.figure()
-        ax = fig.add_subplot(1,2,1)
-        ax_table = fig.add_subplot(1,2,2)
-    else:
-        fig = plt.figure()
-        ax = fig.add_subplot(1,1,1)
-        ax_table = fig.add_subplot(3,3,2)   # 今回は使用しないので適当な座標に配置
-        ax_table.set_visible(False) # 表示しない
+    global _internal_fig, _internal_ax, _internal_ax_table
 
-    # 以下グラフの作成，描画
+    if display_table:
+        _internal_fig = plt.figure()
+        _internal_ax = _internal_fig.add_subplot(1,2,1)
+        _internal_ax_table = _internal_fig.add_subplot(1,2,2)
+    else:
+        _internal_fig = plt.figure()
+        _internal_ax = _internal_fig.add_subplot(1,1,1)
+        _internal_ax_table = _internal_fig.add_subplot(3,3,2)   # 今回は使用しないので適当な座標に配置.
+        _internal_ax_table.set_visible(False) # 表示しない.
+
+    # 以下グラフの作成，描画.
     hexapod_calc = HexapodLegRangeCalculator(hexapod_pram)
 
-    # 脚が出せる力のグラフを描画
+    # 脚が出せる力のグラフを描画.
     hexapod_leg_power = HexapodLegPower(
-        hexapod_calc, hexapod_pram, fig, ax, 
+        hexapod_calc, hexapod_pram, _internal_fig, _internal_ax, 
         x_min=X_MIN, x_max=X_MAX, z_min=Z_MIN, z_max=Z_MAX, step=leg_power_step)
 
     if display_leg_power:
         hexapod_leg_power.render()
 
-    # 脚の可動範囲の近似値を描画
+    # 脚の可動範囲の近似値を描画.
     app_graph = ApproximatedGraphRenderer(
-        hexapod_calc, ax, z_min=Z_MIN, z_max=Z_MAX,
+        hexapod_calc, _internal_ax, z_min=Z_MIN, z_max=Z_MAX,
         draw_additional_line=True, draw_fill=approx_fill, color=color_approx, alpha=alpha_approx)
 
     if display_approximated_graph:
         app_graph.render()
 
-    # 脚を描画
-    leg_renderer = HexapodLegRenderer(hexapod_calc, hexapod_pram, fig, ax, ax_table, display_circle=display_circle, display_wedge=display_wedge)
+    # 脚を描画.
+    leg_renderer = HexapodLegRenderer(hexapod_calc, hexapod_pram, _internal_fig, _internal_ax, _internal_ax_table, display_circle=display_circle, display_wedge=display_wedge)
     leg_renderer.set_img_file_name(image_file_name)
     leg_renderer.render()
 
-    # マウスがグラフのどこをポイントしているかを示す線を描画する
-    mouse_grid_renderer = MouseGridRenderer(fig, ax, alpha=alpha_mouse_grid, color=color_mouse_grid)
+    # マウスがグラフのどこをポイントしているかを示す線を描画する.
+    mouse_grid_renderer = MouseGridRenderer(_internal_fig, _internal_ax, alpha=alpha_mouse_grid, color=color_mouse_grid)
     if display_mouse_grid:
         mouse_grid_renderer.render()
 
-    # 脚の可動範囲を描画する
+    # 脚の可動範囲を描画する.
     hexapod_range_of_motion = HexapodRangeOfMotion(
-        hexapod_calc, hexapod_pram, ax,
+        hexapod_calc, hexapod_pram, _internal_ax,
         color=color_rom, upper_alpha=alpha_upper_rom, lowwer_alpha=alpha_lower_rom)
     hexapod_range_of_motion.render()
 
-    ax.set_xlim(X_MIN, X_MAX)   # x 軸の範囲を設定
-    ax.set_ylim(Z_MIN, Z_MAX)   # z 軸の範囲を設定
+    _internal_ax.set_xlim(X_MIN, X_MAX)   # x 軸の範囲を設定.
+    _internal_ax.set_ylim(Z_MIN, Z_MAX)   # z 軸の範囲を設定.
 
-    ax.set_xlabel('x [mm]')        # x軸のラベルを設定
-    ax.set_ylabel('z [mm]')        # y軸のラベルを設定
+    _internal_ax.set_xlabel('x [mm]')        # x軸のラベルを設定.
+    _internal_ax.set_ylabel('z [mm]')        # y軸のラベルを設定.
 
-    ax.set_aspect('equal')  # x,y軸のスケールを揃える
+    _internal_ax.set_aspect('equal')  # x,y軸のスケールを揃える.
 
     if display_ground_line:
-        ax.plot([X_MIN, X_MAX], [ground_z, ground_z])               # グラフを描画する
+        _internal_ax.plot([X_MIN, X_MAX], [ground_z, ground_z])               # グラフを描画する.
 
     if not do_not_show:
-        plt.show()  # 表示する
-
-    return fig, ax, ax_table
+        plt.show()  # 表示する.
