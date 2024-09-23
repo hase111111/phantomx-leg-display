@@ -15,7 +15,7 @@ import phantom_cross as pc
 if __name__ == "__main__":
     param = pc.HexapodParam()
 
-    # Change the robot conditions
+    # Change the robot conditions.
     param.coxa_length = 0.0
     param.femur_length = 100.0
     param.tibia_length = 100.0
@@ -28,24 +28,27 @@ if __name__ == "__main__":
 
     # param.torque_max = 1000.0
 
-    # Display the phantom cross graph
-    pc.display_graph(
-        # use the changed robot conditions
+    # Display the phantom cross graph.
+    graph = pc.GraphDisplayer()
+
+    graph.display(
+        # use the changed robot conditions.
         param,
 
-        # set display options
+        # set display options.
         display_table=False,
         display_circle=False,
         display_wedge=False,
         display_approximated_graph=False,
         display_ground_line=False,
+        display_mouse_grid=False,
         # display_leg_power=True,
 
         # leg_power_step=5.0,
 
-        # set display range
+        # set display range.
         x_min=-250.0, x_max=250.0, z_min=-250.0, z_max=250, 
 
-        # set file name to save the image
+        # set file name to save the image.
         image_file_name="result/sample_main3.png"
         )

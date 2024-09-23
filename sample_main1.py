@@ -12,4 +12,6 @@ import phantom_cross as pc
 
 if __name__ == "__main__":
     # Display the phantom cross graph.
-    pc.display_graph()
+    graph = pc.GraphDisplayer()
+
+    graph.display()
