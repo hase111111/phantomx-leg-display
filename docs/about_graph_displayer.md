@@ -6,9 +6,13 @@ GraphDisplayerはdisplayメソッドのみを持ちます．
 displayメソッドは多くの引数を持ちますが，デフォルト値が設定されています．
 これらを変更することで，脚の図示をカスタマイズできます．
 
-<div style="text-align: center">
+<div align="center">
     <img src="./img/simple.jpg" width="70%" class="center">
 </div>
+
+<center>
+    <img src="./img/simple.jpg" width="70%" class="center">
+</center>
 
 ## 目次
 
