@@ -79,25 +79,28 @@ class HexapodLegPower:
                 "torque_max = " + str(self._param.torque_max) + "[N*mm] "
         )
 
-        # x_min < x < x_max , z_min < z < z_max の範囲でグラフを描画するため，minからmaxまでself.__STEPづつ増やした数値を格納した配列を作成する
+        # x_min < x < x_max , z_min < z < z_max の範囲でグラフを描画するため，
+        # min から max まで self.__step づつ増やした数値を格納した配列を作成する．
         x_range = np.arange(self._x_min, self._x_max + 1, self._step)
         z_range = np.arange(self._z_min, self._z_max + 1, self._step)
 
         # x*zの要素数を持つ2次元配列power_arrayを作成する(xが列，zが行)
         power_array = np.zeros((len(z_range),len(x_range)))
 
-        # power_arrayの各要素に,x,zの座標における脚がだせる最大の力を計算して代入する,進捗表示のためにtqdmを使用する.必要なければ普通にrangeを使っても良い
+        # power_arrayの各要素に,x,zの座標における脚がだせる最大の力を計算して代入する，
+        # 進捗表示のためにtqdmを使用する.必要なければ普通にrangeを使っても良い．
         for i in tqdm.tqdm(range(len(x_range))):
             for j in tqdm.tqdm(range(len(z_range)), leave=False):
 
-                # j→i (z→x) の順で配列を参照することに注意
+                # j→i (z→x) の順で配列を参照することに注意．
                 power_array[j][i] = self._get_max_power(x_range[i], z_range[j], 0,1)
 
         # power_arrayを等高線で描画する
         cmap = copy.copy(mpl.cm.get_cmap("jet"))
         cmap.set_under('silver')
         cmap.set_over('silver')
-        power_contourf = self._ax.contourf(x_range, z_range, power_array, cmap=cmap, levels=20, vmin=4.0, vmax=20.0)
+        power_contourf = self._ax.contourf(
+            x_range, z_range, power_array, cmap=cmap, levels=20, vmin=4.0, vmax=20.0)
 
         # カラーバーを表示する
         cbar = self._figure.colorbar(power_contourf)
@@ -123,7 +126,7 @@ class HexapodLegPower:
         Returns
         -------
         ans : float
-            引数で受け取った力を何倍したら，トルクが最大値を超えるか．\n倍率を返す
+            引数で受け取った力を何倍したら，トルクが最大値を超えるか．\n倍率を返す．
         '''
 
         # 逆運動学解．間接の角度を求める
@@ -162,7 +165,7 @@ class HexapodLegPower:
             femur_tauqe = math.fabs(tauqe[0][0])
             tibia_tauqe = math.fabs(tauqe[1][0])
 
-            # トルクの最大値を超えていないか判定する．超えたら終了，超えていなければ記録して次のループへ
+            # トルクの最大値を超えていないか判定する．超えたら終了，超えていなければ記録して次のループへ．
             if femur_tauqe < self._param.torque_max and tibia_tauqe < self._param.torque_max:
                 ans = p
             else:
@@ -172,7 +175,7 @@ class HexapodLegPower:
 
     def _make_jacobian(self, theta2: float, theta3: float) -> np.matrix:
         '''
-        ヤコビ行列を計算する
+        ヤコビ行列を計算する．
 
         Parameters
         ----------
@@ -184,7 +187,7 @@ class HexapodLegPower:
         Returns
         -------
         jacobian : np.matrix
-            2*2のヤコビ行列
+            2*2のヤコビ行列．
         '''
 
         Lf = self._param.femur_length
@@ -202,12 +205,12 @@ class HexapodLegPower:
 
     def set_step(self, step: float) -> None:
         '''
-        何mmごとに力の分布を計算するかを設定する
+        何mmごとに力の分布を計算するかを設定する．
 
         Parameters
         ----------
         step : float
-            何mmごとに力の分布を計算するか
+            何mmごとに力の分布を計算するか．
         '''
 
         self._step = step
@@ -217,7 +220,7 @@ class HexapodLegPower:
 
     def set_range(self, x_min: float, x_max: float, z_min: float, z_max: float) -> None:
         '''
-        脚の可動範囲を設定する
+        脚の可動範囲を設定する．
 
         Parameters
         ----------

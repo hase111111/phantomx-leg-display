@@ -30,6 +30,6 @@ if __name__ == "__main__":
     pc.display_graph(display_table=False,
                      display_leg_power=True,
                      leg_power_step=7.0,
-                     set_display_circle=False,
-                     set_display_wedge=False,
+                     display_circle=False,
+                     display_wedge=False,
                      display_mouse_grid=False)

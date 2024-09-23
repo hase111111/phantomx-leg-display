@@ -2,5 +2,5 @@
 #-*- coding: utf-8 -*-
 
 if __name__ == "__main__":
-    print("Hello, World!")
-    print("This is a test program.")
+    print("phantom_cross" + " " + "1.0.1")
+    print("This is a package for hexapod robot.")
